@@ -1,0 +1,5 @@
+[
+  "src"
+  "test"
+  "package.yaml"
+]

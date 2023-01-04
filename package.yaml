@@ -1,0 +1,34 @@
+name:               crm
+version:            0.1.0.0
+author:             Marco Perone
+maintainer:         marco.perone@tweag.io
+copyright:          2022 Tweag I/O
+license:            OtherLicense
+
+extra-source-files:
+  - README.md
+
+# Enable every warning GHC supports, and then turn off the ones we don't care about.
+# inspired by: https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
+ghc-options:
+  - -Weverything
+  - -Werror
+  - -Wno-safe
+#  - -Wno-unsafe
+#  - -Wno-missing-safe-haskell-mode
+#  - -Wno-implicit-prelude
+#  - -Wno-missing-kind-signatures
+#  - -Wno-missing-export-lists
+#  - -Wno-missing-import-lists
+#  - -Wno-missed-specialisations
+#  - -Wno-all-missed-specialisations
+#  - -Wno-orphans
+# TODO: do we still need these?
+# - -fwrite-ide-info
+# - -hiedir=.hie
+
+library:
+  source-dirs:      src
+
+dependencies:
+  - base >= 4.14 && < 5
