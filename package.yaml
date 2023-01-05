@@ -5,22 +5,26 @@ maintainer:         marco.perone@tweag.io
 copyright:          2022 Tweag I/O
 license:            OtherLicense
 
-language: GHC2021
+language: GHC2021 # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/control.html?highlight=ghc2021#extension-GHC2021
 
 default-extensions:
-  - PackageImports
+  - PackageImports # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/package_qualified_imports.html#extension-PackageImports
 
-# Enable every warning GHC supports, and then turn off the ones we don't care about.
-# inspired by: https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
+# Options inspired by: https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
 ghc-options:
-  - -Weverything
-  - -Werror
-  - -Wno-safe
-  - -Wno-unsafe
-  - -Wno-missing-safe-haskell-mode
-  - -Wno-implicit-prelude
-  - -Wno-missing-kind-signatures
-  - -Wno-unused-type-patterns
+  # Enable every warning GHC supports
+  - -Weverything                   # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Weverything
+
+  # Turn every warning into an error
+  - -Werror                        # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Werror
+
+  # Turn off the warnings we don't care about.
+  - -Wno-safe                      # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/safe_haskell.html#ghc-flag--Wsafe
+  - -Wno-unsafe                    # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/safe_haskell.html#ghc-flag--Wunsafe
+  - -Wno-missing-safe-haskell-mode # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/safe_haskell.html#ghc-flag--Wmissing-safe-haskell-mode
+  - -Wno-implicit-prelude          # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wimplicit-prelude
+  - -Wno-missing-kind-signatures   # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-kind-signatures
+#  - -Wno-unused-type-patterns
 #  - -Wno-missing-export-lists
 #  - -Wno-missing-import-lists
 #  - -Wno-missed-specialisations

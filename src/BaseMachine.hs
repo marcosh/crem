@@ -2,7 +2,10 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-top-binds
 {-# OPTIONS_GHC -Wno-unused-top-binds #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
+{-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 
 module BaseMachine () where
 
