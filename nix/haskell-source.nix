@@ -1,5 +1,5 @@
 [
   "src"
-  "test"
+  "spec"
   "package.yaml"
 ]

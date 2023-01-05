@@ -8,7 +8,8 @@ license:            OtherLicense
 language: GHC2021 # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/control.html?highlight=ghc2021#extension-GHC2021
 
 default-extensions:
-  - PackageImports # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/package_qualified_imports.html#extension-PackageImports
+  - DerivingStrategies # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/deriving_strategies.html#extension-DerivingStrategies
+  - PackageImports     # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/package_qualified_imports.html#extension-PackageImports
 
 # Options inspired by: https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
 ghc-options:
@@ -24,9 +25,9 @@ ghc-options:
   - -Wno-missing-safe-haskell-mode # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/safe_haskell.html#ghc-flag--Wmissing-safe-haskell-mode
   - -Wno-implicit-prelude          # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wimplicit-prelude
   - -Wno-missing-kind-signatures   # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-kind-signatures
+  - -Wno-missing-export-lists      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-export-lists
+  - -Wno-missing-import-lists      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-import-lists
 #  - -Wno-unused-type-patterns
-#  - -Wno-missing-export-lists
-#  - -Wno-missing-import-lists
 #  - -Wno-missed-specialisations
 #  - -Wno-all-missed-specialisations
 #  - -Wno-orphans
@@ -34,9 +35,17 @@ ghc-options:
 # - -fwrite-ide-info
 # - -hiedir=.hie
 
-library:
-  source-dirs:      src
-
 dependencies:
   - base
   - singletons-base
+
+library:
+  source-dirs:      src
+
+tests:
+  crm-spec:
+    main:           Spec.hs
+    source-dirs:    spec
+    dependencies:
+      - crm
+      - hspec
