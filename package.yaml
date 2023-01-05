@@ -5,8 +5,10 @@ maintainer:         marco.perone@tweag.io
 copyright:          2022 Tweag I/O
 license:            OtherLicense
 
-extra-source-files:
-  - README.md
+language: GHC2021
+
+default-extensions:
+  - PackageImports
 
 # Enable every warning GHC supports, and then turn off the ones we don't care about.
 # inspired by: https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
@@ -14,10 +16,11 @@ ghc-options:
   - -Weverything
   - -Werror
   - -Wno-safe
-#  - -Wno-unsafe
-#  - -Wno-missing-safe-haskell-mode
-#  - -Wno-implicit-prelude
-#  - -Wno-missing-kind-signatures
+  - -Wno-unsafe
+  - -Wno-missing-safe-haskell-mode
+  - -Wno-implicit-prelude
+  - -Wno-missing-kind-signatures
+  - -Wno-unused-type-patterns
 #  - -Wno-missing-export-lists
 #  - -Wno-missing-import-lists
 #  - -Wno-missed-specialisations
@@ -31,4 +34,5 @@ library:
   source-dirs:      src
 
 dependencies:
-  - base >= 4.14 && < 5
+  - base
+  - singletons-base
