@@ -12,13 +12,13 @@ $( singletons
     [d|
       -- topology with a single vertex and one edge from the vertex to itself
       singleVertexTopology :: Topology ()
-      singleVertexTopology = MkTopology [((), [()])]
+      singleVertexTopology = Topology [((), [()])]
       |]
  )
 
-oneVertexMachine :: StateMachine SingleVertexTopology () ()
+oneVertexMachine :: BaseMachine SingleVertexTopology () ()
 oneVertexMachine =
-  MkStateMachine
-    { initialState = MkInitialState STuple0
-    , action = \STuple0 _ -> MkActionResult STuple0 ()
+  BaseMachine
+    { initialState = InitialState STuple0
+    , action = \STuple0 _ -> ActionResult STuple0 ()
     }

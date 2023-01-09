@@ -9,6 +9,8 @@ language: GHC2021 # https://downloads.haskell.org/ghc/latest/docs/users_guide/ex
 
 default-extensions:
   - DerivingStrategies # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/deriving_strategies.html#extension-DerivingStrategies
+  - LambdaCase         # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/lambda_case.html#extension-LambdaCase
+  - OverloadedStrings  # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/overloaded_strings.html#extension-OverloadedStrings
   - PackageImports     # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/package_qualified_imports.html#extension-PackageImports
 
 # Options inspired by: https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
@@ -26,10 +28,10 @@ ghc-options:
   - -Wno-implicit-prelude          # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wimplicit-prelude
   - -Wno-missing-kind-signatures   # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-kind-signatures
   - -Wno-missing-export-lists      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-export-lists
+  - -Wno-missing-home-modules      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-home-modules
   - -Wno-missing-import-lists      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-import-lists
 #  - -Wno-unused-type-patterns
-#  - -Wno-missed-specialisations
-#  - -Wno-all-missed-specialisations
+  - -Wno-all-missed-specialisations    # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wall-missed-specialisations
 #  - -Wno-orphans
 # TODO: do we still need these?
 # - -fwrite-ide-info
@@ -38,6 +40,7 @@ ghc-options:
 dependencies:
   - base
   - singletons-base
+  - text
 
 library:
   source-dirs:      src

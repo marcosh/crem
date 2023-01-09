@@ -2,6 +2,8 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wall-missed-specialisations
+{-# OPTIONS_GHC -Wno-all-missed-specialisations #-}
 
 module CRM.Example.Switch where
 
@@ -14,18 +16,20 @@ $( singletons
       -- other
       switchTopology :: Topology Bool
       switchTopology =
-        MkTopology
+        Topology
           [ (True, [False])
           , (False, [True])
           ]
       |]
  )
 
-switchMachine :: StateMachine SwitchTopology () ()
+switchMachine :: BaseMachine SwitchTopology () ()
 switchMachine =
-  MkStateMachine
-    { initialState = MkInitialState SFalse
+  BaseMachine
+    { initialState = InitialState SFalse
     , action = \case
-        SFalse () -> MkActionResult STrue ()
-        STrue () -> MkActionResult SFalse ()
+        SFalse -> \case
+          () -> ActionResult STrue ()
+        STrue -> \case
+          () -> ActionResult SFalse ()
     }

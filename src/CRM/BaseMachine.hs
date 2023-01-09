@@ -19,7 +19,7 @@ import "singletons-base" Data.Singletons.Base.TH (singletons)
 -}
 $( singletons
     [d|
-      newtype Topology (vertex :: Type) = MkTopology {edges :: [(vertex, [vertex])]}
+      newtype Topology (vertex :: Type) = Topology {edges :: [(vertex, [vertex])]}
       |]
  )
 
@@ -34,32 +34,32 @@ class AllowedTransition (topology :: Topology vertex) (initial :: vertex) (final
 {- | If `a` is the start and `b` is the end of the first edge,
    then `map` contains an edge from `a` to `b`
 -}
-instance {-# OVERLAPPING #-} AllowedTransition ('MkTopology ('(a, b : l1) : l2)) a b
+instance {-# OVERLAPPING #-} AllowedTransition ('Topology ('(a, b : l1) : l2)) a b
 
 {- | If we know that we have an edge from `a` to `b` in `map`,
    then we also have an edge from `a` to `b` if we add another edge out of `a`
 -}
-instance {-# OVERLAPPING #-} AllowedTransition ('MkTopology ('(a, l1) : l2)) a b => AllowedTransition ('MkTopology ('(a, x : l1) : l2)) a b
+instance {-# OVERLAPPING #-} AllowedTransition ('Topology ('(a, l1) : l2)) a b => AllowedTransition ('Topology ('(a, x : l1) : l2)) a b
 
 {- | If we know that we have an edge from `a` to `b` in `map`,
    then we also have an edge from `a` to `b` if we add another vertex
 -}
-instance AllowedTransition ('MkTopology map) a b => AllowedTransition ('MkTopology (x : map)) a b
+instance AllowedTransition ('Topology map) a b => AllowedTransition ('Topology (x : map)) a b
 
 -- * Specifying state machines
 
-{- | A `StateMachine topology input output` describes a state machine with
+{- | A `BaseMachine topology input output` describes a state machine with
    allowed transitions constrained by a given `topology`.
    A state machine is composed by an `initialState` and an `action`, which
    defines the `output` and the new `state` given the current `state` and an
    `input`
 -}
 data
-  StateMachine
+  BaseMachine
     (topology :: Topology vertex)
     (input :: Type)
     (output :: Type) = forall state.
-  MkStateMachine
+  BaseMachine
   { initialState :: InitialState state
   , action
       :: forall initialVertex
@@ -73,7 +73,7 @@ data
    actual initial data of type `state vertex`
 -}
 data InitialState (state :: vertex -> Type) where
-  MkInitialState :: state vertex -> InitialState state
+  InitialState :: state vertex -> InitialState state
 
 {- | The result of an action of the state machine.
    An `ActionResult topology state initialVertex output` contains an `output` and a `state finalVertex`,
@@ -86,7 +86,7 @@ data
     (initialVertex :: vertex)
     (output :: Type)
   where
-  MkActionResult
+  ActionResult
     :: AllowedTransition topology initialVertex finalVertex
     => state finalVertex
     -> output
