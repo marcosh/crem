@@ -5,7 +5,7 @@ module CRM.StateMachine where
 
 import CRM.BaseMachine
 import CRM.Topology
-import "profunctors" Data.Profunctor (Profunctor (..))
+import "profunctors" Data.Profunctor (Profunctor (..), Strong (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
 
 -- import "base" Control.Category (Category (..))
@@ -47,5 +47,14 @@ instance Profunctor StateMachine where
   rmap f (Compose machine1 machine2) = Compose machine1 (rmap f machine2)
 
 -- * Strong
+
+instance Strong StateMachine where
+  first' :: StateMachine a b -> StateMachine (a, c) (b, c)
+  first' (Basic baseMachine) = Basic $ first' baseMachine
+  first' (Compose machine1 machine2) = Compose (first' machine1) (first' machine2)
+
+  second' :: StateMachine a b -> StateMachine (c, a) (c, b)
+  second' (Basic baseMachine) = Basic $ second' baseMachine
+  second' (Compose machine1 machine2) = Compose (second' machine1) (second' machine2)
 
 -- * Choice

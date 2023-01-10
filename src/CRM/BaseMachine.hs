@@ -4,7 +4,7 @@ module CRM.BaseMachine where
 
 import CRM.Topology
 import "base" Data.Kind (Type)
-import "profunctors" Data.Profunctor (Profunctor (..))
+import "profunctors" Data.Profunctor (Profunctor (..), Strong (..))
 
 -- * Specifying state machines
 
@@ -41,6 +41,21 @@ instance Profunctor (BaseMachine topology) where
     BaseMachine
       { initialState = initialState
       , action = ((f <$>) .) . action
+      }
+
+instance Strong (BaseMachine topology) where
+  first' :: BaseMachine topology a b -> BaseMachine topology (a, c) (b, c)
+  first' (BaseMachine initialState action) =
+    BaseMachine
+      { initialState = initialState
+      , action = \state (a, c) -> (,c) <$> action state a
+      }
+
+  second' :: BaseMachine topology a b -> BaseMachine topology (c, a) (c, b)
+  second' (BaseMachine initialState action) =
+    BaseMachine
+      { initialState = initialState
+      , action = \state (c, a) -> (c,) <$> action state a
       }
 
 {- | A value of type `InitialState state` describes the initial state of a
