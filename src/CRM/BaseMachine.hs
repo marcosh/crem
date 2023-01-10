@@ -4,6 +4,7 @@ module CRM.BaseMachine where
 
 import CRM.Topology
 import "base" Data.Kind (Type)
+import "profunctors" Data.Profunctor (Profunctor (..))
 
 -- * Specifying state machines
 
@@ -26,6 +27,21 @@ data
       -> input
       -> ActionResult topology state initialVertex output
   }
+
+instance Profunctor (BaseMachine topology) where
+  lmap :: (a -> b) -> BaseMachine topology b c -> BaseMachine topology a c
+  lmap f (BaseMachine initialState action) =
+    BaseMachine
+      { initialState = initialState
+      , action = (. f) . action
+      }
+
+  rmap :: (b -> c) -> BaseMachine topology a b -> BaseMachine topology a c
+  rmap f (BaseMachine initialState action) =
+    BaseMachine
+      { initialState = initialState
+      , action = ((f <$>) .) . action
+      }
 
 {- | A value of type `InitialState state` describes the initial state of a
    state machine, describing the initial `vertex` in the `topology` and the
@@ -50,3 +66,11 @@ data
     => state finalVertex
     -> output
     -> ActionResult topology state initialVertex output
+
+instance Functor (ActionResult topology state initialVertex) where
+  fmap
+    :: (a -> b)
+    -> ActionResult topology state initialVertex a
+    -> ActionResult topology state initialVertex b
+  fmap f (ActionResult state output) =
+    ActionResult state (f output)
