@@ -4,6 +4,7 @@
 module CRM.Render where
 
 import CRM.BaseMachine
+import CRM.Topology
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind, demote)
 import "text" Data.Text (Text, pack)
 

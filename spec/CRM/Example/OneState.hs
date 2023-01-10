@@ -6,6 +6,7 @@
 module CRM.Example.OneState where
 
 import "crm" CRM.BaseMachine
+import "crm" CRM.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
 $( singletons
