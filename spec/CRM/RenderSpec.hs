@@ -4,6 +4,7 @@ import CRM.Example.LockDoor
 import CRM.Example.OneState
 import CRM.Example.Switch
 import "crm" CRM.Render
+import "crm" CRM.StateMachine
 import "text" Data.Text as Text (unlines)
 import "hspec" Test.Hspec (Spec, describe, it, shouldBe)
 
@@ -72,4 +73,33 @@ spec =
             , (IsLockClosed, IsLockLocked)
             , (IsLockLocked, IsLockLocked)
             , (IsLockLocked, IsLockClosed)
+            ]
+
+    describe "machineAsGraph" $ do
+      it "should render the basic machine with a single vertex" $ do
+        renderUntypedMermaid (machineAsGraph (Basic oneVertexMachine))
+          `shouldBe` Text.unlines
+            [ "stateDiagram-v2"
+            , "() --> ()"
+            ]
+
+      it "should render the basic switch machine" $ do
+        renderUntypedMermaid (machineAsGraph (Basic switchMachine))
+          `shouldBe` Text.unlines
+            [ "stateDiagram-v2"
+            , "True --> False"
+            , "False --> True"
+            ]
+
+      it "should render the basic lockDoor machine" $ do
+        renderUntypedMermaid (machineAsGraph (Basic lockDoorMachine))
+          `shouldBe` Text.unlines
+            [ "stateDiagram-v2"
+            , "IsLockOpen --> IsLockOpen"
+            , "IsLockOpen --> IsLockClosed"
+            , "IsLockClosed --> IsLockClosed"
+            , "IsLockClosed --> IsLockOpen"
+            , "IsLockClosed --> IsLockLocked"
+            , "IsLockLocked --> IsLockLocked"
+            , "IsLockLocked --> IsLockClosed"
             ]

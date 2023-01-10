@@ -1,9 +1,11 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module CRM.Render where
 
 import CRM.BaseMachine
+import CRM.StateMachine
 import CRM.Topology
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind, demote)
 import "text" Data.Text (Text, pack)
@@ -31,8 +33,26 @@ topologyAsGraph (Topology edges) = Graph $ edges >>= edgify
   its topology
 -}
 baseMachineAsGraph
-  :: forall tag topology input output
-   . (Demote (Topology tag) ~ Topology tag, SingKind tag, SingI topology)
-  => BaseMachine (topology :: Topology tag) input output
-  -> Graph tag
+  :: forall vertex topology input output
+   . (Demote (Topology vertex) ~ Topology vertex, SingKind vertex, SingI topology)
+  => BaseMachine (topology :: Topology vertex) input output
+  -> Graph vertex
 baseMachineAsGraph _ = topologyAsGraph (demote @topology)
+
+-- A data type to represent a graph which is not tracking the vertex type
+data UntypedGraph = forall a. (Show a) => UntypedGraph (Graph a)
+
+instance Show UntypedGraph where
+  show :: UntypedGraph -> String
+  show (UntypedGraph graph) = show graph
+
+-- Render an `UntypedGraph` to the Mermaid format
+renderUntypedMermaid :: UntypedGraph -> Text
+renderUntypedMermaid (UntypedGraph graph) = renderMermaid graph
+
+{- | Interpret a `StateMachine` as an `UntypedGraph` using the information
+ contained in its structure and in the topology of its basic components
+-}
+machineAsGraph :: StateMachine input output -> UntypedGraph
+machineAsGraph (Basic baseMachine) =
+  UntypedGraph (baseMachineAsGraph baseMachine)
