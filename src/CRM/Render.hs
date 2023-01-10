@@ -5,16 +5,11 @@
 module CRM.Render where
 
 import CRM.BaseMachine
+import CRM.Graph
 import CRM.StateMachine
 import CRM.Topology
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind, demote)
 import "text" Data.Text (Text, pack)
-
--- * Graph
-
--- | A graph is just a list of edges between vertices of type `a`
-newtype Graph a = Graph [(a, a)]
-  deriving stock (Eq, Show)
 
 -- | We can render a `Graph a` as [mermaid](https://mermaid.js.org/) state diagram
 renderMermaid :: Show a => Graph a -> Text
@@ -39,13 +34,6 @@ baseMachineAsGraph
   -> Graph vertex
 baseMachineAsGraph _ = topologyAsGraph (demote @topology)
 
--- A data type to represent a graph which is not tracking the vertex type
-data UntypedGraph = forall a. (Show a) => UntypedGraph (Graph a)
-
-instance Show UntypedGraph where
-  show :: UntypedGraph -> String
-  show (UntypedGraph graph) = show graph
-
 -- Render an `UntypedGraph` to the Mermaid format
 renderUntypedMermaid :: UntypedGraph -> Text
 renderUntypedMermaid (UntypedGraph graph) = renderMermaid graph
@@ -56,3 +44,7 @@ renderUntypedMermaid (UntypedGraph graph) = renderMermaid graph
 machineAsGraph :: StateMachine input output -> UntypedGraph
 machineAsGraph (Basic baseMachine) =
   UntypedGraph (baseMachineAsGraph baseMachine)
+machineAsGraph (Compose machine1 machine2) =
+  untypedProductGraph
+    (machineAsGraph machine1)
+    (machineAsGraph machine2)

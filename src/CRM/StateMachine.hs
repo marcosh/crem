@@ -18,17 +18,21 @@ data StateMachine input output where
      . (Demote (Topology vertex) ~ Topology vertex, SingKind vertex, SingI topology, Show vertex)
     => BaseMachine topology input output
     -> StateMachine input output
+  Compose
+    :: StateMachine a b
+    -> StateMachine b c
+    -> StateMachine a c
 
 -- * SemiCategory
 
--- infixr 1 >>>
--- infixr 1 <<<
+infixr 1 >>>
+infixr 1 <<<
 
--- (>>>) :: StateMachine a b -> StateMachine b c -> StateMachine a c
--- (>>>) = _
+(>>>) :: StateMachine a b -> StateMachine b c -> StateMachine a c
+(>>>) = Compose
 
--- (<<<) :: StateMachine b c -> StateMachine a b -> StateMachine a c
--- (<<<) = flip (>>>)
+(<<<) :: StateMachine b c -> StateMachine a b -> StateMachine a c
+(<<<) = flip (>>>)
 
 -- * Profunctor
 

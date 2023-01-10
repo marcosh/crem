@@ -3,6 +3,7 @@ module CRM.RenderSpec where
 import CRM.Example.LockDoor
 import CRM.Example.OneState
 import CRM.Example.Switch
+import "crm" CRM.Graph
 import "crm" CRM.Render
 import "crm" CRM.StateMachine
 import "text" Data.Text as Text (unlines)
