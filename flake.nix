@@ -57,19 +57,27 @@
       # The version of GHC used for default package and development shell.
       defaultGhcVersion = "ghc90";
 
-      # This is a shell utility that watches Haskell source files for changes, and triggers a
-      # Cabal rebuild when they change. This will NOT trigger when a NEW file is added.
-      watch = pkgs.writeShellApplication {
-        name = "watch";
-        text = "fd --extension=hs --extension=yaml | entr -c ${pkgs.writeShellApplication {
-          name = "watch-unwrapped";
+      # This is a shell utility that watches source files for changes, and triggers a
+      # command when they change. This will NOT trigger when a NEW file is added.
+      watch = name: command:
+        pkgs.writeShellApplication {
+          name = name;
+          text = "fd --extension=hs --extension=yaml | entr -c ${pkgs.writeShellApplication {
+          name = "${name}-unwrapped";
           text = ''
             hpack
-            cabal build
-            cabal test --test-show-details=streaming --test-option=--color
+            ${command}
           '';
-        }}/bin/watch-unwrapped";
-      };
+        }}/bin/${name}-unwrapped";
+        };
+
+      # Trigger a build every time a file changes
+      build-watch = watch "build-watch"
+        "cabal build";
+
+      # Trigger a test execution every time a file changes
+      test-watch = watch "test-watch"
+        "cabal test --test-show-details=streaming --test-option=--color";
     in
     rec {
       packages = {
@@ -96,7 +104,8 @@
               fourmolu
               haskell-language-server
               hpack
-              watch
+              build-watch
+              test-watch
               pkgs.fd
               pkgs.entr
               pkgs.bat
