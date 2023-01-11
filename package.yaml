@@ -92,13 +92,13 @@ ghc-options:
 
 dependencies:
   - base
-  - singletons-base
-  - text
 
 library:
   source-dirs:      src
   dependencies:
     - profunctors
+    - singletons-base
+    - text
   # Disable adding Paths_crm to other-modules, because it does not conform to our style guide.
   # https://github.com/sol/hpack#handling-of-paths_-modules
   when:
@@ -112,6 +112,21 @@ tests:
     dependencies:
       - crm
       - hspec
+      - singletons-base
+      - text
+    when:
+    - condition: false
+      other-modules: Paths_crm
+
+  crm-doctests:
+    source-dirs:    doctest
+    main:           Main.hs
+    ghc-options:
+      - -threaded
+      - -Wno-unused-packages
+    dependencies:
+      - crm
+      - doctest-parallel
     when:
     - condition: false
       other-modules: Paths_crm

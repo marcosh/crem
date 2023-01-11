@@ -76,8 +76,10 @@
         "cabal build";
 
       # Trigger a test execution every time a file changes
+      # the --write-ghc-environment-files=always is required by doctest-parallel
+      # see https://github.com/martijnbastiaan/doctest-parallel/blob/main/example/README.md#cabalproject
       test-watch = watch "test-watch"
-        "cabal test --test-show-details=streaming --test-option=--color";
+        "cabal test --test-show-details=streaming --write-ghc-environment-files=always";
     in
     rec {
       packages = {
