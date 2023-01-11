@@ -5,13 +5,61 @@ maintainer:         marco.perone@tweag.io
 copyright:          2022 Tweag I/O
 license:            OtherLicense
 
-language: GHC2021 # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/control.html?highlight=ghc2021#extension-GHC2021
+# language: GHC2021 # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/control.html?highlight=ghc2021#extension-GHC2021
 
 default-extensions:
   - DerivingStrategies # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/deriving_strategies.html#extension-DerivingStrategies
   - LambdaCase         # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/lambda_case.html#extension-LambdaCase
   - OverloadedStrings  # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/overloaded_strings.html#extension-OverloadedStrings
   - PackageImports     # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/package_qualified_imports.html#extension-PackageImports
+
+  # Enabled by GHC2021, which we don't use because it's only supported by GHC >= 9.2
+  -  BangPatterns
+  -  BinaryLiterals
+  -  ConstrainedClassMethods
+  -  ConstraintKinds
+  -  DeriveDataTypeable
+  -  DeriveFoldable
+  -  DeriveFunctor
+  -  DeriveGeneric
+  -  DeriveLift
+  -  DeriveTraversable
+  -  DoAndIfThenElse
+  -  EmptyCase
+  -  EmptyDataDecls
+  -  EmptyDataDeriving
+  -  ExistentialQuantification
+  -  ExplicitForAll
+    #-  FieldSelectors # Not supported by GHC 9.0
+  -  FlexibleContexts
+  -  FlexibleInstances
+  -  ForeignFunctionInterface
+  -  GADTSyntax
+  -  GeneralisedNewtypeDeriving
+  -  HexFloatLiterals
+  -  ImplicitPrelude
+  -  ImportQualifiedPost
+  -  InstanceSigs
+  -  KindSignatures
+  -  MonomorphismRestriction
+  -  MultiParamTypeClasses
+  -  NamedFieldPuns
+  -  NamedWildCards
+  -  NumericUnderscores
+  -  PatternGuards
+  -  PolyKinds
+  -  PostfixOperators
+  -  RankNTypes
+  -  RelaxedPolyRec
+  -  ScopedTypeVariables
+  -  StandaloneDeriving
+  -  StandaloneKindSignatures
+  -  StarIsType
+  -  TraditionalRecordSyntax
+  -  TupleSections
+  -  TypeApplications
+  -  TypeOperators
+  -  TypeSynonymInstances
 
 # Options inspired by: https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
 ghc-options:
@@ -26,7 +74,8 @@ ghc-options:
   - -Wno-unsafe                    # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/safe_haskell.html#ghc-flag--Wunsafe
   - -Wno-missing-safe-haskell-mode # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/safe_haskell.html#ghc-flag--Wmissing-safe-haskell-mode
   - -Wno-implicit-prelude          # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wimplicit-prelude
-  - -Wno-missing-kind-signatures   # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-kind-signatures
+    # Not supported by GHC 9.0
+    #- -Wno-missing-kind-signatures   # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-kind-signatures
   - -Wno-missing-export-lists      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-export-lists
   - -Wno-missing-home-modules      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-home-modules
   - -Wno-missing-import-lists      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-import-lists

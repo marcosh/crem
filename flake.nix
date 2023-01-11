@@ -2,7 +2,8 @@
   description = "marcosh/crm: compositional reproducible machines";
 
   inputs = {
-    nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
+    nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
     flake-utils.url = "github:numtide/flake-utils";
     nix-filter.url = "github:numtide/nix-filter";
     flake-compat = {
@@ -32,16 +33,16 @@
       # see here for specifics: https://nixos.wiki/wiki/Overlays
       haskellPackagesFor =
         { ghcVersion
-        , overrides ? (_: _: { })
+        , haskellPackages ? pkgs.haskell.packages."ghc${ghcVersion}"
         }:
-        pkgs.haskell.packages."ghc${ghcVersion}".override {
-          overrides = self: super: (overrides self super) // {
+        haskellPackages.override {
+          overrides = self: super: {
             crm = self.callCabal2nix "crm" src { };
           };
         };
 
       # A list of GHC versions and corresponding package overrides to use with `haskellPackagesFor`.
-      configurations = import ./nix/haskell-configurations.nix { inherit inputs; };
+      configurations = import ./nix/haskell-configurations.nix { inherit inputs system; };
 
       # A utility function that creates a set containing key-value pairs constructed for each
       # element in `configurations`.
@@ -54,7 +55,21 @@
           configurations;
 
       # The version of GHC used for default package and development shell.
-      defaultGhcVersion = "ghc92";
+      defaultGhcVersion = "ghc90";
+
+      # This is a shell utility that watches Haskell source files for changes, and triggers a
+      # Cabal rebuild when they change. This will NOT trigger when a NEW file is added.
+      watch = pkgs.writeShellApplication {
+        name = "watch";
+        text = "fd --extension=hs --extension=yaml | entr -c ${pkgs.writeShellApplication {
+          name = "watch-unwrapped";
+          text = ''
+            hpack
+            cabal build
+            cabal test --test-show-details=streaming --test-option=--color
+          '';
+        }}/bin/watch-unwrapped";
+      };
     in
     rec {
       packages = {
@@ -81,6 +96,10 @@
               fourmolu
               haskell-language-server
               hpack
+              watch
+              pkgs.fd
+              pkgs.entr
+              pkgs.bat
             ];
             shellHook = ''
               export PS1="❄️ GHC ${haskellPackages.ghc.version} $PS1"

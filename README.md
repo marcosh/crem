@@ -27,7 +27,7 @@ nix-shell
 
 ### GHC version
 
-The project has a default GHC version that is specified in the flake.
+The project has a default GHC version that is specified in the flake. At the moment that version is 9.0, because the HLS plugin Wingman [currently only builds up to this version](https://github.com/haskell/haskell-language-server/issues/2971).
 
 It is also possible to use other GHC versions to build the project and enter development shells. This allows us to easily test multiple versions.
 
