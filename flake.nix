@@ -67,7 +67,7 @@
       watch = name: command:
         pkgs.writeShellApplication {
           name = name;
-          text = "inotifywait -m -r -e modify,attrib,move,create,delete src spec doctest package.yaml | sh -c \"while read NEWFILE; do ${pkgs.writeShellApplication {
+          text = "inotifywait -m -r -e modify,attrib,move,create,delete ${inputs.nixpkgs.lib.concatStringsSep " " (import ./nix/haskell-source.nix)} | sh -c \"while read NEWFILE; do ${pkgs.writeShellApplication {
             name = "${name}-unwrapped";
             text = ''
               hpack
