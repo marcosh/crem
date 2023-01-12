@@ -103,12 +103,12 @@
               cabal-install
               fourmolu
               haskell-language-server
-              hpack
               build-watch
               test-watch
-              pkgs.fd
-              pkgs.entr
               pkgs.bat
+              pkgs.entr
+              pkgs.fd
+              pkgs.hpack
             ];
             shellHook = ''
               export PS1="❄️ GHC ${haskellPackages.ghc.version} $PS1"
