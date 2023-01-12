@@ -67,7 +67,7 @@
       watch = name: command:
         pkgs.writeShellApplication {
           name = name;
-          text = "inotifywait -m -r -e modify,attrib,move,create,delete ${inputs.nixpkgs.lib.concatStringsSep " " (import ./nix/haskell-source.nix)} | sh -c \"while read NEWFILE; do ${pkgs.writeShellApplication {
+          text = "inotifywait -m -r -e close_write,attrib,move,delete ${inputs.nixpkgs.lib.concatStringsSep " " (import ./nix/haskell-source.nix)} | sh -c \"while read NEWFILE; do ${pkgs.writeShellApplication {
             name = "${name}-unwrapped";
             text = ''
               hpack
@@ -83,8 +83,9 @@
       # Trigger a test execution every time a file changes
       # the --write-ghc-environment-files=always is required by doctest-parallel
       # see https://github.com/martijnbastiaan/doctest-parallel/blob/main/example/README.md#cabalproject
+      # and https://github.com/martijnbastiaan/doctest-parallel/issues/22
       test-watch = watch "test-watch"
-        "cabal test --test-show-details=streaming --write-ghc-environment-files=always";
+        "cabal build --write-ghc-environment-files=always && cabal test --test-show-details=streaming";
     in
     rec {
       packages = {
