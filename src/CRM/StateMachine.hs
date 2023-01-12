@@ -8,11 +8,8 @@ import CRM.Topology
 import "profunctors" Data.Profunctor (Profunctor (..), Strong (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
 
--- import "base" Control.Category (Category (..))
-
-{- | A `StateMachine` is a [Mealy machine](https://en.wikipedia.org/wiki/Mealy_machine)
- with inputs of type `input` and outputs of type `output`
--}
+-- | A `StateMachine` is a [Mealy machine](https://en.wikipedia.org/wiki/Mealy_machine)
+-- with inputs of type `input` and outputs of type `output`
 data StateMachine input output where
   Basic
     :: forall vertex (topology :: Topology vertex) input output
