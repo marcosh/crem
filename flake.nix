@@ -63,17 +63,17 @@
       defaultGhcVersion = "ghc90";
 
       # This is a shell utility that watches source files for changes, and triggers a
-      # command when they change. This will NOT trigger when a NEW file is added.
+      # command when they change.
       watch = name: command:
         pkgs.writeShellApplication {
           name = name;
-          text = "fd --extension=hs --extension=yaml | entr -c ${pkgs.writeShellApplication {
-          name = "${name}-unwrapped";
-          text = ''
-            hpack
-            ${command}
-          '';
-        }}/bin/${name}-unwrapped";
+          text = "inotifywait -m -r -e modify,attrib,move,create,delete src spec doctest package.yaml | sh -c \"while read NEWFILE; do ${pkgs.writeShellApplication {
+            name = "${name}-unwrapped";
+            text = ''
+              hpack
+              ${command}
+            '';
+          }}/bin/${name}-unwrapped; done;\"";
         };
 
       # Trigger a build every time a file changes
@@ -112,10 +112,8 @@
               haskell-language-server
               build-watch
               test-watch
-              pkgs.bat
-              pkgs.entr
-              pkgs.fd
               pkgs.hpack
+              pkgs.inotify-tools
             ];
             shellHook = ''
               export PS1="❄️ GHC ${haskellPackages.ghc.version} $PS1"
