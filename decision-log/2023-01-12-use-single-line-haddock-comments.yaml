@@ -4,14 +4,14 @@ context: >
   We would like to document the project extensively, creating proper
   documentation for all datatypes and functions defined in the project.
 
-  [Haddock](https://haskell-haddock.readthedocs.io) is a tool that converts code comments to documentation.
-  It supports two styles of comments:
+  [Haddock](https://haskell-haddock.readthedocs.io) is a tool that converts
+  code comments to documentation. It supports two styles of comments:
 
   - single-line: `-- |`
 
   - multi-line: `{- |`
 
-  Haddock also offers "doctests" to automatically run the examples
+  Haddock also allows "doctests" to automatically run the examples
   included in the Haddock documentation. Such examples are defined using the
   `>>>` syntax inside Haddock comments.
 
@@ -19,7 +19,9 @@ context: >
   can directly execute doctest comments, but only if they are single-line.
 decision: >
   We will use single-line comments so that examples can be executed by HLS and
-  recognised as doctests
+  recognised as doctests.
 consequences: >
   We configure [Fourmolu](https://github.com/fourmolu/fourmolu) to use
   single-line comments and use it to enforce this style.
+
+  We will run doctests as part of the test suite.
