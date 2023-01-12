@@ -24,9 +24,8 @@ topologyAsGraph (Topology edges) = Graph $ edges >>= edgify
     edgify :: (v, [v]) -> [(v, v)]
     edgify (v, vs) = (v,) <$> vs
 
-{- | Interpret a `BaseMachine` as a `Graph` using the information contained in
-  its topology
--}
+-- | Interpret a `BaseMachine` as a `Graph` using the information contained in
+-- its topology
 baseMachineAsGraph
   :: forall vertex topology input output
    . (Demote (Topology vertex) ~ Topology vertex, SingKind vertex, SingI topology)
@@ -38,9 +37,8 @@ baseMachineAsGraph _ = topologyAsGraph (demote @topology)
 renderUntypedMermaid :: UntypedGraph -> Text
 renderUntypedMermaid (UntypedGraph graph) = renderMermaid graph
 
-{- | Interpret a `StateMachine` as an `UntypedGraph` using the information
- contained in its structure and in the topology of its basic components
--}
+-- | Interpret a `StateMachine` as an `UntypedGraph` using the information
+-- contained in its structure and in the topology of its basic components
 machineAsGraph :: StateMachine input output -> UntypedGraph
 machineAsGraph (Basic baseMachine) =
   UntypedGraph (baseMachineAsGraph baseMachine)

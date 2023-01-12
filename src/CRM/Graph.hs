@@ -6,14 +6,13 @@ module CRM.Graph where
 newtype Graph a = Graph [(a, a)]
   deriving stock (Eq, Show)
 
-{- | The product graph.
- It has as vertices the product of the set of vertices of the initial graph.
- It has as edge from `(a1, b1)` to `(a2, b2)` if and only if there is an edge
- from `a1` to `a2` and an edge from `b1` to `b2`
-
- >>> productGraph (Graph [('a', 'b')]) (Graph [('c', 'd')])
- Graph [(('a','c'),('b','d'))]
--}
+-- | The product graph.
+-- It has as vertices the product of the set of vertices of the initial graph.
+-- It has as edge from `(a1, b1)` to `(a2, b2)` if and only if there is an edge
+-- from `a1` to `a2` and an edge from `b1` to `b2`
+--
+-- >>> productGraph (Graph [('a', 'b')]) (Graph [('c', 'd')])
+-- Graph [(('a','c'),('b','d'))]
 productGraph :: Graph a -> Graph b -> Graph (a, b)
 productGraph (Graph edges1) (Graph edges2) =
   Graph $

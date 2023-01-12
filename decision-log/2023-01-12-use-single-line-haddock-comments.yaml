@@ -1,0 +1,27 @@
+name: Use single line haddock comments
+date: 2023-01-12
+context: >
+  We would like to document the project extensively, creating proper
+  documentation for all datatypes and functions defined in the project.
+
+  Hence we would like to use as much as possible
+  [Haddock](https://haskell-haddock.readthedocs.io)-style comments. Haddock
+  supports two styles of comments:
+
+  - single-line: `-- |`
+
+  - multi-line: `{- |`
+
+  Moreover we would like to use `doctests` to properly check the examples
+  included in the Haddock documentation. Such examples are defined using the
+  `>>>` syntax inside Haddock comments.
+
+  The [Haskell Language Server](https://haskell-language-server.readthedocs.io)
+  allows to execute directly examples defined with the `>>>` syntax inside any
+  kind (i.e. not necessarily Haddock ones) on single-line comments.
+decision: >
+  We will use single-line comments so that examples can be executed by HLS and
+  recognised as doctests
+consequences: >
+  We configure [Fourmolu](https://github.com/fourmolu/fourmolu) to use
+  single-line comments and use it to enforce this style.
