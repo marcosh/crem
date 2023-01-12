@@ -5,6 +5,7 @@ dist-*
 
 # nix
 result
+result-*
 
 # direnv
 .direnv
