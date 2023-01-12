@@ -4,21 +4,19 @@ context: >
   We would like to document the project extensively, creating proper
   documentation for all datatypes and functions defined in the project.
 
-  Hence we would like to use as much as possible
-  [Haddock](https://haskell-haddock.readthedocs.io)-style comments. Haddock
-  supports two styles of comments:
+  [Haddock](https://haskell-haddock.readthedocs.io) is a tool that converts code comments to documentation.
+  It supports two styles of comments:
 
   - single-line: `-- |`
 
   - multi-line: `{- |`
 
-  Moreover we would like to use `doctests` to properly check the examples
+  Haddock also offers "doctests" to automatically run the examples
   included in the Haddock documentation. Such examples are defined using the
   `>>>` syntax inside Haddock comments.
 
   The [Haskell Language Server](https://haskell-language-server.readthedocs.io)
-  allows to execute directly examples defined with the `>>>` syntax inside any
-  kind (i.e. not necessarily Haddock ones) on single-line comments.
+  can directly execute doctest comments, but only if they are single-line.
 decision: >
   We will use single-line comments so that examples can be executed by HLS and
   recognised as doctests
