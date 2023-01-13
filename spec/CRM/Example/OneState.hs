@@ -20,6 +20,5 @@ $( singletons
 oneVertexMachine :: BaseMachine SingleVertexTopology () ()
 oneVertexMachine =
   BaseMachine
-    { initialState = InitialState STuple0
-    , action = \STuple0 _ -> ActionResult STuple0 ()
+    { action = \STuple0 _ -> ActionResult STuple0 ()
     }

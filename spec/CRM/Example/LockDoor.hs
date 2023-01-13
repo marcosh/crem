@@ -47,8 +47,7 @@ data LockDoorEvent
 lockDoorMachine :: BaseMachine LockDoorTopology LockDoorCommand LockDoorEvent
 lockDoorMachine =
   BaseMachine
-    { initialState = InitialState SIsLockClosed
-    , action = \case
+    { action = \case
         SIsLockOpen -> \case
           LockOpen -> ActionResult SIsLockOpen LockNoOp
           LockClose -> ActionResult SIsLockClosed LockClosed

@@ -1,0 +1,22 @@
+name: Remove initialState field
+date: 2023-01-13
+context: >
+  A [Mealy machine](https://en.wikipedia.org/wiki/Mealy_machine) is usually
+  described by an evolution function `s -> a -> (b, s)` and an
+  `initialState :: s`.
+
+  The initial state is useful only we actually need to run the state machine,
+  not to understand the topology of the state machine.
+
+  Removing the initial state from the definition, we are left with a stateless
+  definition of a process which consumes inputs of type `a` and produces
+  outputs of type `b`. This implies that what we have at hand is a category!
+decision: >
+  We decide to move the `initialState` out of the state machine definition, and
+  pass it instead when the machine is actually run.
+consequences: >
+  The `BaseMachine` data type loses the `initialState` field and all the
+  examples machines do not define it.
+
+  This will also allow the implementation of an instance of the `Category` type
+  class.

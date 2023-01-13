@@ -27,8 +27,7 @@ $( singletons
 switchMachine :: BaseMachine SwitchTopology () ()
 switchMachine =
   BaseMachine
-    { initialState = InitialState SFalse
-    , action = \case
+    { action = \case
         SFalse -> \case
           () -> ActionResult STrue ()
         STrue -> \case
