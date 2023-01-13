@@ -1,6 +1,5 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GADTs #-}
-{-# LANGUAGE QuantifiedConstraints #-}
 
 module CRM.StateMachine where
 
@@ -18,7 +17,6 @@ data StateMachine input output where
        , SingKind vertex
        , SingI topology
        , Show vertex
-       , forall (vertex' :: vertex). AllowedTransition topology vertex' vertex'
        )
     => BaseMachine topology input output
     -> StateMachine input output
