@@ -13,7 +13,7 @@ $( singletons
     [d|
       -- topology with a single vertex and one edge from the vertex to itself
       singleVertexTopology :: Topology ()
-      singleVertexTopology = Topology [((), [()])]
+      singleVertexTopology = Topology []
       |]
  )
 

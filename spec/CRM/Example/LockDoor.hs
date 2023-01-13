@@ -24,9 +24,9 @@ $( singletons
       lockDoorTopology :: Topology LockDoorVertex
       lockDoorTopology =
         Topology
-          [ (IsLockOpen, [IsLockOpen, IsLockClosed])
-          , (IsLockClosed, [IsLockClosed, IsLockOpen, IsLockLocked])
-          , (IsLockLocked, [IsLockLocked, IsLockClosed])
+          [ (IsLockOpen, [IsLockClosed])
+          , (IsLockClosed, [IsLockOpen, IsLockLocked])
+          , (IsLockLocked, [IsLockClosed])
           ]
       |]
  )

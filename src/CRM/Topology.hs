@@ -27,6 +27,8 @@ $( singletons
 -- that the `topology` allows transitions from the`initial` to the `final`
 -- state
 data AllowTransition (topology :: Topology vertex) (initial :: vertex) (final :: vertex) where
+  -- | We always allow an edge from a vertex to itself
+  AllowIdentityEdge :: AllowTransition topology a a
   -- | If `a` is the start and `b` is the end of the first edge,
   -- then `map` contains an edge from `a` to `b`
   AllowFirstEdge :: AllowTransition ('Topology ('(a, b : l1) : l2)) a b
@@ -44,13 +46,16 @@ data AllowTransition (topology :: Topology vertex) (initial :: vertex) (final ::
 class AllowedTransition (topology :: Topology vertex) (initial :: vertex) (final :: vertex) where
   allowsTransition :: AllowTransition topology initial final
 
-instance {-# OVERLAPPING #-} AllowedTransition ('Topology ('(a, b : l1) : l2)) a b where
+instance {-# INCOHERENT #-} AllowedTransition ('Topology ('(a, b : l1) : l2)) a b where
   allowsTransition = AllowFirstEdge
 
-instance {-# OVERLAPPING #-} AllowedTransition ('Topology ('(a, l1) : l2)) a b => AllowedTransition ('Topology ('(a, x : l1) : l2)) a b where
+instance {-# INCOHERENT #-} AllowedTransition ('Topology ('(a, l1) : l2)) a b => AllowedTransition ('Topology ('(a, x : l1) : l2)) a b where
   allowsTransition =
     AllowAddingEdge (allowsTransition :: AllowTransition ('Topology ('(a, l1) : l2)) a b)
 
-instance AllowedTransition ('Topology map) a b => AllowedTransition ('Topology (x : map)) a b where
+instance {-# INCOHERENT #-} AllowedTransition ('Topology map) a b => AllowedTransition ('Topology (x : map)) a b where
   allowsTransition =
     AllowAddingVertex (allowsTransition :: AllowTransition ('Topology map) a b)
+
+instance {-# INCOHERENT #-} AllowedTransition topology a a where
+  allowsTransition = AllowIdentityEdge
