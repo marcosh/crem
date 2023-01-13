@@ -27,9 +27,7 @@ spec =
     describe "topologyAsGraph" $ do
       it "should render the topology with a single vertex" $ do
         topologyAsGraph singleVertexTopology
-          `shouldBe` Graph
-            [ ((), ())
-            ]
+          `shouldBe` Graph []
 
       it "should render the switch topology" $ do
         topologyAsGraph switchTopology
@@ -41,21 +39,16 @@ spec =
       it "should render the lockDoor topology" $ do
         topologyAsGraph lockDoorTopology
           `shouldBe` Graph
-            [ (IsLockOpen, IsLockOpen)
-            , (IsLockOpen, IsLockClosed)
-            , (IsLockClosed, IsLockClosed)
+            [ (IsLockOpen, IsLockClosed)
             , (IsLockClosed, IsLockOpen)
             , (IsLockClosed, IsLockLocked)
-            , (IsLockLocked, IsLockLocked)
             , (IsLockLocked, IsLockClosed)
             ]
 
     describe "baseMachineAsGraph" $ do
       it "should render the machine with a single vertex" $ do
         baseMachineAsGraph oneVertexMachine
-          `shouldBe` Graph
-            [ ((), ())
-            ]
+          `shouldBe` Graph []
 
       it "should render the switch machine" $ do
         baseMachineAsGraph switchMachine
@@ -67,12 +60,9 @@ spec =
       it "should render the lockDoor machine" $ do
         baseMachineAsGraph lockDoorMachine
           `shouldBe` Graph
-            [ (IsLockOpen, IsLockOpen)
-            , (IsLockOpen, IsLockClosed)
-            , (IsLockClosed, IsLockClosed)
+            [ (IsLockOpen, IsLockClosed)
             , (IsLockClosed, IsLockOpen)
             , (IsLockClosed, IsLockLocked)
-            , (IsLockLocked, IsLockLocked)
             , (IsLockLocked, IsLockClosed)
             ]
 
@@ -81,26 +71,22 @@ spec =
         renderUntypedMermaid (machineAsGraph (Basic oneVertexMachine))
           `shouldBe` Text.unlines
             [ "stateDiagram-v2"
-            , "() --> ()"
             ]
 
--- it "should render the basic switch machine" $ do
---   renderUntypedMermaid (machineAsGraph (Basic switchMachine))
---     `shouldBe` Text.unlines
---       [ "stateDiagram-v2"
---       , "True --> False"
---       , "False --> True"
---       ]
+      it "should render the basic switch machine" $ do
+        renderUntypedMermaid (machineAsGraph (Basic switchMachine))
+          `shouldBe` Text.unlines
+            [ "stateDiagram-v2"
+            , "True --> False"
+            , "False --> True"
+            ]
 
--- it "should render the basic lockDoor machine" $ do
---   renderUntypedMermaid (machineAsGraph (Basic lockDoorMachine))
---     `shouldBe` Text.unlines
---       [ "stateDiagram-v2"
---       , "IsLockOpen --> IsLockOpen"
---       , "IsLockOpen --> IsLockClosed"
---       , "IsLockClosed --> IsLockClosed"
---       , "IsLockClosed --> IsLockOpen"
---       , "IsLockClosed --> IsLockLocked"
---       , "IsLockLocked --> IsLockLocked"
---       , "IsLockLocked --> IsLockClosed"
---       ]
+      it "should render the basic lockDoor machine" $ do
+        renderUntypedMermaid (machineAsGraph (Basic lockDoorMachine))
+          `shouldBe` Text.unlines
+            [ "stateDiagram-v2"
+            , "IsLockOpen --> IsLockClosed"
+            , "IsLockClosed --> IsLockOpen"
+            , "IsLockClosed --> IsLockLocked"
+            , "IsLockLocked --> IsLockClosed"
+            ]
