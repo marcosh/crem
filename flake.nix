@@ -37,7 +37,12 @@
         }:
         haskellPackages.override {
           overrides = self: super: {
-            crm = self.callCabal2nix "crm" src { };
+            crm = (self.callCabal2nix "crm" src { }).overrideAttrs (attrs: {
+              # doctest-parallel needs to know where the compiled crm package is
+              preCheck = ''
+                export GHC_PACKAGE_PATH="dist/package.conf.inplace:$GHC_PACKAGE_PATH"
+              '';
+            });
           };
         };
 
