@@ -23,19 +23,34 @@ $( singletons
 
 -- ** AllowedTransition
 
--- | We expose at the type level the information contained in the topology
--- An instance of `AllowedTransition topology initial final` means that the
--- `topology` allows transitions from the`initial` to the `final` state
-class AllowedTransition (topology :: Topology vertex) (initial :: vertex) (final :: vertex)
+-- | An value of type of `AllowedTransition topology initial final` is a proof
+-- that the `topology` allows transitions from the`initial` to the `final`
+-- state
+data AllowTransition (topology :: Topology vertex) (initial :: vertex) (final :: vertex) where
+  -- | If `a` is the start and `b` is the end of the first edge,
+  -- then `map` contains an edge from `a` to `b`
+  AllowFirstEdge :: AllowTransition ('Topology ('(a, b : l1) : l2)) a b
+  -- | If we know that we have an edge from `a` to `b` in a topology,
+  -- then we also have an edge from `a` to `b` if we add another edge out of `a`
+  AllowAddingEdge
+    :: AllowTransition ('Topology ('(a, l1) : l2)) a b
+    -> AllowTransition ('Topology ('(a, x : l1) : l2)) a b
+  -- | If we know that we have an edge from `a` to `b` in `map`,
+  -- then we also have an edge from `a` to `b` if we add another vertex
+  AllowAddingVertex
+    :: AllowTransition ('Topology map) a b
+    -> AllowTransition ('Topology (x : map)) a b
 
--- | If `a` is the start and `b` is the end of the first edge,
--- then `map` contains an edge from `a` to `b`
-instance {-# OVERLAPPING #-} AllowedTransition ('Topology ('(a, b : l1) : l2)) a b
+class AllowedTransition (topology :: Topology vertex) (initial :: vertex) (final :: vertex) where
+  allowsTransition :: AllowTransition topology initial final
 
--- | If we know that we have an edge from `a` to `b` in `map`,
--- then we also have an edge from `a` to `b` if we add another edge out of `a`
-instance {-# OVERLAPPING #-} AllowedTransition ('Topology ('(a, l1) : l2)) a b => AllowedTransition ('Topology ('(a, x : l1) : l2)) a b
+instance {-# OVERLAPPING #-} AllowedTransition ('Topology ('(a, b : l1) : l2)) a b where
+  allowsTransition = AllowFirstEdge
 
--- | If we know that we have an edge from `a` to `b` in `map`,
--- then we also have an edge from `a` to `b` if we add another vertex
-instance AllowedTransition ('Topology map) a b => AllowedTransition ('Topology (x : map)) a b
+instance {-# OVERLAPPING #-} AllowedTransition ('Topology ('(a, l1) : l2)) a b => AllowedTransition ('Topology ('(a, x : l1) : l2)) a b where
+  allowsTransition =
+    AllowAddingEdge (allowsTransition :: AllowTransition ('Topology ('(a, l1) : l2)) a b)
+
+instance AllowedTransition ('Topology map) a b => AllowedTransition ('Topology (x : map)) a b where
+  allowsTransition =
+    AllowAddingVertex (allowsTransition :: AllowTransition ('Topology map) a b)

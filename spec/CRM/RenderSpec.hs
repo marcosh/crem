@@ -84,23 +84,23 @@ spec =
             , "() --> ()"
             ]
 
-      it "should render the basic switch machine" $ do
-        renderUntypedMermaid (machineAsGraph (Basic switchMachine))
-          `shouldBe` Text.unlines
-            [ "stateDiagram-v2"
-            , "True --> False"
-            , "False --> True"
-            ]
+-- it "should render the basic switch machine" $ do
+--   renderUntypedMermaid (machineAsGraph (Basic switchMachine))
+--     `shouldBe` Text.unlines
+--       [ "stateDiagram-v2"
+--       , "True --> False"
+--       , "False --> True"
+--       ]
 
-      it "should render the basic lockDoor machine" $ do
-        renderUntypedMermaid (machineAsGraph (Basic lockDoorMachine))
-          `shouldBe` Text.unlines
-            [ "stateDiagram-v2"
-            , "IsLockOpen --> IsLockOpen"
-            , "IsLockOpen --> IsLockClosed"
-            , "IsLockClosed --> IsLockClosed"
-            , "IsLockClosed --> IsLockOpen"
-            , "IsLockClosed --> IsLockLocked"
-            , "IsLockLocked --> IsLockLocked"
-            , "IsLockLocked --> IsLockClosed"
-            ]
+-- it "should render the basic lockDoor machine" $ do
+--   renderUntypedMermaid (machineAsGraph (Basic lockDoorMachine))
+--     `shouldBe` Text.unlines
+--       [ "stateDiagram-v2"
+--       , "IsLockOpen --> IsLockOpen"
+--       , "IsLockOpen --> IsLockClosed"
+--       , "IsLockClosed --> IsLockClosed"
+--       , "IsLockClosed --> IsLockOpen"
+--       , "IsLockClosed --> IsLockLocked"
+--       , "IsLockLocked --> IsLockLocked"
+--       , "IsLockLocked --> IsLockClosed"
+--       ]

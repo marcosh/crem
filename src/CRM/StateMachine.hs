@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE QuantifiedConstraints #-}
 
 module CRM.StateMachine where
 
@@ -13,7 +14,12 @@ import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
 data StateMachine input output where
   Basic
     :: forall vertex (topology :: Topology vertex) input output
-     . (Demote (Topology vertex) ~ Topology vertex, SingKind vertex, SingI topology, Show vertex)
+     . ( Demote (Topology vertex) ~ Topology vertex
+       , SingKind vertex
+       , SingI topology
+       , Show vertex
+       , forall (vertex' :: vertex). AllowedTransition topology vertex' vertex'
+       )
     => BaseMachine topology input output
     -> StateMachine input output
   Compose
