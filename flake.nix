@@ -85,7 +85,10 @@
       # see https://github.com/martijnbastiaan/doctest-parallel/blob/main/example/README.md#cabalproject
       # and https://github.com/martijnbastiaan/doctest-parallel/issues/22
       test-watch = watch "test-watch"
-        "cabal build --write-ghc-environment-files=always && cabal test --test-show-details=streaming";
+''
+    cabal build --write-ghc-environment-files=always
+    cabal test --test-show-details=streaming
+'';
     in
     rec {
       packages = {
