@@ -5,7 +5,7 @@ module CRM.StateMachine where
 
 import CRM.BaseMachine
 import CRM.Topology
-import "profunctors" Data.Profunctor (Profunctor (..), Strong (..))
+import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
 
 -- | A `StateMachine` is a [Mealy machine](https://en.wikipedia.org/wiki/Mealy_machine)
@@ -59,3 +59,12 @@ instance Strong StateMachine where
   second' (Compose machine1 machine2) = Compose (second' machine1) (second' machine2)
 
 -- * Choice
+
+instance Choice StateMachine where
+  left' :: StateMachine a b -> StateMachine (Either a c) (Either b c)
+  left' (Basic baseMachine) = Basic $ left' baseMachine
+  left' (Compose machine1 machine2) = Compose (left' machine1) (left' machine2)
+
+  right' :: StateMachine a b -> StateMachine (Either c a) (Either c b)
+  right' (Basic baseMachine) = Basic $ right' baseMachine
+  right' (Compose machine1 machine2) = Compose (right' machine1) (right' machine2)
