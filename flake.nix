@@ -67,7 +67,7 @@
       watch = name: command:
         pkgs.writeShellApplication {
           name = name;
-          text = "inotifywait -m -r -e close_write,attrib,move,delete ${inputs.nixpkgs.lib.concatStringsSep " " (import ./nix/haskell-source.nix)} | sh -c \"while read NEWFILE; do ${pkgs.writeShellApplication {
+          text = "inotifywait -m -r -e close_write,attrib,move,delete ${builtins.concatStringsSep " " (import ./nix/haskell-source.nix)} | sh -c \"while read NEWFILE; do ${pkgs.writeShellApplication {
             name = "${name}-unwrapped";
             text = ''
               hpack
