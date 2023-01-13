@@ -64,31 +64,35 @@
 
       # This is a shell utility that watches source files for changes, and triggers a
       # command when they change.
+      watch-unwrapped = name: command:
+        pkgs.writeScriptBin "${name}-unwrapped" ''
+          hpack
+          ${command}
+        '';
       watch = name: command:
         pkgs.writeShellApplication {
           name = name;
-          text = "inotifywait -m -r -e close_write,attrib,move,delete ${builtins.concatStringsSep " " (import ./nix/haskell-source.nix)} | sh -c \"while read NEWFILE; do ${pkgs.writeShellApplication {
-            name = "${name}-unwrapped";
-            text = ''
-              hpack
-              ${command}
+          runtimeInputs = [ pkgs.inotify-tools pkgs.hpack (watch-unwrapped name command) ];
+          text =
+            let sources = builtins.concatStringsSep " " (import ./nix/haskell-source.nix); in
+            ''
+              inotifywait -m -r -e close_write,attrib,move,delete ${sources} | sh -c "while read NEWFILE; do ${name}-unwrapped; done;"
             '';
-          }}/bin/${name}-unwrapped; done;\"";
         };
 
-      # Trigger a build every time a file changes
-      build-watch = watch "build-watch"
-        "cabal build";
+      # Trigger a simple build every time a file changes
+      build-watch = watch "build-watch" ''
+        cabal build
+      '';
 
       # Trigger a test execution every time a file changes
       # the --write-ghc-environment-files=always is required by doctest-parallel
       # see https://github.com/martijnbastiaan/doctest-parallel/blob/main/example/README.md#cabalproject
       # and https://github.com/martijnbastiaan/doctest-parallel/issues/22
-      test-watch = watch "test-watch"
-''
-    cabal build --write-ghc-environment-files=always
-    cabal test --test-show-details=streaming
-'';
+      test-watch = watch "test-watch" ''
+        cabal build --write-ghc-environment-files=always
+        cabal test --test-show-details=streaming --test-option=--color
+      '';
     in
     rec {
       packages = {
@@ -117,7 +121,6 @@
               build-watch
               test-watch
               pkgs.hpack
-              pkgs.inotify-tools
             ];
             shellHook = ''
               export PS1="❄️ GHC ${haskellPackages.ghc.version} $PS1"
