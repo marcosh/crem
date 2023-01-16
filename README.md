@@ -1,6 +1,6 @@
-# crm
+# crem
 
-`crm` stands for **c**ompositional **r**epresentable **m**achines
+`crem` stands for **c**ompositional **r**epresentable **e**xecutable **m**achines
 
 ## development
 
