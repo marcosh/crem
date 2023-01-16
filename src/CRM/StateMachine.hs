@@ -3,8 +3,9 @@
 
 module CRM.StateMachine where
 
-import CRM.BaseMachine
+import CRM.BaseMachine as BaseMachine
 import CRM.Topology
+import "base" Control.Category (Category (..))
 import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
 
@@ -25,16 +26,14 @@ data StateMachine input output where
     -> StateMachine b c
     -> StateMachine a c
 
--- * SemiCategory
+-- * Category
 
-infixr 1 >>>
-infixr 1 <<<
+instance Category StateMachine where
+  id :: StateMachine a a
+  id = Basic identity
 
-(>>>) :: StateMachine a b -> StateMachine b c -> StateMachine a c
-(>>>) = Compose
-
-(<<<) :: StateMachine b c -> StateMachine a b -> StateMachine a c
-(<<<) = flip (>>>)
+  (.) :: StateMachine b c -> StateMachine a b -> StateMachine a c
+  (.) = flip Compose
 
 -- * Profunctor
 

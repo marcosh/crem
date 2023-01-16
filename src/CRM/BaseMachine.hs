@@ -5,6 +5,7 @@ module CRM.BaseMachine where
 import CRM.Topology
 import "base" Data.Kind (Type)
 import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
+import "singletons-base" Data.Singletons.Base.TH (STuple0 (..))
 
 -- * Specifying state machines
 
@@ -105,3 +106,13 @@ instance Functor (ActionResult topology state initialVertex) where
     -> ActionResult topology state initialVertex b
   fmap f (ActionResult state output) =
     ActionResult state (f output)
+
+-- ** Identity machine
+
+-- | The `id` machine always outputs its input and never changes its state
+identity :: BaseMachine ('Topology '[ '( '(), '[ '()])]) a a
+identity =
+  BaseMachine
+    { initialState = InitialState STuple0
+    , action = ActionResult
+    }
