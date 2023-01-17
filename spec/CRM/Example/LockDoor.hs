@@ -43,11 +43,12 @@ data LockDoorEvent
   | LockClosed
   | LockLocked
   | LockUnlocked
+  deriving stock (Eq, Show)
 
-lockDoorMachine :: BaseMachine LockDoorTopology LockDoorCommand LockDoorEvent
-lockDoorMachine =
+lockDoorMachine :: SLockDoorVertex a -> BaseMachine LockDoorTopology LockDoorCommand LockDoorEvent
+lockDoorMachine initialState =
   BaseMachine
-    { initialState = InitialState SIsLockClosed
+    { initialState = InitialState initialState
     , action = \case
         SIsLockOpen -> \case
           LockOpen -> ActionResult SIsLockOpen LockNoOp
