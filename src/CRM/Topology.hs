@@ -9,7 +9,7 @@
 
 module CRM.Topology where
 
-import "singletons-base" Data.Singletons.Base.TH (singletons)
+import "singletons-base" Data.Singletons.Base.TH
 
 -- * Topology
 
@@ -59,3 +59,12 @@ instance {-# INCOHERENT #-} AllowedTransition ('Topology map) a b => AllowedTran
 
 instance {-# INCOHERENT #-} AllowedTransition topology a a where
   allowsTransition = AllowIdentityEdge
+
+-- ** Trivial topology
+
+$( singletons
+    [d|
+      trivialTopology :: Topology ()
+      trivialTopology = Topology []
+      |]
+ )
