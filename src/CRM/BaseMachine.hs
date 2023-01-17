@@ -116,3 +116,24 @@ identity =
     { initialState = InitialState STuple0
     , action = ActionResult
     }
+
+-- ** Run a machine
+
+-- | Given an `input`, run the machine to get an output and a new version of
+-- the machine
+runBaseMachine
+  :: BaseMachine topology input output
+  -> input
+  -> (output, BaseMachine topology input output)
+runBaseMachine (BaseMachine (InitialState initialState) action) input =
+  let
+    actionResult = action initialState input
+   in
+    case actionResult of
+      (ActionResult finalState output) ->
+        ( output
+        , BaseMachine
+            { initialState = InitialState finalState
+            , action = action
+            }
+        )
