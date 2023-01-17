@@ -6,6 +6,7 @@ import CRM.Example.Switch
 import "crm" CRM.Graph
 import "crm" CRM.Render
 import "crm" CRM.StateMachine
+import Data.Singletons.Base.TH
 import "text" Data.Text as Text (unlines)
 import "hspec" Test.Hspec (Spec, describe, it, shouldBe)
 
@@ -51,14 +52,14 @@ spec =
           `shouldBe` Graph []
 
       it "should render the switch machine" $ do
-        baseMachineAsGraph switchMachine
+        baseMachineAsGraph (switchMachine SFalse)
           `shouldBe` Graph
             [ (True, False)
             , (False, True)
             ]
 
       it "should render the lockDoor machine" $ do
-        baseMachineAsGraph lockDoorMachine
+        baseMachineAsGraph (lockDoorMachine SIsLockClosed)
           `shouldBe` Graph
             [ (IsLockOpen, IsLockClosed)
             , (IsLockClosed, IsLockOpen)
@@ -74,7 +75,7 @@ spec =
             ]
 
       it "should render the basic switch machine" $ do
-        renderUntypedMermaid (machineAsGraph (Basic switchMachine))
+        renderUntypedMermaid (machineAsGraph (Basic $ switchMachine SFalse))
           `shouldBe` Text.unlines
             [ "stateDiagram-v2"
             , "True --> False"
@@ -82,7 +83,7 @@ spec =
             ]
 
       it "should render the basic lockDoor machine" $ do
-        renderUntypedMermaid (machineAsGraph (Basic lockDoorMachine))
+        renderUntypedMermaid (machineAsGraph (Basic $ lockDoorMachine SIsLockClosed))
           `shouldBe` Text.unlines
             [ "stateDiagram-v2"
             , "IsLockOpen --> IsLockClosed"
