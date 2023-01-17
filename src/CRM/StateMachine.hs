@@ -67,3 +67,16 @@ instance Choice StateMachine where
   right' :: StateMachine a b -> StateMachine (Either c a) (Either c b)
   right' (Basic baseMachine) = Basic $ right' baseMachine
   right' (Compose machine1 machine2) = Compose (right' machine1) (right' machine2)
+
+-- * Run a state machine
+
+-- | Given an `input`, run the machine to get an output and a new version of
+-- the machine
+run :: StateMachine a b -> a -> (b, StateMachine a b)
+run (Basic baseMachine) a = Basic <$> runBaseMachine baseMachine a
+run (Compose machine1 machine2) a =
+  let
+    (output1, machine1') = run machine1 a
+    (output2, machine2') = run machine2 output1
+   in
+    (output2, Compose machine1' machine2')
