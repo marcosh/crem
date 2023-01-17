@@ -6,6 +6,7 @@ module CRM.StateMachine where
 import CRM.BaseMachine as BaseMachine
 import CRM.Topology
 import "base" Control.Category (Category (..))
+import "base" Data.Bifunctor (bimap)
 import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
 
@@ -25,6 +26,17 @@ data StateMachine input output where
     :: StateMachine a b
     -> StateMachine b c
     -> StateMachine a c
+  Parallel
+    :: StateMachine a b
+    -> StateMachine c d
+    -> StateMachine (a, c) (b, d)
+  Alternative
+    :: StateMachine a b
+    -> StateMachine c d
+    -> StateMachine (Either a c) (Either b d)
+
+stateless :: (a -> b) -> StateMachine a b
+stateless f = Basic $ statelessBase f
 
 -- * Category
 
@@ -41,32 +53,32 @@ instance Profunctor StateMachine where
   lmap :: (a -> b) -> StateMachine b c -> StateMachine a c
   lmap f (Basic baseMachine) = Basic $ lmap f baseMachine
   lmap f (Compose machine1 machine2) = Compose (lmap f machine1) machine2
+  lmap f machine@(Parallel _ _) = Compose (stateless f) machine
+  lmap f machine@(Alternative _ _) = Compose (stateless f) machine
 
   rmap :: (b -> c) -> StateMachine a b -> StateMachine a c
   rmap f (Basic baseMachine) = Basic $ rmap f baseMachine
   rmap f (Compose machine1 machine2) = Compose machine1 (rmap f machine2)
+  rmap f machine@(Parallel _ _) = Compose machine (stateless f)
+  rmap f machine@(Alternative _ _) = Compose machine (stateless f)
 
 -- * Strong
 
 instance Strong StateMachine where
   first' :: StateMachine a b -> StateMachine (a, c) (b, c)
-  first' (Basic baseMachine) = Basic $ first' baseMachine
-  first' (Compose machine1 machine2) = Compose (first' machine1) (first' machine2)
+  first' = flip Parallel Control.Category.id
 
   second' :: StateMachine a b -> StateMachine (c, a) (c, b)
-  second' (Basic baseMachine) = Basic $ second' baseMachine
-  second' (Compose machine1 machine2) = Compose (second' machine1) (second' machine2)
+  second' = Parallel Control.Category.id
 
 -- * Choice
 -- | An instance of `Choice` allows us to have parallel composition of state machines, meaning that we can pass two inputs to two state machines and get out the outputs of both
 instance Choice StateMachine where
   left' :: StateMachine a b -> StateMachine (Either a c) (Either b c)
-  left' (Basic baseMachine) = Basic $ left' baseMachine
-  left' (Compose machine1 machine2) = Compose (left' machine1) (left' machine2)
+  left' = flip Alternative Control.Category.id
 
   right' :: StateMachine a b -> StateMachine (Either c a) (Either c b)
-  right' (Basic baseMachine) = Basic $ right' baseMachine
-  right' (Compose machine1 machine2) = Compose (right' machine1) (right' machine2)
+  right' = Alternative Control.Category.id
 
 -- * Run a state machine
 
@@ -80,3 +92,13 @@ run (Compose machine1 machine2) a =
     (output2, machine2') = run machine2 output1
    in
     (output2, Compose machine1' machine2')
+run (Parallel machine1 machine2) a =
+  let
+    (output1, machine1') = run machine1 (fst a)
+    (output2, machine2') = run machine2 (snd a)
+   in
+    ((output1, output2), Parallel machine1' machine2')
+run (Alternative machine1 machine2) a =
+  case a of
+    Left a1 -> bimap Left (`Alternative` machine2) $ run machine1 a1
+    Right a2 -> bimap Right (machine1 `Alternative`) $ run machine2 a2

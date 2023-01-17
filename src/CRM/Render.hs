@@ -46,3 +46,11 @@ machineAsGraph (Compose machine1 machine2) =
   untypedProductGraph
     (machineAsGraph machine1)
     (machineAsGraph machine2)
+machineAsGraph (Parallel machine1 machine2) =
+  untypedProductGraph
+    (machineAsGraph machine1)
+    (machineAsGraph machine2)
+machineAsGraph (Alternative machine1 machine2) =
+  untypedProductGraph
+    (machineAsGraph machine1)
+    (machineAsGraph machine2)

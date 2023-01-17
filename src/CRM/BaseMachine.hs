@@ -107,15 +107,21 @@ instance Functor (ActionResult topology state initialVertex) where
   fmap f (ActionResult state output) =
     ActionResult state (f output)
 
+-- ** Stateless machines
+
+statelessBase :: (a -> b) -> BaseMachine TrivialTopology a b
+statelessBase f =
+  BaseMachine
+    { initialState = InitialState STuple0
+    , action = \state input ->
+        ActionResult state $ f input
+    }
+
 -- ** Identity machine
 
 -- | The `id` machine always outputs its input and never changes its state
-identity :: BaseMachine ('Topology '[ '( '(), '[ '()])]) a a
-identity =
-  BaseMachine
-    { initialState = InitialState STuple0
-    , action = ActionResult
-    }
+identity :: BaseMachine TrivialTopology a a
+identity = statelessBase id
 
 -- ** Run a machine
 
