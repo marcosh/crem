@@ -1,5 +1,6 @@
 module CRM.StateMachineSpec where
 
+import CRM.Example.BooleanStateMachine (booleanStateMachine)
 import CRM.Example.LockDoor
 import CRM.Example.Switch (switchMachine)
 import "crm" CRM.StateMachine
@@ -8,7 +9,6 @@ import "hspec" Test.Hspec (Expectation, Spec, describe, it, shouldBe)
 
 shouldOutput :: (Eq b, Show b) => (b, StateMachine a b) -> b -> Expectation
 shouldOutput (output, _) expectedOutput = output `shouldBe` expectedOutput
-
 spec :: Spec
 spec =
   describe "StateMachine" $ do
@@ -66,3 +66,16 @@ spec =
           let
             runOnce = snd $ run (Basic $ lockDoorMachine SIsLockLocked) LockUnlock
           run runOnce LockOpen `shouldOutput` LockOpened
+
+      describe "boolean state machine" $ do
+        it "outputs 1 when it is in a False state and receives a 0" $ do
+          run (booleanStateMachine SFalse) 0 `shouldOutput` 1
+
+        it "outputs 3 when it is in a False state and receives a 1" $ do
+          run (booleanStateMachine SFalse) 1 `shouldOutput` 3
+
+        it "outputs -1 when it is in a True state and receives a 0" $ do
+          run (booleanStateMachine STrue) 0 `shouldOutput` (-1)
+
+        it "outputs 5 when it is in a True state and receives a 1" $ do
+          run (booleanStateMachine STrue) 1 `shouldOutput` 5

@@ -124,6 +124,19 @@ statelessBase f =
 identity :: BaseMachine TrivialTopology a a
 identity = statelessBase id
 
+-- ** Unfold
+
+-- | a machine modelled with explicit state, where every transition is allowed
+unrestrictedBaseMachine
+  :: (forall initialVertex. state initialVertex -> a -> ActionResult (AllowAllTopology @vertex) state initialVertex b)
+  -> InitialState (state :: vertex -> Type)
+  -> BaseMachine (AllowAllTopology @vertex) a b
+unrestrictedBaseMachine action initialState =
+  BaseMachine
+    { initialState = initialState
+    , action = action
+    }
+
 -- ** Run a machine
 
 -- | Given an `input`, run the machine to get an output and a new version of
