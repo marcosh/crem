@@ -7,8 +7,10 @@ import CRM.BaseMachine as BaseMachine
 import CRM.Topology
 import "base" Control.Category (Category (..))
 import "base" Data.Bifunctor (bimap)
+import "base" Data.Kind (Type)
 import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
+import Prelude hiding ((.))
 
 -- | A `StateMachine` is a [Mealy machine](https://en.wikipedia.org/wiki/Mealy_machine)
 -- with inputs of type `input` and outputs of type `output`
@@ -35,8 +37,21 @@ data StateMachine input output where
     -> StateMachine c d
     -> StateMachine (Either a c) (Either b d)
 
+-- | a state machine which does not rely on state
 stateless :: (a -> b) -> StateMachine a b
 stateless f = Basic $ statelessBase f
+
+-- | a machine modelled with explicit state, where every transition is allowed
+unrestrictedMachine
+  :: (Demote vertex ~ vertex, SingKind vertex, SingI (AllowAllTopology @vertex), Show vertex)
+  => ( forall initialVertex
+        . state initialVertex
+       -> a
+       -> ActionResult (AllowAllTopology @vertex) state initialVertex b
+     )
+  -> InitialState (state :: vertex -> Type)
+  -> StateMachine a b
+unrestrictedMachine action state = Basic $ unrestrictedBaseMachine action state
 
 -- * Category
 

@@ -10,6 +10,7 @@
 module CRM.Topology where
 
 import "singletons-base" Data.Singletons.Base.TH
+import "singletons-base" Prelude.Singletons
 
 -- * Topology
 
@@ -67,5 +68,14 @@ $( singletons
     [d|
       trivialTopology :: Topology ()
       trivialTopology = Topology []
+      |]
+ )
+
+-- ** Allow all topology
+
+$( singletons
+    [d|
+      allowAllTopology :: (Bounded a, Enum a) => Topology a
+      allowAllTopology = Topology [(a, [minBound .. maxBound]) | a <- [minBound .. maxBound]]
       |]
  )
