@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE TypeFamilies #-}
 
 module CRM.StateMachine where
 
@@ -8,7 +9,10 @@ import CRM.Topology
 import "base" Control.Category (Category (..))
 import "base" Data.Bifunctor (bimap)
 import "base" Data.Kind (Type)
-import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
+import "base" Data.List.NonEmpty (NonEmpty (..), fromList)
+import "profunctors" Data.Profunctor (Choice (..), Costrong (..), Profunctor (..), Strong (..))
+import "profunctors" Data.Profunctor.Rep (Corepresentable (..), unfirstCorep, unsecondCorep)
+import "profunctors" Data.Profunctor.Sieve (Cosieve (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
 import Prelude hiding ((.))
 
@@ -17,7 +21,7 @@ import Prelude hiding ((.))
 data StateMachine input output where
   Basic
     :: forall vertex (topology :: Topology vertex) input output
-     . ( Demote (Topology vertex) ~ Topology vertex
+     . ( Demote vertex ~ vertex
        , SingKind vertex
        , SingI topology
        , Show vertex
@@ -93,6 +97,56 @@ instance Choice StateMachine where
 
   right' :: StateMachine a b -> StateMachine (Either c a) (Either c b)
   right' = Alternative Control.Category.id
+
+-- * Cosieve
+
+-- | see https://hackage.haskell.org/package/profunctors-5.6.2/docs/Data-Profunctor-Sieve.html#v:cosieve
+-- This is basically saying that we can interpret a `StateMachine a b` as a
+-- function from a `NonEmpty a` to `b`
+instance Cosieve StateMachine NonEmpty where
+  cosieve :: StateMachine a b -> NonEmpty a -> b
+  cosieve machine (a0 :| as0) =
+    case run machine a0 of
+      (b, machine') -> case as0 of
+        [] -> b
+        a1 : as1 -> cosieve machine' (a1 :| as1)
+
+-- * Corepresentable
+
+-- the state space for a machine with a topology containing a single vertex
+-- and a type of possible states in that vertex
+data SingleVertexState a (vertex :: ()) where
+  SingleVertexState :: a -> SingleVertexState a '()
+
+-- | see https://hackage.haskell.org/package/profunctors-5.6.2/docs/Data-Profunctor-Rep.html#t:Corepresentable
+-- This is basically saying that we can interpret a function from `NonEmpty a`
+-- to `b` as a `StateMachine a b`, where we store the tail of the non-empty
+-- list in the state of the machine.
+instance Corepresentable StateMachine where
+  type Corep StateMachine = NonEmpty
+
+  cotabulate :: forall a b. (NonEmpty a -> b) -> StateMachine a b
+  cotabulate f =
+    Basic @() @TrivialTopology $
+      BaseMachine
+        { initialState = InitialState $ SingleVertexState ([] :: [a])
+        , action = \(SingleVertexState as) input ->
+            let
+              allInputs = input : as
+             in
+              ActionResult
+                (SingleVertexState allInputs)
+                (f . fromList . reverse $ allInputs)
+        }
+
+-- * Costrong
+
+instance Costrong StateMachine where
+  unfirst :: StateMachine (a, c) (b, c) -> StateMachine a b
+  unfirst = unfirstCorep
+
+  unsecond :: StateMachine (c, a) (c, b) -> StateMachine a b
+  unsecond = unsecondCorep
 
 -- * Run a state machine
 

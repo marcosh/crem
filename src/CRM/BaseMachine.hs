@@ -4,7 +4,9 @@ module CRM.BaseMachine where
 
 import CRM.Topology
 import "base" Data.Kind (Type)
+import "base" Data.List.NonEmpty (NonEmpty (..))
 import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
+import "profunctors" Data.Profunctor.Sieve (Cosieve (..))
 import "singletons-base" Data.Singletons.Base.TH (STuple0 (..))
 
 -- * Specifying state machines
@@ -77,6 +79,17 @@ instance Choice (BaseMachine topology) where
           Right a -> Right <$> action state a
       }
 
+-- | see https://hackage.haskell.org/package/profunctors-5.6.2/docs/Data-Profunctor-Sieve.html#v:cosieve
+-- This is basically saying that we can interpret a `BaseMachine topology a b`
+-- as a function from a `NonEmpty a` to `b`
+instance Cosieve (BaseMachine topology) NonEmpty where
+  cosieve :: BaseMachine topology a b -> NonEmpty a -> b
+  cosieve machine (a0 :| as0) =
+    case runBaseMachine machine a0 of
+      (b, machine') -> case as0 of
+        [] -> b
+        a1 : as1 -> cosieve machine' (a1 :| as1)
+
 -- | A value of type `InitialState state` describes the initial state of a
 -- state machine, describing the initial `vertex` in the `topology` and the
 -- actual initial data of type `state vertex`
@@ -110,7 +123,7 @@ instance Functor (ActionResult topology state initialVertex) where
 -- ** Stateless machines
 
 -- | The `statelessBase` transforms its input to its output and never changes its state
-statelessBase :: (a -> b) -> BaseMachine TrivialTopology a b
+statelessBase :: (a -> b) -> BaseMachine (TrivialTopology @()) a b
 statelessBase f =
   BaseMachine
     { initialState = InitialState STuple0
@@ -121,7 +134,7 @@ statelessBase f =
 -- ** Identity machine
 
 -- | The `identity` machine simply outputs its input and never changes its state. It is the result of `statelessBase id`.
-identity :: BaseMachine TrivialTopology a a
+identity :: BaseMachine (TrivialTopology @()) a a
 identity = statelessBase id
 
 -- ** Unfold

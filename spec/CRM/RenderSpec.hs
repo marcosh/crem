@@ -6,6 +6,7 @@ import CRM.Example.Switch
 import "crm" CRM.Graph
 import "crm" CRM.Render
 import "crm" CRM.StateMachine
+import CRM.Topology (trivialTopology)
 import Data.Singletons.Base.TH
 import "text" Data.Text as Text (unlines)
 import "hspec" Test.Hspec (Spec, describe, it, shouldBe)
@@ -27,7 +28,7 @@ spec =
 
     describe "topologyAsGraph" $ do
       it "should render the topology with a single vertex" $ do
-        topologyAsGraph singleVertexTopology
+        topologyAsGraph (trivialTopology @())
           `shouldBe` Graph []
 
       it "should render the switch topology" $ do
