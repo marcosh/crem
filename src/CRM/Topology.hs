@@ -18,7 +18,8 @@ import "singletons-base" Prelude.Singletons
 -- It contains the collection of allowed transitions
 $( singletons
     [d|
-      newtype Topology vertex = Topology {edges :: [(vertex, [vertex])]}
+      newtype Topology vertex = Topology
+        {edges :: [(vertex, [vertex])]}
       |]
  )
 
@@ -66,7 +67,9 @@ instance {-# INCOHERENT #-} AllowedTransition topology a a where
 -- | The trivial topology only allows identity transitions.
 $( singletons
     [d|
-      trivialTopology :: Topology ()
+      -- Given a type `a` for vertices, only trivial transitions, i.e. staying
+      -- at the same vertex, are allowed
+      trivialTopology :: Topology a
       trivialTopology = Topology []
       |]
  )
@@ -75,6 +78,8 @@ $( singletons
 
 $( singletons
     [d|
+      -- Given a type `a` for vertices, every transition from one vertex to
+      -- any other is allowed
       allowAllTopology :: (Bounded a, Enum a) => Topology a
       allowAllTopology = Topology [(a, [minBound .. maxBound]) | a <- [minBound .. maxBound]]
       |]

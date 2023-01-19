@@ -4,11 +4,24 @@ import CRM.Example.BooleanStateMachine (booleanStateMachine)
 import CRM.Example.LockDoor
 import CRM.Example.Switch (switchMachine)
 import "crm" CRM.StateMachine
+import "base" Data.List.NonEmpty (NonEmpty, fromList)
+import "profunctors" Data.Profunctor.Rep (cotabulate)
+import "profunctors" Data.Profunctor.Sieve (cosieve)
 import "singletons-base" Data.Singletons.Base.TH
 import "hspec" Test.Hspec (Expectation, Spec, describe, it, shouldBe)
+import "hspec" Test.Hspec.QuickCheck (prop)
+import "QuickCheck" Test.QuickCheck (arbitrary, forAll, suchThat)
 
 shouldOutput :: (Eq b, Show b) => (b, StateMachine a b) -> b -> Expectation
 shouldOutput (output, _) expectedOutput = output `shouldBe` expectedOutput
+
+shouldHaveTheSameOutputAs
+  :: (Eq b, Show b)
+  => (b, StateMachine a b)
+  -> (b, StateMachine a b)
+  -> Expectation
+shouldHaveTheSameOutputAs (b1, _) (b2, _) = b1 `shouldBe` b2
+
 spec :: Spec
 spec =
   describe "StateMachine" $ do
@@ -79,3 +92,19 @@ spec =
 
         it "outputs 5 when it is in a True state and receives a 1" $ do
           run (booleanStateMachine STrue) 1 `shouldOutput` 5
+
+    describe "cotabulate and cosieve are each other inverses" $ do
+      prop "cotabulate . cosieve = id" $ do
+        forAll (arbitrary @Int) $ do
+          \input ->
+            run (booleanStateMachine SFalse) input
+              `shouldHaveTheSameOutputAs` run (cotabulate . cosieve $ booleanStateMachine SFalse) input
+
+      prop "cosieve . cotabulate = id" $ do
+        let
+          nonEmptyFunction :: NonEmpty Int -> Int
+          nonEmptyFunction = sum
+        forAll (fromList <$> (arbitrary @[Int] `suchThat` (not . null))) $ do
+          \input ->
+            nonEmptyFunction input
+              `shouldBe` (cosieve . cotabulate @StateMachine $ nonEmptyFunction) input
