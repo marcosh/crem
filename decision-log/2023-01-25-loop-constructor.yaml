@@ -1,0 +1,41 @@
+name: Add Loop constructor
+date: 2023-01-25
+context: >
+  We would like to have machines which are able to feed back their output as
+  input to themselves, if types align correctly.
+
+  One option to do this is to use the `Costrong` instance for machines, or
+  similarly an `ArrowLoop` instance. This would require the use of a `fix`
+  style using `unfirst` or `loop`.
+
+  The other option is adding a new constructor `Loop` to `StateMachine` and use
+  that to loop over the provided machine when the machine is run.
+  In general it does not make much sense to loopa machine of type
+  `StateMachine a a`, since that would mean never stopping.
+  One option to signal the stopping would be to restrict `Loop` only to
+  machines with an output of type `m b`, where `m` admits and instance of
+  `MonadError e m`. This does not work as good as we would like, since we are
+  very much interested in using `m = []` and currently there is no `MonadError`
+  instance for lists.
+  The other option is using directly `Loop` only on machines of type
+  `StateMachine a [a]`. This also makes sense since `StateMachine a b` is
+  isomorphic to `(NonEmpty a) -> b` and then `[a]` could be seen as the sum of
+  the stop case (`[]`) and the continuation case `NonEmpty a`.
+
+  Moreover, adding a new constructor, we could use that information when we
+  need to represent graphically our machines.
+decision: >
+  For the moment, until we understand more about the categorical setting which
+  underlies the issue, we are going to use
+
+  ```
+  Loop :: StateMachine a [a] -> StateMachine a [a]
+  ```
+consequences: >
+  A new `Loop` constructor is added to the `StateMachine` data type.
+
+  For the moment we can compute the topology of a looping machine as transitive
+  closure of the original topology.
+
+  It could be possible in the future to use that information in representing
+  correctly the flow on the machine.

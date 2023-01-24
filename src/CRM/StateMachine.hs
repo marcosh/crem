@@ -7,7 +7,8 @@ module CRM.StateMachine where
 import CRM.BaseMachine as BaseMachine
 import CRM.Topology
 import "base" Control.Category (Category (..))
-import "base" Data.Bifunctor (bimap)
+import "base" Data.Bifunctor (Bifunctor (..), bimap)
+import "base" Data.Foldable (foldl')
 import "base" Data.Kind (Type)
 import "base" Data.List.NonEmpty (NonEmpty (..), fromList)
 import "profunctors" Data.Profunctor (Choice (..), Costrong (..), Profunctor (..), Strong (..))
@@ -24,6 +25,7 @@ data StateMachine input output where
      . ( Demote vertex ~ vertex
        , SingKind vertex
        , SingI topology
+       , Eq vertex
        , Show vertex
        )
     => BaseMachine topology input output
@@ -40,6 +42,9 @@ data StateMachine input output where
     :: StateMachine a b
     -> StateMachine c d
     -> StateMachine (Either a c) (Either b d)
+  Loop
+    :: StateMachine a [a]
+    -> StateMachine a [a]
 
 -- | a state machine which does not rely on state
 stateless :: (a -> b) -> StateMachine a b
@@ -47,7 +52,12 @@ stateless f = Basic $ statelessBase f
 
 -- | a machine modelled with explicit state, where every transition is allowed
 unrestrictedMachine
-  :: (Demote vertex ~ vertex, SingKind vertex, SingI (AllowAllTopology @vertex), Show vertex)
+  :: ( Demote vertex ~ vertex
+     , SingKind vertex
+     , SingI (AllowAllTopology @vertex)
+     , Eq vertex
+     , Show vertex
+     )
   => ( forall initialVertex
         . state initialVertex
        -> a
@@ -74,7 +84,6 @@ instance Profunctor StateMachine where
   lmap f (Compose machine1 machine2) = Compose (lmap f machine1) machine2
   lmap f machine = Compose (stateless f) machine
 
-
   rmap :: (b -> c) -> StateMachine a b -> StateMachine a c
   rmap f (Basic baseMachine) = Basic $ rmap f baseMachine
   rmap f (Compose machine1 machine2) = Compose machine1 (rmap f machine2)
@@ -90,6 +99,7 @@ instance Strong StateMachine where
   second' = Parallel Control.Category.id
 
 -- * Choice
+
 -- | An instance of `Choice` allows us to have parallel composition of state machines, meaning that we can pass two inputs to two state machines and get out the outputs of both
 instance Choice StateMachine where
   left' :: StateMachine a b -> StateMachine (Either a c) (Either b c)
@@ -170,3 +180,19 @@ run (Alternative machine1 machine2) a =
   case a of
     Left a1 -> bimap Left (`Alternative` machine2) $ run machine1 a1
     Right a2 -> bimap Right (machine1 `Alternative`) $ run machine2 a2
+run (Loop machine) a =
+  let
+    (as, machine') = run machine a
+   in
+    first (as <>) $ runMultiple (Loop machine') as
+
+-- | process multiple inputs in one go, accumulating the results in a monoid
+runMultiple
+  :: (Foldable f, Monoid b)
+  => StateMachine a b
+  -> f a
+  -> (b, StateMachine a b)
+runMultiple machine =
+  foldl'
+    (\(b, machine') -> first (b <>) . run machine')
+    (mempty, machine)
