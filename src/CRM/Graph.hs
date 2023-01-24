@@ -1,5 +1,7 @@
 module CRM.Graph where
 
+import "base" Data.List (nub)
+
 -- * Graph
 
 -- | A graph is just a list of edges between vertices of type `a`
@@ -21,10 +23,30 @@ productGraph (Graph edges1) (Graph edges2) =
     )
       <$> [(edge1, edge2) | edge1 <- edges1, edge2 <- edges2]
 
+-- computes all the possible paths in the input graph and considers them as
+-- edges.
+-- Notive that the current implementation is removing duplicates
+transitiveClosureGraph :: Eq a => Graph a -> Graph a
+transitiveClosureGraph graph@(Graph edges) =
+  Graph $
+    foldr
+      ( \a edgesSoFar ->
+          edgesSoFar <> pathsStartingWith graph a
+      )
+      []
+      (nub $ fst <$> edges)
+  where
+    pathsStartingWith :: Eq a => Graph a -> a -> [(a, a)]
+    pathsStartingWith graph'@(Graph edges') a =
+      let
+        edgesStartingWithA = filter ((== a) . fst) edges'
+       in
+        edgesStartingWithA <> ((a,) . snd <$> (pathsStartingWith graph' . snd =<< edgesStartingWithA))
+
 -- * UntypedGraph
 
 -- A data type to represent a graph which is not tracking the vertex type
-data UntypedGraph = forall a. (Show a) => UntypedGraph (Graph a)
+data UntypedGraph = forall a. (Eq a, Show a) => UntypedGraph (Graph a)
 
 instance Show UntypedGraph where
   show :: UntypedGraph -> String
@@ -34,3 +56,8 @@ instance Show UntypedGraph where
 untypedProductGraph :: UntypedGraph -> UntypedGraph -> UntypedGraph
 untypedProductGraph (UntypedGraph graph1) (UntypedGraph graph2) =
   UntypedGraph (productGraph graph1 graph2)
+
+-- same as `transitiveClosureGraph` but for `UntypedGraph`
+untypedTransitiveClosureGraph :: UntypedGraph -> UntypedGraph
+untypedTransitiveClosureGraph (UntypedGraph graph) =
+  UntypedGraph (transitiveClosureGraph graph)

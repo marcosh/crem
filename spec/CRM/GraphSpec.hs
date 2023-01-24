@@ -18,3 +18,10 @@ spec =
             , ((1, 'a'), (2, 'b'))
             , ((1, 'c'), (2, 'd'))
             ]
+
+    describe "transitiveClosureGraph" $ do
+      it "computes correctly the transitive closure of a graph" $
+        do
+          transitiveClosureGraph
+            (Graph [(1 :: Int, 2), (2, 3), (1, 4)])
+          `shouldBe` Graph [(2, 3), (1, 2), (1, 4), (1, 3)]

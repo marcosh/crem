@@ -2,6 +2,7 @@ module CRM.StateMachineSpec where
 
 import CRM.Example.BooleanStateMachine (booleanStateMachine)
 import CRM.Example.LockDoor
+import CRM.Example.PlusOneUpToFour (plus1UpTo4)
 import CRM.Example.Switch (switchMachine)
 import "crm" CRM.StateMachine
 import "base" Data.List.NonEmpty (NonEmpty, fromList)
@@ -108,3 +109,12 @@ spec =
           \input ->
             nonEmptyFunction input
               `shouldBe` (cosieve . cotabulate @StateMachine $ nonEmptyFunction) input
+
+    describe "Loop constructor runs correctly" $ do
+      describe "with the plus1UpTo4 machine" $ do
+        it "runs correctly on a single input" $ do
+          run (Loop plus1UpTo4) 1 `shouldOutput` [2, 3, 4, 5]
+          run (Loop plus1UpTo4) 5 `shouldOutput` []
+
+        it "processes correctly multiple inputs" $ do
+          runMultiple (Loop plus1UpTo4) [1, 1] `shouldOutput` [2, 3, 4, 5, 2, 3, 4, 5]
