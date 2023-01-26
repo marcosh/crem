@@ -9,7 +9,7 @@ import "singletons-base" Data.Singletons.Base.TH
 
 oneVertexMachine :: BaseMachine (TrivialTopology @()) () ()
 oneVertexMachine =
-  BaseMachine
+  BaseMachineT
     { initialState = InitialState STuple0
-    , action = \STuple0 _ -> ActionResult STuple0 ()
+    , action = \STuple0 _ -> pureResult () STuple0
     }

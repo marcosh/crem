@@ -15,11 +15,11 @@ booleanStateMachine initialState =
     ( \state input -> case state of
         SFalse ->
           if even input
-            then ActionResult SFalse (input + 1)
-            else ActionResult STrue (input * 3)
+            then pureResult (input + 1) SFalse
+            else pureResult (input * 3) STrue
         STrue ->
           if even input
-            then ActionResult STrue (input - 1)
-            else ActionResult SFalse (input * 5)
+            then pureResult (input - 1) STrue
+            else pureResult (input * 5) SFalse
     )
     (InitialState initialState)
