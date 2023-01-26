@@ -59,7 +59,7 @@ instance Strong StateMachine where
   second' (Compose machine1 machine2) = Compose (second' machine1) (second' machine2)
 
 -- * Choice
-
+-- | An instance of `Choice` allows us to have parallel composition of state machines, meaning that we can pass two inputs to two state machines and get out the outputs of both
 instance Choice StateMachine where
   left' :: StateMachine a b -> StateMachine (Either a c) (Either b c)
   left' (Basic baseMachine) = Basic $ left' baseMachine
