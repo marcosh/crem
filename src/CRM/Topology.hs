@@ -62,6 +62,7 @@ instance {-# INCOHERENT #-} AllowedTransition topology a a where
 
 -- ** Trivial topology
 
+-- | The trivial topology only allows identity transitions.
 $( singletons
     [d|
       trivialTopology :: Topology ()
