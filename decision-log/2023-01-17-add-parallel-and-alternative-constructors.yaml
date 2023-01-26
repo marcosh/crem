@@ -10,7 +10,7 @@ context: >
   Still everytime that we are combining two state machine, either sequentially,
   in parallel or in alternative, the set of states is always the cartesian
   product of the sets of states. It follows that we would not be able to
-  understand
+  understand which constructor we used just by looking at the topology.
 decision: >
   We decide to add specific constructors for parallel and alternative
   composition.
