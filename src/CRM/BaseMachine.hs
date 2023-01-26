@@ -109,6 +109,7 @@ instance Functor (ActionResult topology state initialVertex) where
 
 -- ** Stateless machines
 
+-- | The `statelessBase` transforms its input to its output and never changes its state
 statelessBase :: (a -> b) -> BaseMachine TrivialTopology a b
 statelessBase f =
   BaseMachine
@@ -119,7 +120,7 @@ statelessBase f =
 
 -- ** Identity machine
 
--- | The `id` machine always outputs its input and never changes its state
+-- | The `identity` machine simply outputs its input and never changes its state. It is the result of `statelessBase id`.
 identity :: BaseMachine TrivialTopology a a
 identity = statelessBase id
 

@@ -53,14 +53,13 @@ instance Profunctor StateMachine where
   lmap :: (a -> b) -> StateMachine b c -> StateMachine a c
   lmap f (Basic baseMachine) = Basic $ lmap f baseMachine
   lmap f (Compose machine1 machine2) = Compose (lmap f machine1) machine2
-  lmap f machine@(Parallel _ _) = Compose (stateless f) machine
-  lmap f machine@(Alternative _ _) = Compose (stateless f) machine
+  lmap f machine = Compose (stateless f) machine
+
 
   rmap :: (b -> c) -> StateMachine a b -> StateMachine a c
   rmap f (Basic baseMachine) = Basic $ rmap f baseMachine
   rmap f (Compose machine1 machine2) = Compose machine1 (rmap f machine2)
-  rmap f machine@(Parallel _ _) = Compose machine (stateless f)
-  rmap f machine@(Alternative _ _) = Compose machine (stateless f)
+  rmap f machine = Compose machine (stateless f)
 
 -- * Strong
 
@@ -92,10 +91,10 @@ run (Compose machine1 machine2) a =
     (output2, machine2') = run machine2 output1
    in
     (output2, Compose machine1' machine2')
-run (Parallel machine1 machine2) a =
+run (Parallel machine1 machine2) (a, b) =
   let
-    (output1, machine1') = run machine1 (fst a)
-    (output2, machine2') = run machine2 (snd a)
+    (output1, machine1') = run machine1 a
+    (output2, machine2') = run machine2 b
    in
     ((output1, output2), Parallel machine1' machine2')
 run (Alternative machine1 machine2) a =
