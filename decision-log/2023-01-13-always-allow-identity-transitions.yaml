@@ -1,13 +1,13 @@
 name: Always allow identity transitions
 date: 2023-01-13
 context: >
-  The topology of a state machine describes which are the allowed transitions.
+  The topology of a state machine lists its allowed transitions.
 
   Sometimes (like in the implementation of the `Choice` typeclass) we would
   simply like to say that we are not changing state. This is still seen as a
   transition by our current implementation.
 decision: >
-  We decide to consider everytime not changing state as a valid transition.
+  We will always consider not changing state as a valid transition.
 consequences: >
   We create a new instance of our `AllowedTransition` typeclass which searches
   for a proof term indicating that a transition is allowed. Such an instance
