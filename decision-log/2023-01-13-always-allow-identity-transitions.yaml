@@ -16,3 +16,6 @@ consequences: >
 
   This implies that it is not necessary to specify in a topology that every
   trivial transition is allowed.
+  
+  Moreover this implies that with library we will not be able to model machines
+  that do not allow any trivial transition.
