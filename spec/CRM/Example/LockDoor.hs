@@ -47,22 +47,22 @@ data LockDoorEvent
 
 lockDoorMachine :: SLockDoorVertex a -> BaseMachine LockDoorTopology LockDoorCommand LockDoorEvent
 lockDoorMachine initialState =
-  BaseMachine
+  BaseMachineT
     { initialState = InitialState initialState
     , action = \case
         SIsLockOpen -> \case
-          LockOpen -> ActionResult SIsLockOpen LockNoOp
-          LockClose -> ActionResult SIsLockClosed LockClosed
-          LockLock -> ActionResult SIsLockOpen LockNoOp
-          LockUnlock -> ActionResult SIsLockOpen LockNoOp
+          LockOpen -> pureResult LockNoOp SIsLockOpen
+          LockClose -> pureResult LockClosed SIsLockClosed
+          LockLock -> pureResult LockNoOp SIsLockOpen
+          LockUnlock -> pureResult LockNoOp SIsLockOpen
         SIsLockClosed -> \case
-          LockOpen -> ActionResult SIsLockOpen LockOpened
-          LockClose -> ActionResult SIsLockClosed LockNoOp
-          LockLock -> ActionResult SIsLockLocked LockLocked
-          LockUnlock -> ActionResult SIsLockClosed LockNoOp
+          LockOpen -> pureResult LockOpened SIsLockOpen
+          LockClose -> pureResult LockNoOp SIsLockClosed
+          LockLock -> pureResult LockLocked SIsLockLocked
+          LockUnlock -> pureResult LockNoOp SIsLockClosed
         SIsLockLocked -> \case
-          LockOpen -> ActionResult SIsLockLocked LockNoOp
-          LockClose -> ActionResult SIsLockLocked LockNoOp
-          LockLock -> ActionResult SIsLockLocked LockNoOp
-          LockUnlock -> ActionResult SIsLockClosed LockUnlocked
+          LockOpen -> pureResult LockNoOp SIsLockLocked
+          LockClose -> pureResult LockNoOp SIsLockLocked
+          LockLock -> pureResult LockNoOp SIsLockLocked
+          LockUnlock -> pureResult LockUnlocked SIsLockClosed
     }
