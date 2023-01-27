@@ -115,7 +115,6 @@ tests:
       - profunctors
       - singletons-base
       - text
-      - QuickCheck
     when:
     - condition: false
       other-modules: Paths_crm

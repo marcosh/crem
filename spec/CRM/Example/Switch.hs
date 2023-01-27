@@ -26,11 +26,11 @@ $( singletons
 
 switchMachine :: SBool a -> BaseMachine SwitchTopology () ()
 switchMachine initialState =
-  BaseMachine
+  BaseMachineT
     { initialState = InitialState initialState
     , action = \case
         SFalse -> \case
-          () -> ActionResult STrue ()
+          () -> pureResult () STrue
         STrue -> \case
-          () -> ActionResult SFalse ()
+          () -> pureResult () SFalse
     }

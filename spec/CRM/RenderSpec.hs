@@ -7,6 +7,7 @@ import "crm" CRM.Graph
 import "crm" CRM.Render
 import "crm" CRM.StateMachine
 import CRM.Topology (trivialTopology)
+import Data.Functor.Identity
 import Data.Singletons.Base.TH
 import "text" Data.Text as Text (unlines)
 import "hspec" Test.Hspec (Spec, describe, it, shouldBe)
@@ -49,18 +50,18 @@ spec =
 
     describe "baseMachineAsGraph" $ do
       it "should render the machine with a single vertex" $ do
-        baseMachineAsGraph oneVertexMachine
+        baseMachineAsGraph (oneVertexMachine @Identity)
           `shouldBe` Graph []
 
       it "should render the switch machine" $ do
-        baseMachineAsGraph (switchMachine SFalse)
+        baseMachineAsGraph (switchMachine SFalse @Identity)
           `shouldBe` Graph
             [ (True, False)
             , (False, True)
             ]
 
       it "should render the lockDoor machine" $ do
-        baseMachineAsGraph (lockDoorMachine SIsLockClosed)
+        baseMachineAsGraph (lockDoorMachine SIsLockClosed @Identity)
           `shouldBe` Graph
             [ (IsLockOpen, IsLockClosed)
             , (IsLockClosed, IsLockOpen)
@@ -70,13 +71,13 @@ spec =
 
     describe "machineAsGraph" $ do
       it "should render the basic machine with a single vertex" $ do
-        renderUntypedMermaid (machineAsGraph (Basic oneVertexMachine))
+        renderUntypedMermaid (machineAsGraph (Basic $ oneVertexMachine @Identity))
           `shouldBe` Text.unlines
             [ "stateDiagram-v2"
             ]
 
       it "should render the basic switch machine" $ do
-        renderUntypedMermaid (machineAsGraph (Basic $ switchMachine SFalse))
+        renderUntypedMermaid (machineAsGraph (Basic $ switchMachine SFalse @Identity))
           `shouldBe` Text.unlines
             [ "stateDiagram-v2"
             , "True --> False"
@@ -84,7 +85,7 @@ spec =
             ]
 
       it "should render the basic lockDoor machine" $ do
-        renderUntypedMermaid (machineAsGraph (Basic $ lockDoorMachine SIsLockClosed))
+        renderUntypedMermaid (machineAsGraph (Basic $ lockDoorMachine SIsLockClosed @Identity))
           `shouldBe` Text.unlines
             [ "stateDiagram-v2"
             , "IsLockOpen --> IsLockClosed"

@@ -10,12 +10,7 @@ import "base" Control.Category (Category (..))
 import "base" Data.Bifunctor (Bifunctor (..), bimap)
 import "base" Data.Foldable (foldlM)
 import "base" Data.Kind (Type)
-
--- import "base" Data.List.NonEmpty (NonEmpty (..), fromList)
 import "profunctors" Data.Profunctor (Choice {-Costrong (..),-} (..), Profunctor (..), Strong (..))
-
--- import "profunctors" Data.Profunctor.Rep (Corepresentable (..), unfirstCorep, unsecondCorep)
--- import "profunctors" Data.Profunctor.Sieve (Cosieve (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
 import Prelude hiding ((.))
 
@@ -47,6 +42,11 @@ data StateMachineT m input output where
   Loop
     :: StateMachineT m a [a]
     -> StateMachineT m a [a]
+  Kleisli
+    :: (Foldable n, Monoid (n c))
+    => StateMachineT m a (n b)
+    -> StateMachineT m b (n c)
+    -> StateMachineT m a (n c)
 
 type StateMachine a b = forall m. Monad m => StateMachineT m a b
 
@@ -59,6 +59,7 @@ hoist f machine = case machine of
   Parallel machine1 machine2 -> Parallel (hoist f machine1) (hoist f machine2)
   Alternative machine1 machine2 -> Alternative (hoist f machine1) (hoist f machine2)
   Loop machine' -> Loop $ hoist f machine'
+  Kleisli machine1 machine2 -> Kleisli (hoist f machine1) (hoist f machine2)
 
 -- | a state machine which does not rely on state
 statelessT :: Applicative m => (a -> m b) -> StateMachineT m a b
@@ -196,6 +197,10 @@ run (Alternative machine1 machine2) a =
 run (Loop machine) a = do
   (as, machine') <- run machine a
   first (as <>) <$> runMultiple (Loop machine') as
+run (Kleisli machine1 machine2) a = do
+  (bs, machine1') <- run machine1 a
+  (cs, machine2') <- runMultiple machine2 bs
+  pure (cs, Kleisli machine1' machine2')
 
 -- | process multiple inputs in one go, accumulating the results in a monoid
 runMultiple
