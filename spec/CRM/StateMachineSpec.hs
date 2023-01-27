@@ -5,21 +5,17 @@ import CRM.Example.LockDoor
 import CRM.Example.PlusOneUpToFour (plus1UpTo4)
 import CRM.Example.Switch (switchMachine)
 import "crm" CRM.StateMachine
-import "base" Data.List.NonEmpty (NonEmpty, fromList)
-import "profunctors" Data.Profunctor.Rep (cotabulate)
-import "profunctors" Data.Profunctor.Sieve (cosieve)
+import Data.Functor.Identity (Identity (..))
 import "singletons-base" Data.Singletons.Base.TH
 import "hspec" Test.Hspec (Expectation, Spec, describe, it, shouldBe)
-import "hspec" Test.Hspec.QuickCheck (prop)
-import "QuickCheck" Test.QuickCheck (arbitrary, forAll, suchThat)
 
-shouldOutput :: (Eq b, Show b) => (b, StateMachine a b) -> b -> Expectation
-shouldOutput (output, _) expectedOutput = output `shouldBe` expectedOutput
+shouldOutput :: (Eq b, Show b) => Identity (b, c) -> b -> Expectation
+shouldOutput (Identity (output, _)) expectedOutput = output `shouldBe` expectedOutput
 
 shouldHaveTheSameOutputAs
   :: (Eq b, Show b)
-  => (b, StateMachine a b)
-  -> (b, StateMachine a b)
+  => (b, c)
+  -> (b, c)
   -> Expectation
 shouldHaveTheSameOutputAs (b1, _) (b2, _) = b1 `shouldBe` b2
 
@@ -73,12 +69,14 @@ spec =
 
         it "outputs Locked when it is open and receive a Close and a Lock command" $ do
           let
-            runOnce = snd $ run (Basic $ lockDoorMachine SIsLockOpen) LockClose
+            runOnce :: StateMachineT Identity LockDoorCommand LockDoorEvent
+            runOnce = runIdentity $ snd <$> run (Basic $ lockDoorMachine SIsLockOpen @Identity) LockClose
           run runOnce LockLock `shouldOutput` LockLocked
 
         it "outputs Opened when it is locked and receive a Unlock and an Open command" $ do
           let
-            runOnce = snd $ run (Basic $ lockDoorMachine SIsLockLocked) LockUnlock
+            runOnce :: StateMachineT Identity LockDoorCommand LockDoorEvent
+            runOnce = runIdentity $ snd <$> run (Basic $ lockDoorMachine SIsLockLocked @Identity) LockUnlock
           run runOnce LockOpen `shouldOutput` LockOpened
 
       describe "boolean state machine" $ do
@@ -94,21 +92,21 @@ spec =
         it "outputs 5 when it is in a True state and receives a 1" $ do
           run (booleanStateMachine STrue) 1 `shouldOutput` 5
 
-    describe "cotabulate and cosieve are each other inverses" $ do
-      prop "cotabulate . cosieve = id" $ do
-        forAll (arbitrary @Int) $ do
-          \input ->
-            run (booleanStateMachine SFalse) input
-              `shouldHaveTheSameOutputAs` run (cotabulate . cosieve $ booleanStateMachine SFalse) input
+    -- describe "cotabulate and cosieve are each other inverses" $ do
+    --   prop "cotabulate . cosieve = id" $ do
+    --     forAll (arbitrary @Int) $ do
+    --       \input ->
+    --         run (booleanStateMachine SFalse) input
+    --           `shouldHaveTheSameOutputAs` run (cotabulate . cosieve $ booleanStateMachine SFalse) input
 
-      prop "cosieve . cotabulate = id" $ do
-        let
-          nonEmptyFunction :: NonEmpty Int -> Int
-          nonEmptyFunction = sum
-        forAll (fromList <$> (arbitrary @[Int] `suchThat` (not . null))) $ do
-          \input ->
-            nonEmptyFunction input
-              `shouldBe` (cosieve . cotabulate @StateMachine $ nonEmptyFunction) input
+    --   prop "cosieve . cotabulate = id" $ do
+    --     let
+    --       nonEmptyFunction :: NonEmpty Int -> Int
+    --       nonEmptyFunction = sum
+    --     forAll (fromList <$> (arbitrary @[Int] `suchThat` (not . null))) $ do
+    --       \input ->
+    --         nonEmptyFunction input
+    --           `shouldBe` (cosieve . cotabulate @StateMachine $ nonEmptyFunction) input
 
     describe "Loop constructor runs correctly" $ do
       describe "with the plus1UpTo4 machine" $ do

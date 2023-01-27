@@ -3,7 +3,7 @@
 
 module CRM.Example.TriangularMachine where
 
-import CRM.BaseMachine (ActionResult (..), InitialState (..))
+import CRM.BaseMachine (InitialState (..), pureResult)
 import CRM.StateMachine (StateMachine, unrestrictedMachine)
 
 data TriangularState (a :: ()) where
@@ -15,8 +15,8 @@ triangular =
     ( \case
         OnlyState state ->
           \input ->
-            ActionResult
-              (OnlyState $ state + 1)
+            pureResult
               (state + input)
+              (OnlyState $ state + 1)
     )
     (InitialState (OnlyState 0))

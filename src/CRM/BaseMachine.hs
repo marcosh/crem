@@ -205,16 +205,13 @@ runBaseMachineT
   -> input
   -> m (output, BaseMachineT m topology input output)
 runBaseMachineT (BaseMachineT (InitialState initialState) action) input =
-  let
-    actionResult = action initialState input
-   in
-    case actionResult of
-      ActionResult outputStatePair ->
-        second
-          ( \finalState ->
-              BaseMachineT
-                { initialState = InitialState finalState
-                , action = action
-                }
-          )
-          <$> outputStatePair
+  case action initialState input of
+    ActionResult outputStatePair ->
+      second
+        ( \finalState ->
+            BaseMachineT
+              { initialState = InitialState finalState
+              , action = action
+              }
+        )
+        <$> outputStatePair
