@@ -54,8 +54,11 @@ machineAsGraph (Alternative machine1 machine2) =
   untypedProductGraph
     (machineAsGraph machine1)
     (machineAsGraph machine2)
-machineAsGraph (Loop machine) =
-  untypedTransitiveClosureGraph (machineAsGraph machine)
+machineAsGraph (Feedback machine1 machine2) =
+  untypedTransitiveClosureGraph $
+    untypedProductGraph
+      (machineAsGraph machine1)
+      (machineAsGraph machine2)
 machineAsGraph (Kleisli machine1 machine2) =
   untypedProductGraph
     (machineAsGraph machine1)

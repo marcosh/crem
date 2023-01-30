@@ -5,7 +5,10 @@ import CRM.Example.LockDoor
 import CRM.Example.PlusOneUpToFour (plus1UpTo4)
 import CRM.Example.Switch (switchMachine)
 import "crm" CRM.StateMachine
-import Data.Functor.Identity (Identity (..))
+import "base" Control.Category qualified
+import "base" Data.Functor.Identity (Identity (..))
+import "base" Data.List (singleton)
+import "profunctors" Data.Profunctor (rmap)
 import "singletons-base" Data.Singletons.Base.TH
 import "hspec" Test.Hspec (Expectation, Spec, describe, it, shouldBe)
 
@@ -108,11 +111,15 @@ spec =
     --         nonEmptyFunction input
     --           `shouldBe` (cosieve . cotabulate @StateMachine $ nonEmptyFunction) input
 
-    describe "Loop constructor runs correctly" $ do
+    describe "Feedback constructor runs correctly" $ do
       describe "with the plus1UpTo4 machine" $ do
+        let
+          echo :: StateMachine a [a]
+          echo = rmap singleton Control.Category.id
+
         it "runs correctly on a single input" $ do
-          run (Loop plus1UpTo4) 1 `shouldOutput` [1, 2, 3, 4, 5]
-          run (Loop plus1UpTo4) 5 `shouldOutput` [5]
+          run (Feedback echo plus1UpTo4) 1 `shouldOutput` [1, 2, 3, 4, 5]
+          run (Feedback echo plus1UpTo4) 5 `shouldOutput` [5]
 
         it "processes correctly multiple inputs" $ do
-          runMultiple (Loop plus1UpTo4) [1, 1] `shouldOutput` [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+          runMultiple (Feedback echo plus1UpTo4) [1, 1] `shouldOutput` [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]

@@ -16,14 +16,8 @@ aggregate = rmap maybeToList $ Basic riskAggregate
 policy :: StateMachine RiskEvent [RiskCommand]
 policy = rmap maybeToList riskPolicy
 
-circle :: StateMachine RiskEvent [RiskEvent]
-circle = Kleisli policy aggregate
-
-loop :: StateMachine RiskEvent [RiskEvent]
-loop = Loop circle
-
 writeModel :: StateMachine RiskCommand [RiskEvent]
-writeModel = Kleisli aggregate loop
+writeModel = Feedback aggregate policy
 
 projection :: StateMachine RiskEvent ReceivedData
 projection = Basic riskProjection
