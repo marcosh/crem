@@ -39,3 +39,4 @@ consequences: >
 
   It could be possible in the future to use that information in representing
   correctly the flow on the machine.
+deprecated-by: ./2023-01-30-feedback-constructor.yaml

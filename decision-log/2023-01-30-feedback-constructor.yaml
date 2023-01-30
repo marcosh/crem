@@ -1,0 +1,33 @@
+name: Replace Loop constructor with Feedback
+date: 2023-01-30
+context: >
+  In the standard ES/CQRS architecture we use in the `RiskManager` example, the
+  aggregate and the policy feed each other in a loop.
+
+  When we use the `Loop` constructor, we need to execute first the aggregate
+  and then loop over the composition of the policy and the aggregate. When we
+  do this, we reuse the aggregate twice and the inner state of these two
+  instances are not linked. This causes wrong evolutions of the composed
+  machine.
+decision: >
+  We decide to replace the
+
+  ```haskell
+  Loop :: StateMachine a [a] -> StateMachine a [a]
+  ```
+
+  constructor with the more general
+
+  ```haskell
+  Feedback
+    :: StateMachine a [b]
+    -> StateMachine b [a]
+    -> StateMachine a [b]
+  ```
+
+  constructor.
+consequences: >
+  We have a more generic constructor to compose machines which feed back data
+  to the data flow.
+
+  Pure looping could be obtained by composing `Feedback` with `id`.
