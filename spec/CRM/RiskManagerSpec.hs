@@ -30,6 +30,13 @@ loanDetails =
     , instalments = InstalmentsNumber 10
     }
 
+otherLoanDetails :: LoanDetails
+otherLoanDetails =
+  LoanDetails
+    { amount = EuroCents 20000
+    , instalments = InstalmentsNumber 5
+    }
+
 creditBureauData :: CreditBureauData
 creditBureauData =
   CreditBureauData
@@ -194,5 +201,26 @@ spec =
           `shouldOutput` ReceivedData
             { receivedUserData = Just myUserData
             , receivedLoanDetails = Nothing
+            , receivedCreditBureauData = Just creditBureauData
+            }
+
+      it "collects the user data and the loan details" $ do
+        runMultiple riskApplication [RegisterUserData myUserData, ProvideLoanDetails loanDetails]
+          `shouldOutput` ReceivedData
+            { receivedUserData = Just myUserData
+            , receivedLoanDetails = Just loanDetails
+            , receivedCreditBureauData = Just creditBureauData
+            }
+
+      it "updates the loan details" $ do
+        runMultiple
+          riskApplication
+          [ RegisterUserData myUserData
+          , ProvideLoanDetails loanDetails
+          , ProvideLoanDetails otherLoanDetails
+          ]
+          `shouldOutput` ReceivedData
+            { receivedUserData = Just myUserData
+            , receivedLoanDetails = Just otherLoanDetails
             , receivedCreditBureauData = Just creditBureauData
             }
