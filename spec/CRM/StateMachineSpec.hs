@@ -111,8 +111,8 @@ spec =
     describe "Loop constructor runs correctly" $ do
       describe "with the plus1UpTo4 machine" $ do
         it "runs correctly on a single input" $ do
-          run (Loop plus1UpTo4) 1 `shouldOutput` [2, 3, 4, 5]
-          run (Loop plus1UpTo4) 5 `shouldOutput` []
+          run (Loop plus1UpTo4) 1 `shouldOutput` [1, 2, 3, 4, 5]
+          run (Loop plus1UpTo4) 5 `shouldOutput` [5]
 
         it "processes correctly multiple inputs" $ do
-          runMultiple (Loop plus1UpTo4) [1, 1] `shouldOutput` [2, 3, 4, 5, 2, 3, 4, 5]
+          runMultiple (Loop plus1UpTo4) [1, 1] `shouldOutput` [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]

@@ -196,7 +196,7 @@ run (Alternative machine1 machine2) a =
     Right a2 -> bimap Right (machine1 `Alternative`) <$> run machine2 a2
 run (Loop machine) a = do
   (as, machine') <- run machine a
-  first (as <>) <$> runMultiple (Loop machine') as
+  first (a :) <$> runMultiple (Loop machine') as
 run (Kleisli machine1 machine2) a = do
   (bs, machine1') <- run machine1 a
   (cs, machine2') <- runMultiple machine2 bs
