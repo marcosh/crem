@@ -90,23 +90,20 @@ spec =
         run policy (CreditBureauDataReceived creditBureauData)
           `shouldOutput` []
 
-    describe "loop" $ do
-      it "emits a user registration event when the same event is received" $ do
-        run loop (UserDataRegistered myUserData)
-          `shouldOutput` [UserDataRegistered myUserData]
-
-      it "emits two user registration events when the same events are received" $ do
-        runMultiple loop [UserDataRegistered myUserData, UserDataRegistered myUserData]
-          `shouldOutput` [UserDataRegistered myUserData, UserDataRegistered myUserData]
-
     describe "writeModel" $ do
       it "emits a registered event when a registration command is received" $ do
         run writeModel (RegisterUserData myUserData)
-          `shouldOutput` [UserDataRegistered myUserData]
+          `shouldOutput` [ UserDataRegistered myUserData
+                         , CreditBureauDataReceived creditBureauData
+                         ]
 
       it "emits two registered events when two registration command are received" $ do
         runMultiple writeModel [RegisterUserData myUserData, RegisterUserData myUserData]
-          `shouldOutput` [UserDataRegistered myUserData, UserDataRegistered myUserData]
+          `shouldOutput` [ UserDataRegistered myUserData
+                         , CreditBureauDataReceived creditBureauData
+                         , UserDataRegistered myUserData
+                         , CreditBureauDataReceived creditBureauData
+                         ]
 
     describe "riskProjection" $ do
       it "registers one user when a registration event is received" $ do
@@ -157,6 +154,11 @@ spec =
                             , receivedLoanDetails = Nothing
                             , receivedCreditBureauData = Nothing
                             }
+                         , ReceivedData
+                            { receivedUserData = Just myUserData
+                            , receivedLoanDetails = Nothing
+                            , receivedCreditBureauData = Just creditBureauData
+                            }
                          ]
 
       it "registers two users when two registration commands are received" $ do
@@ -167,9 +169,14 @@ spec =
                             , receivedCreditBureauData = Nothing
                             }
                          , ReceivedData
+                            { receivedUserData = Just myUserData
+                            , receivedLoanDetails = Nothing
+                            , receivedCreditBureauData = Just creditBureauData
+                            }
+                         , ReceivedData
                             { receivedUserData = Just notMyUserData
                             , receivedLoanDetails = Nothing
-                            , receivedCreditBureauData = Nothing
+                            , receivedCreditBureauData = Just creditBureauData
                             }
                          ]
 
@@ -179,7 +186,7 @@ spec =
           `shouldOutput` ReceivedData
             { receivedUserData = Just myUserData
             , receivedLoanDetails = Nothing
-            , receivedCreditBureauData = Nothing
+            , receivedCreditBureauData = Just creditBureauData
             }
 
       it "updates the user data" $ do
@@ -187,5 +194,5 @@ spec =
           `shouldOutput` ReceivedData
             { receivedUserData = Just myUserData
             , receivedLoanDetails = Nothing
-            , receivedCreditBureauData = Nothing
+            , receivedCreditBureauData = Just creditBureauData
             }

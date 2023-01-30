@@ -39,9 +39,10 @@ data StateMachineT m input output where
     :: StateMachineT m a b
     -> StateMachineT m c d
     -> StateMachineT m (Either a c) (Either b d)
-  Loop
-    :: StateMachineT m a [a]
-    -> StateMachineT m a [a]
+  Feedback
+    :: StateMachineT m a [b]
+    -> StateMachineT m b [a]
+    -> StateMachineT m a [b]
   Kleisli
     :: (Foldable n, Monoid (n c))
     => StateMachineT m a (n b)
@@ -58,7 +59,7 @@ hoist f machine = case machine of
   Compose machine1 machine2 -> Compose (hoist f machine1) (hoist f machine2)
   Parallel machine1 machine2 -> Parallel (hoist f machine1) (hoist f machine2)
   Alternative machine1 machine2 -> Alternative (hoist f machine1) (hoist f machine2)
-  Loop machine' -> Loop $ hoist f machine'
+  Feedback machine1 machine2 -> Feedback (hoist f machine1) (hoist f machine2)
   Kleisli machine1 machine2 -> Kleisli (hoist f machine1) (hoist f machine2)
 
 -- | a state machine which does not rely on state
@@ -194,9 +195,10 @@ run (Alternative machine1 machine2) a =
   case a of
     Left a1 -> bimap Left (`Alternative` machine2) <$> run machine1 a1
     Right a2 -> bimap Right (machine1 `Alternative`) <$> run machine2 a2
-run (Loop machine) a = do
-  (as, machine') <- run machine a
-  first (a :) <$> runMultiple (Loop machine') as
+run (Feedback machine1 machine2) a = do
+  (bs, machine1') <- run machine1 a
+  (as, machine2') <- runMultiple machine2 bs
+  first (bs <>) <$> runMultiple (Feedback machine1' machine2') as
 run (Kleisli machine1 machine2) a = do
   (bs, machine1') <- run machine1 a
   (cs, machine2') <- runMultiple machine2 bs
