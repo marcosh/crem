@@ -62,4 +62,4 @@ machineAsGraph (Feedback machine1 machine2) =
 machineAsGraph (Kleisli machine1 machine2) =
   untypedProductGraph
     (machineAsGraph machine1)
-    (machineAsGraph machine2)
+    (untypedTransitiveClosureGraph $ machineAsGraph machine2)
