@@ -40,9 +40,10 @@ data StateMachineT m input output where
     -> StateMachineT m c d
     -> StateMachineT m (Either a c) (Either b d)
   Feedback
-    :: StateMachineT m a [b]
-    -> StateMachineT m b [a]
-    -> StateMachineT m a [b]
+    :: (Foldable n, Monoid (n a), Monoid (n b))
+    => StateMachineT m a (n b)
+    -> StateMachineT m b (n a)
+    -> StateMachineT m a (n b)
   Kleisli
     :: (Foldable n, Monoid (n c))
     => StateMachineT m a (n b)
