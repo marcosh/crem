@@ -7,9 +7,9 @@
 
 module CRM.Example.RiskManager.Aggregate where
 
-import "crm" CRM.BaseMachine
+import CRM.BaseMachine
 import CRM.Example.RiskManager.Domain
-import "crm" CRM.Topology
+import CRM.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
 $( singletons

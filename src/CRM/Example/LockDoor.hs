@@ -9,8 +9,8 @@
 
 module CRM.Example.LockDoor where
 
-import "crm" CRM.BaseMachine
-import "crm" CRM.Topology
+import CRM.BaseMachine
+import CRM.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
 $( singletons
