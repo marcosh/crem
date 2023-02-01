@@ -2,8 +2,8 @@
 
 module CRM.Example.BooleanStateMachine where
 
-import "crm" CRM.BaseMachine
-import "crm" CRM.StateMachine
+import CRM.BaseMachine
+import CRM.StateMachine
 import "singletons-base" Data.Singletons.Base.TH
 
 booleanStateMachine

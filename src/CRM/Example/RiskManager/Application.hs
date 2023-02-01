@@ -4,7 +4,7 @@ import CRM.Example.RiskManager.Aggregate (riskAggregate)
 import CRM.Example.RiskManager.Domain (RiskCommand, RiskEvent)
 import CRM.Example.RiskManager.Policy (riskPolicy)
 import CRM.Example.RiskManager.Projection (ReceivedData, riskProjection)
-import "crm" CRM.StateMachine
+import CRM.StateMachine
 import "base" Data.List (singleton)
 import "base" Data.Maybe (maybeToList)
 import "profunctors" Data.Profunctor (rmap)

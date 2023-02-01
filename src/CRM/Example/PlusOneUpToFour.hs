@@ -2,7 +2,7 @@
 
 module CRM.Example.PlusOneUpToFour where
 
-import "crm" CRM.StateMachine (StateMachine, stateless)
+import CRM.StateMachine (StateMachine, stateless)
 
 plus1UpTo4 :: StateMachine Int [Int]
 plus1UpTo4 =

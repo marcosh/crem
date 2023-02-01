@@ -9,9 +9,9 @@
 
 module CRM.Example.RiskManager.Projection where
 
-import "crm" CRM.BaseMachine
+import CRM.BaseMachine
 import CRM.Example.RiskManager.Domain
-import "crm" CRM.Topology
+import CRM.Topology
 import "base" Data.Monoid (Last (..))
 import "singletons-base" Data.Singletons.Base.TH
 import "base" GHC.Generics (Generic)

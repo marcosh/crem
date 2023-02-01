@@ -1,7 +1,7 @@
 module CRM.Example.RiskManager.Policy where
 
 import CRM.Example.RiskManager.Domain
-import "crm" CRM.StateMachine
+import CRM.StateMachine
 
 riskPolicy :: StateMachine RiskEvent (Maybe RiskCommand)
 riskPolicy =
