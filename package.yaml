@@ -131,3 +131,10 @@ tests:
     when:
     - condition: false
       other-modules: Paths_crm
+
+executables:
+  hobbit-game:
+    source-dirs:    hobbit-game
+    main:           Main.hs
+    dependencies:
+      - crm
