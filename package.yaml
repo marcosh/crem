@@ -138,3 +138,8 @@ executables:
     main:           Main.hs
     dependencies:
       - crm
+    # Disable adding Paths_crm to other-modules, because it does not conform to our style guide.
+    # https://github.com/sol/hpack#handling-of-paths_-modules
+    when:
+    - condition: false
+      other-modules: Paths_crm
