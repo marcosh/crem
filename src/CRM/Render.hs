@@ -11,11 +11,22 @@ import CRM.Topology
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind, demote)
 import "text" Data.Text (Text, pack)
 
+newtype Mermaid = Mermaid {getText :: Text}
+  deriving newtype (Eq, Show)
+
+instance Semigroup Mermaid where
+  (<>) :: Mermaid -> Mermaid -> Mermaid
+  (Mermaid t1) <> (Mermaid t2) = Mermaid (t1 <> "\n" <> t2)
+
 -- | We can render a `Graph a` as [mermaid](https://mermaid.js.org/) state diagram
-renderMermaid :: Show a => Graph a -> Text
-renderMermaid (Graph l) =
-  "stateDiagram-v2\n"
-    <> foldMap (\(a1, a2) -> pack (show a1) <> " --> " <> pack (show a2) <> "\n") l
+renderStateDiagram :: Show a => Graph a -> Mermaid
+renderStateDiagram graph =
+  Mermaid "stateDiagram-v2\n" <> renderGraph graph
+
+renderGraph :: Show a => Graph a -> Mermaid
+renderGraph (Graph l) =
+  Mermaid $
+    foldMap (\(a1, a2) -> pack (show a1) <> " --> " <> pack (show a2) <> "\n") l
 
 -- | Turn a `Topology` into a `Graph`
 topologyAsGraph :: Topology v -> Graph v
@@ -34,8 +45,11 @@ baseMachineAsGraph
 baseMachineAsGraph _ = topologyAsGraph (demote @topology)
 
 -- Render an `UntypedGraph` to the Mermaid format
-renderUntypedMermaid :: UntypedGraph -> Text
-renderUntypedMermaid (UntypedGraph graph) = renderMermaid graph
+renderUntypedStateDiagram :: UntypedGraph -> Mermaid
+renderUntypedStateDiagram (UntypedGraph graph) = renderStateDiagram graph
+
+renderUntypedGraph :: UntypedGraph -> Mermaid
+renderUntypedGraph (UntypedGraph graph) = renderGraph graph
 
 -- | Interpret a `StateMachine` as an `UntypedGraph` using the information
 -- contained in its structure and in the topology of its basic components

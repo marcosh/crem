@@ -17,15 +17,16 @@ spec =
   describe "Render" $ do
     describe "renderMermaid" $ do
       it "should render correctly a graph" $ do
-        renderMermaid (Graph [(1 :: Int, 1), (1, 2), (1, 3), (2, 3), (3, 1)])
-          `shouldBe` Text.unlines
-            [ "stateDiagram-v2"
-            , "1 --> 1"
-            , "1 --> 2"
-            , "1 --> 3"
-            , "2 --> 3"
-            , "3 --> 1"
-            ]
+        renderGraph (Graph [(1 :: Int, 1), (1, 2), (1, 3), (2, 3), (3, 1)])
+          `shouldBe` Mermaid
+            ( Text.unlines
+                [ "1 --> 1"
+                , "1 --> 2"
+                , "1 --> 3"
+                , "2 --> 3"
+                , "3 --> 1"
+                ]
+            )
 
     describe "topologyAsGraph" $ do
       it "should render the topology with a single vertex" $ do
@@ -71,25 +72,28 @@ spec =
 
     describe "machineAsGraph" $ do
       it "should render the basic machine with a single vertex" $ do
-        renderUntypedMermaid (machineAsGraph (Basic $ oneVertexMachine @Identity))
-          `shouldBe` Text.unlines
-            [ "stateDiagram-v2"
-            ]
+        renderUntypedGraph (machineAsGraph (Basic $ oneVertexMachine @Identity))
+          `shouldBe` Mermaid
+            ( Text.unlines
+                []
+            )
 
       it "should render the basic switch machine" $ do
-        renderUntypedMermaid (machineAsGraph (Basic $ switchMachine SFalse @Identity))
-          `shouldBe` Text.unlines
-            [ "stateDiagram-v2"
-            , "True --> False"
-            , "False --> True"
-            ]
+        renderUntypedGraph (machineAsGraph (Basic $ switchMachine SFalse @Identity))
+          `shouldBe` Mermaid
+            ( Text.unlines
+                [ "True --> False"
+                , "False --> True"
+                ]
+            )
 
       it "should render the basic lockDoor machine" $ do
-        renderUntypedMermaid (machineAsGraph (Basic $ lockDoorMachine SIsLockClosed @Identity))
-          `shouldBe` Text.unlines
-            [ "stateDiagram-v2"
-            , "IsLockOpen --> IsLockClosed"
-            , "IsLockClosed --> IsLockOpen"
-            , "IsLockClosed --> IsLockLocked"
-            , "IsLockLocked --> IsLockClosed"
-            ]
+        renderUntypedGraph (machineAsGraph (Basic $ lockDoorMachine SIsLockClosed @Identity))
+          `shouldBe` Mermaid
+            ( Text.unlines
+                [ "IsLockOpen --> IsLockClosed"
+                , "IsLockClosed --> IsLockOpen"
+                , "IsLockClosed --> IsLockLocked"
+                , "IsLockLocked --> IsLockClosed"
+                ]
+            )
