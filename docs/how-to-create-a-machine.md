@@ -211,6 +211,7 @@ Basic
      . ( Demote vertex ~ vertex
        , SingKind vertex
        , SingI topology
+       , Eq vertex
        , Show vertex
        )
     => BaseMachine topology a b
@@ -305,6 +306,50 @@ data ExampleState (vertex :: ExampleVertex) where
 This says that the first vertex will contain an `Int`, the second vertex a `String` and the third vertex a `Bool`.
 
 Notice how we are using `ExampleVertex` as a kind and `'FirstVertex`, `'SecondVertex` and `'ThirdVertex` as types of that kind.
+
+#### `Basic` constraints
+
+The `Basic` constructor imposes several constraints on the `vertex` and the `topology` types to allow to perform the type-level tricks the library is currently using.
+
+```haskell
+( Demote vertex ~ vertex
+, SingKind vertex
+, SingI topology
+, Eq vertex
+, Show vertex
+)
+```
+
+While `Eq vertex` and `Show vertex` do not require further explanation, let's try to provide a little more details and references for the other three.
+
+They are all required to [`demote`](https://hackage.haskell.org/package/singletons-3.0.2/docs/Data-Singletons.html#v:demote) a `topology` described at the type level, so that we can actually work with it at the value level.
+
+##### `SingI topology`
+
+The class [`SingI`](https://hackage.haskell.org/package/singletons-3.0.2/docs/Data-Singletons.html#t:SingI) is essentially a way to implicitly pass a singleton, which could be then retrieved with the `sing` function.
+
+##### `SingKind vertex`
+
+The [`SingKind`](https://hackage.haskell.org/package/singletons-3.0.2/docs/Data-Singletons.html#t:SingKind) class is a _kind_ class, and it classifies all kinds for which singletons are defined.
+
+It supports converting between a singleton type and the base (unrefined) type which it is built from.
+
+It is defined by a `Demote` associated type and two functions
+
+```haskell
+fromSing :: Sing (a :: k) -> Demote k
+toSing :: Demote k -> SomeSing k
+```
+
+##### `Demote vertex ~ vertex`
+
+The `demote` function, which allows us to bring information from the type level to the value level, actually returns a value of type `Demote (KindOf a)`. Hence, when we want to bring the type-level `topology` to the value level, and we do `demote @topology`, what we get is not a `Topology vertex`, but a `Demote (Topology vertex)`.
+
+Since what we actually need is in fact a `Topology vertex`, we need to require that the two types are actually the same, and `Demote vertex ~ vertex` grants that and allows us to get a real `Topology` from the usage of `demote`.
+
+This constraint is imposing some relevant restrictions to our `vertex` type.
+
+If you take a look at the type instances for `Demote` (you can use `:i Demote` in `ghci` to see them), you will notice you have instances for `()`, `Bool` and `Ordering` and that you can combine then using `[]`, tuples, `Maybe` and `Either`. In practice this means that `vertex` needs to be (isomorphic to) a type built with just these types.
 
 #### Implementing the machine logic
 

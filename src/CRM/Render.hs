@@ -28,7 +28,7 @@ topologyAsGraph (Topology edges) = Graph $ edges >>= edgify
 -- its topology
 baseMachineAsGraph
   :: forall vertex topology input output m
-   . (Demote (Topology vertex) ~ Topology vertex, SingKind vertex, SingI topology)
+   . (Demote vertex ~ vertex, SingKind vertex, SingI topology)
   => BaseMachineT m (topology :: Topology vertex) input output
   -> Graph vertex
 baseMachineAsGraph _ = topologyAsGraph (demote @topology)
