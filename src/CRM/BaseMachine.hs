@@ -149,6 +149,8 @@ instance Functor m => Functor (ActionResult m topology state initialVertex) wher
   fmap f (ActionResult outputStatePair) =
     ActionResult $ first f <$> outputStatePair
 
+-- | Create an `ActionResult` without performing any side effect in the `m`
+-- context
 pureResult
   :: (Applicative m, AllowedTransition topology initialVertex finalVertex)
   => output
@@ -156,15 +158,20 @@ pureResult
   -> ActionResult m topology state initialVertex output
 pureResult output state = ActionResult . pure $ (output, state)
 
+-- | This is fairly similar to `sequenceA` from `Traversable` and in fact it
+-- does the same job, with the slight difference that `sequenceA` would return
+-- `f (ActionResult Identity topology state initialVertex output)`
 sequence
-  :: ActionResult Identity topology state initialVertex [output]
-  -> ActionResult [] topology state initialVertex output
+  :: Functor f
+  => ActionResult Identity topology state initialVertex (f output)
+  -> ActionResult f topology state initialVertex output
 sequence (ActionResult (Identity (outputs, state))) =
   ActionResult $ (,state) <$> outputs
 
 -- ** Stateless machines
 
--- | The `statelessBaseT` transforms its input to its output and never changes its state
+-- | `statelessBaseT` transforms its input to its output and never changes its
+-- state
 statelessBaseT :: Applicative m => (a -> m b) -> BaseMachineT m (TrivialTopology @()) a b
 statelessBaseT f =
   BaseMachineT
@@ -173,6 +180,8 @@ statelessBaseT f =
         ActionResult $ (,state) <$> f input
     }
 
+-- | `statelessBase` transforms its input to its output and never changes its
+-- state, without performing any side effect
 statelessBase :: (a -> b) -> BaseMachine (TrivialTopology @()) a b
 statelessBase f = statelessBaseT (pure . f)
 
