@@ -1,14 +1,9 @@
 {-# LANGUAGE GADTs #-}
 
-module CRM.RenderFlow where
+module CRM.Render.RenderFlow where
 
-import CRM.Render
+import CRM.Render.Render
 import CRM.StateMachine
-import "base" Data.String (IsString)
-import "text" Data.Text
-
-newtype MachineLabel = MachineLabel {getLabel :: Text}
-  deriving newtype (Eq, Show, IsString)
 
 data TreeMetadata a
   = LeafLabel a
@@ -19,7 +14,7 @@ renderFlow :: TreeMetadata MachineLabel -> StateMachineT m input output -> Eithe
 renderFlow (LeafLabel label) (Basic machine) =
   Right
     ( Mermaid ("state " <> getLabel label <> " {")
-        <> renderGraph (baseMachineAsGraph machine)
+        <> renderLabelledGraph label (baseMachineAsGraph machine)
         <> Mermaid "}"
     , label
     , label

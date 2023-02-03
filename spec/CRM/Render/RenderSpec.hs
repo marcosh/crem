@@ -1,15 +1,15 @@
-module CRM.RenderSpec where
+module CRM.Render.RenderSpec where
 
 import CRM.Example.LockDoor
 import CRM.Example.OneState
 import CRM.Example.Switch
 import "crm" CRM.Graph
-import "crm" CRM.Render
+import "crm" CRM.Render.Render
 import "crm" CRM.StateMachine
 import CRM.Topology (trivialTopology)
 import Data.Functor.Identity
+import "base" Data.List (intersperse)
 import Data.Singletons.Base.TH
-import "text" Data.Text as Text (unlines)
 import "hspec" Test.Hspec (Spec, describe, it, shouldBe)
 
 spec :: Spec
@@ -17,15 +17,20 @@ spec =
   describe "Render" $ do
     describe "renderMermaid" $ do
       it "should render correctly a graph" $ do
-        renderGraph (Graph [(1 :: Int, 1), (1, 2), (1, 3), (2, 3), (3, 1)])
+        renderGraph (Graph [(LT, LT), (LT, EQ), (LT, GT), (EQ, GT), (GT, LT)])
           `shouldBe` Mermaid
-            ( Text.unlines
-                [ "1 --> 1"
-                , "1 --> 2"
-                , "1 --> 3"
-                , "2 --> 3"
-                , "3 --> 1"
-                ]
+            ( mconcat $
+                intersperse
+                  "\n"
+                  [ "LT"
+                  , "EQ"
+                  , "GT"
+                  , "LT --> LT"
+                  , "LT --> EQ"
+                  , "LT --> GT"
+                  , "EQ --> GT"
+                  , "GT --> LT"
+                  ]
             )
 
     describe "topologyAsGraph" $ do
@@ -73,27 +78,33 @@ spec =
     describe "machineAsGraph" $ do
       it "should render the basic machine with a single vertex" $ do
         renderUntypedGraph (machineAsGraph (Basic $ oneVertexMachine @Identity))
-          `shouldBe` Mermaid
-            ( Text.unlines
-                []
-            )
+          `shouldBe` Mermaid "()"
 
       it "should render the basic switch machine" $ do
         renderUntypedGraph (machineAsGraph (Basic $ switchMachine SFalse @Identity))
           `shouldBe` Mermaid
-            ( Text.unlines
-                [ "True --> False"
-                , "False --> True"
-                ]
+            ( mconcat $
+                intersperse
+                  "\n"
+                  [ "False"
+                  , "True"
+                  , "True --> False"
+                  , "False --> True"
+                  ]
             )
 
       it "should render the basic lockDoor machine" $ do
         renderUntypedGraph (machineAsGraph (Basic $ lockDoorMachine SIsLockClosed @Identity))
           `shouldBe` Mermaid
-            ( Text.unlines
-                [ "IsLockOpen --> IsLockClosed"
-                , "IsLockClosed --> IsLockOpen"
-                , "IsLockClosed --> IsLockLocked"
-                , "IsLockLocked --> IsLockClosed"
-                ]
+            ( mconcat $
+                intersperse
+                  "\n"
+                  [ "IsLockOpen"
+                  , "IsLockClosed"
+                  , "IsLockLocked"
+                  , "IsLockOpen --> IsLockClosed"
+                  , "IsLockClosed --> IsLockOpen"
+                  , "IsLockClosed --> IsLockLocked"
+                  , "IsLockLocked --> IsLockClosed"
+                  ]
             )

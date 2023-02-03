@@ -5,12 +5,13 @@
 module CRM.StateMachine where
 
 import CRM.BaseMachine as BaseMachine
+import CRM.Render.RenderableVertices (RenderableVertices)
 import CRM.Topology
 import "base" Control.Category (Category (..))
 import "base" Data.Bifunctor (Bifunctor (..), bimap)
 import "base" Data.Foldable (foldlM)
 import "base" Data.Kind (Type)
-import "profunctors" Data.Profunctor (Choice {-Costrong (..),-} (..), Profunctor (..), Strong (..))
+import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
 import Prelude hiding ((.))
 
@@ -24,6 +25,7 @@ data StateMachineT m input output where
        , SingI topology
        , Eq vertex
        , Show vertex
+       , RenderableVertices vertex
        )
     => BaseMachineT m topology input output
     -> StateMachineT m input output
@@ -77,6 +79,7 @@ unrestrictedMachine
      , SingI (AllowAllTopology @vertex)
      , Eq vertex
      , Show vertex
+     , RenderableVertices vertex
      )
   => ( forall initialVertex
         . state initialVertex
