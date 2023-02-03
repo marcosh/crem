@@ -31,17 +31,22 @@ transitiveClosureGraph graph@(Graph edges) =
   Graph $
     foldr
       ( \a edgesSoFar ->
-          edgesSoFar <> pathsStartingWith graph a
+          edgesSoFar <> pathsFrom graph a
       )
       []
       (nub $ fst <$> edges)
   where
-    pathsStartingWith :: Eq a => Graph a -> a -> [(a, a)]
-    pathsStartingWith graph'@(Graph edges') a =
+    edgesFrom :: Eq a => Graph a -> a -> [(a, a)]
+    edgesFrom (Graph edges') a = filter ((== a) . fst) edges'
+
+    pathsFrom :: forall a. Eq a => Graph a -> a -> [(a, a)]
+    pathsFrom g a =
       let
-        edgesStartingWithA = filter ((== a) . fst) edges'
+        edgesFromAToB = edgesFrom g a
+        pathsFromBToC = edgesFromAToB >>= pathsFrom g . snd
+        edgesFromAToC = (a,) . snd <$> pathsFromBToC
        in
-        edgesStartingWithA <> ((a,) . snd <$> (pathsStartingWith graph' . snd =<< edgesStartingWithA))
+        edgesFromAToB <> edgesFromAToC
 
 -- * UntypedGraph
 

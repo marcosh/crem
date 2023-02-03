@@ -40,8 +40,9 @@ otherLoanDetails =
 creditBureauData :: CreditBureauData
 creditBureauData =
   CreditBureauData
-    (MissedPaymentDeadlines 2)
-    (EuroCents 100000)
+    { missedPaymentDeadlines = MissedPaymentDeadlines 2
+    , arrears = EuroCents 100000
+    }
 
 spec :: Spec
 spec =

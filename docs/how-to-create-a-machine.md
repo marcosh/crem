@@ -199,7 +199,7 @@ a │ ┌╌╌╌╌┐ [b] ┌╌╌╌╌┐ │ [c]
 
 where the outputs `bs :: [b]` of the first machine are is passed as inputs to the second machine, and processed all one by one.
 
-Notice that in fact everything works not only for lists, but for every foldable type.
+We used lists `[b]` here to denote multiple outputs, but we can in fact use any [`Foldable`](https://hackage.haskell.org/package/base/docs/Prelude.html#t:Foldable) type.
 
 ## `Basic`
 
@@ -244,7 +244,7 @@ We use a `Topology vertex` kind, and we construct types of that kind using the `
 
 To define a `Topology`, we first need to define the type of its vertices.
 
-This is usually done by defining an enumeration of the vertices, like
+A straightforward approach is to define an enumeration of vertices, like
 
 ```haskell
 data ExampleVertex

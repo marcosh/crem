@@ -25,11 +25,15 @@ data ReceivedData = ReceivedData
 
 instance Semigroup ReceivedData where
   (<>) :: ReceivedData -> ReceivedData -> ReceivedData
-  (<>) (ReceivedData ud1 ld1 cbd1) (ReceivedData ud2 ld2 cbd2) =
+  r1 <> r2 =
     ReceivedData
-      (getLast $ Last ud1 <> Last ud2)
-      (getLast $ Last ld1 <> Last ld2)
-      (getLast $ Last cbd1 <> Last cbd2)
+      { receivedUserData =
+          getLast $ Last (receivedUserData r1) <> Last (receivedUserData r2)
+      , receivedLoanDetails =
+          getLast $ Last (receivedLoanDetails r1) <> Last (receivedLoanDetails r2)
+      , receivedCreditBureauData =
+          getLast $ Last (receivedCreditBureauData r1) <> Last (receivedCreditBureauData r2)
+      }
 
 instance Monoid ReceivedData where
   mempty :: ReceivedData
