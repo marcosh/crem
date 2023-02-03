@@ -114,7 +114,6 @@ tests:
       - hspec
       - profunctors
       - singletons-base
-      - text
     when:
     - condition: false
       other-modules: Paths_crm

@@ -6,6 +6,8 @@
 {-# OPTIONS_GHC -Wno-all-missed-specialisations #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-deriving-strategies
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
+{-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 
 module CRM.Example.LockDoor where
 
@@ -19,7 +21,7 @@ $( singletons
         = IsLockOpen
         | IsLockClosed
         | IsLockLocked
-        deriving stock (Eq, Show)
+        deriving stock (Eq, Show, Enum, Bounded)
 
       lockDoorTopology :: Topology LockDoorVertex
       lockDoorTopology =

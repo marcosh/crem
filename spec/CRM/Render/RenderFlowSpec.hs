@@ -1,9 +1,9 @@
-module CRM.RenderFlowSpec where
+module CRM.Render.RenderFlowSpec where
 
 import "crm" CRM.Example.LockDoor (SLockDoorVertex (..), lockDoorMachine)
 import "crm" CRM.Example.RiskManager.Application (riskApplication)
-import "crm" CRM.Render (Mermaid (..), baseMachineAsGraph, renderGraph)
-import "crm" CRM.RenderFlow (MachineLabel (..), TreeMetadata (..), renderFlow)
+import "crm" CRM.Render.Render (MachineLabel (..), Mermaid (..), baseMachineAsGraph, renderLabelledGraph)
+import "crm" CRM.Render.RenderFlow (TreeMetadata (..), renderFlow)
 import "crm" CRM.StateMachine (StateMachineT (..), stateless)
 import "base" Data.Functor.Identity (Identity)
 import "base" Data.List (singleton)
@@ -17,7 +17,7 @@ spec =
         renderFlow @Identity (LeafLabel "lockMachine") (Basic $ lockDoorMachine SIsLockClosed)
           `shouldBe` Right
             ( Mermaid "state lockMachine {"
-                <> ( renderGraph . baseMachineAsGraph @_ @_ @_ @_ @Identity $
+                <> ( renderLabelledGraph "lockMachine" . baseMachineAsGraph @_ @_ @_ @_ @Identity $
                       lockDoorMachine SIsLockClosed
                    )
                 <> Mermaid "}"
@@ -34,7 +34,7 @@ spec =
               (stateless length)
           )
           `shouldBe` Right
-            ( Mermaid "state show {\n\n}\nstate length {\n\n}\nshow --> length"
+            ( Mermaid "state show {\nshow_()\n}\nstate length {\nlength_()\n}\nshow --> length"
             , MachineLabel "show"
             , MachineLabel "length"
             )
@@ -48,7 +48,7 @@ spec =
               (stateless $ length @[] @String)
           )
           `shouldBe` Right
-            ( Mermaid "state foo {\n\n}\nstate bar {\n\n}\nstate fork_foobar <<fork>>\nstate join_foobar <<join>>\nfork_foobar --> foo\nfork_foobar --> bar\nfoo --> join_foobar\nbar --> join_foobar"
+            ( Mermaid "state foo {\nfoo_()\n}\nstate bar {\nbar_()\n}\nstate fork_foobar <<fork>>\nstate join_foobar <<join>>\nfork_foobar --> foo\nfork_foobar --> bar\nfoo --> join_foobar\nbar --> join_foobar"
             , MachineLabel "fork_foobar"
             , MachineLabel "join_foobar"
             )
@@ -62,7 +62,7 @@ spec =
               (stateless $ length @[] @String)
           )
           `shouldBe` Right
-            ( Mermaid "state foo {\n\n}\nstate bar {\n\n}\nstate fork_choice_foobar <<choice>>\nstate join_choice_foobar <<choice>>\nfork_choice_foobar --> foo\nfork_choice_foobar --> bar\nfoo --> join_choice_foobar\nbar --> join_choice_foobar"
+            ( Mermaid "state foo {\nfoo_()\n}\nstate bar {\nbar_()\n}\nstate fork_choice_foobar <<choice>>\nstate join_choice_foobar <<choice>>\nfork_choice_foobar --> foo\nfork_choice_foobar --> bar\nfoo --> join_choice_foobar\nbar --> join_choice_foobar"
             , MachineLabel "fork_choice_foobar"
             , MachineLabel "join_choice_foobar"
             )
@@ -76,7 +76,7 @@ spec =
               (stateless $ singleton @Int)
           )
           `shouldBe` Right
-            ( Mermaid "state foo {\n\n}\nstate bar {\n\n}\nfoo --> bar\nbar --> foo"
+            ( Mermaid "state foo {\nfoo_()\n}\nstate bar {\nbar_()\n}\nfoo --> bar\nbar --> foo"
             , MachineLabel "foo"
             , MachineLabel "foo"
             )
@@ -90,7 +90,7 @@ spec =
               (stateless $ singleton @Int)
           )
           `shouldBe` Right
-            ( Mermaid "state show {\n\n}\nstate length {\n\n}\nshow --> length"
+            ( Mermaid "state show {\nshow_()\n}\nstate length {\nlength_()\n}\nshow --> length"
             , MachineLabel "show"
             , MachineLabel "length"
             )
@@ -110,7 +110,7 @@ spec =
           )
           riskApplication
           `shouldBe` Right
-            ( Mermaid "state aggregate {\nNoDataVertex --> CollectedUserDataVertex\nCollectedUserDataVertex --> CollectedLoanDetailsFirstVertex\nCollectedUserDataVertex --> ReceivedCreditBureauDataFirstVertex\nCollectedLoanDetailsFirstVertex --> CollectedAllDataVertex\nReceivedCreditBureauDataFirstVertex --> CollectedAllDataVertex\n\n}\nstate policy {\n\n}\naggregate --> policy\npolicy --> aggregate\nstate projection {\n\n}\naggregate --> projection\nstate mconcat {\n\n}\nprojection --> mconcat"
+            ( Mermaid "state aggregate {\naggregate_NoDataVertex\naggregate_CollectedUserDataVertex\naggregate_CollectedLoanDetailsFirstVertex\naggregate_ReceivedCreditBureauDataFirstVertex\naggregate_CollectedAllDataVertex\naggregate_NoDataVertex --> aggregate_CollectedUserDataVertex\naggregate_CollectedUserDataVertex --> aggregate_CollectedLoanDetailsFirstVertex\naggregate_CollectedUserDataVertex --> aggregate_ReceivedCreditBureauDataFirstVertex\naggregate_CollectedLoanDetailsFirstVertex --> aggregate_CollectedAllDataVertex\naggregate_ReceivedCreditBureauDataFirstVertex --> aggregate_CollectedAllDataVertex\n}\nstate policy {\npolicy_()\n}\naggregate --> policy\npolicy --> aggregate\nstate projection {\nprojection_SingleProjectionVertex\n}\naggregate --> projection\nstate mconcat {\nmconcat_()\n}\nprojection --> mconcat"
             , "aggregate"
             , "mconcat"
             )

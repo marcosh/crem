@@ -1,5 +1,6 @@
 module CRM.Graph where
 
+import CRM.Render.RenderableVertices (RenderableVertices)
 import "base" Data.List (nub)
 
 -- * Graph
@@ -51,7 +52,7 @@ transitiveClosureGraph graph@(Graph edges) =
 -- * UntypedGraph
 
 -- A data type to represent a graph which is not tracking the vertex type
-data UntypedGraph = forall a. (Eq a, Show a) => UntypedGraph (Graph a)
+data UntypedGraph = forall a. (RenderableVertices a, Eq a, Show a) => UntypedGraph (Graph a)
 
 instance Show UntypedGraph where
   show :: UntypedGraph -> String

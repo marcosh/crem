@@ -2,31 +2,76 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module CRM.Render where
+module CRM.Render.Render where
 
 import CRM.BaseMachine
 import CRM.Graph
+import CRM.Render.RenderableVertices
 import CRM.StateMachine
 import CRM.Topology
+import "base" Data.List (intersperse)
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind, demote)
-import "text" Data.Text (Text, pack)
+import "base" Data.String (IsString)
+import "text" Data.Text (Text, null, pack)
+import Prelude hiding (null)
 
 newtype Mermaid = Mermaid {getText :: Text}
   deriving newtype (Eq, Show)
 
 instance Semigroup Mermaid where
   (<>) :: Mermaid -> Mermaid -> Mermaid
+  (Mermaid "") <> m = m
+  m <> (Mermaid "") = m
   (Mermaid t1) <> (Mermaid t2) = Mermaid (t1 <> "\n" <> t2)
 
+newtype MachineLabel = MachineLabel {getLabel :: Text}
+  deriving newtype (Eq, Show, IsString)
+
 -- | We can render a `Graph a` as [mermaid](https://mermaid.js.org/) state diagram
-renderStateDiagram :: Show a => Graph a -> Mermaid
+renderStateDiagram :: (RenderableVertices a, Show a) => Graph a -> Mermaid
 renderStateDiagram graph =
   Mermaid "stateDiagram-v2\n" <> renderGraph graph
 
-renderGraph :: Show a => Graph a -> Mermaid
-renderGraph (Graph l) =
-  Mermaid $
-    foldMap (\(a1, a2) -> pack (show a1) <> " --> " <> pack (show a2) <> "\n") l
+labelVertex :: Show a => MachineLabel -> a -> Text
+labelVertex label =
+  let
+    prefix =
+      if null (getLabel label)
+        then ""
+        else getLabel label <> "_"
+   in
+    (prefix <>) . pack . show
+
+renderLabelledVertices
+  :: forall a
+   . (Show a, RenderableVertices a)
+  => MachineLabel
+  -> Graph a
+  -> Mermaid
+renderLabelledVertices label _ =
+  Mermaid . mconcat . intersperse "\n" $ labelVertex label <$> (vertices :: [a])
+
+renderVertices :: forall a. (Show a, RenderableVertices a) => Graph a -> Mermaid
+renderVertices = renderLabelledVertices ""
+
+renderLabelledEdges :: Show a => MachineLabel -> Graph a -> Mermaid
+renderLabelledEdges label (Graph l) =
+  Mermaid . mconcat . intersperse "\n" $
+    (\(a1, a2) -> labelVertex label a1 <> " --> " <> labelVertex label a2) <$> l
+
+renderEdges :: Show a => Graph a -> Mermaid
+renderEdges = renderLabelledEdges ""
+
+renderLabelledGraph
+  :: (RenderableVertices a, Show a)
+  => MachineLabel
+  -> Graph a
+  -> Mermaid
+renderLabelledGraph label graph =
+  renderLabelledVertices label graph <> renderLabelledEdges label graph
+
+renderGraph :: (RenderableVertices a, Show a) => Graph a -> Mermaid
+renderGraph = renderLabelledGraph ""
 
 -- | Turn a `Topology` into a `Graph`
 topologyAsGraph :: Topology v -> Graph v
@@ -39,7 +84,10 @@ topologyAsGraph (Topology edges) = Graph $ edges >>= edgify
 -- its topology
 baseMachineAsGraph
   :: forall vertex topology input output m
-   . (Demote vertex ~ vertex, SingKind vertex, SingI topology)
+   . ( Demote vertex ~ vertex
+     , SingKind vertex
+     , SingI topology
+     )
   => BaseMachineT m (topology :: Topology vertex) input output
   -> Graph vertex
 baseMachineAsGraph _ = topologyAsGraph (demote @topology)
