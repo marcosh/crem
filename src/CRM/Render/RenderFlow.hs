@@ -71,8 +71,8 @@ renderFlow (BinaryLabel forwardLabels backwardsLabels) (Feedback machine1 machin
   Right
     ( forwardMermaid
         <> backwardMermaid
-        <> Mermaid (getLabel forwardLabelOut <> " --> " <> getLabel backawardLabelIn)
-        <> Mermaid (getLabel backwardLabelOut <> " --> " <> getLabel forwardLabelIn)
+        <> Mermaid (getLabel forwardLabelOut <> " --> " <> getLabel backawardLabelIn <> ": []")
+        <> Mermaid (getLabel backwardLabelOut <> " --> " <> getLabel forwardLabelIn <> ": []")
     , forwardLabelIn
     , forwardLabelOut
     )
@@ -82,7 +82,7 @@ renderFlow (BinaryLabel leftLabels rightLabels) (Kleisli machine1 machine2) = do
   Right
     ( leftMermaid
         <> rightMermaid
-        <> Mermaid (getLabel leftLabelOut <> " --> " <> getLabel rightLabelIn)
+        <> Mermaid (getLabel leftLabelOut <> " --> " <> getLabel rightLabelIn <> ": []")
     , leftLabelIn
     , rightLabelOut
     )
