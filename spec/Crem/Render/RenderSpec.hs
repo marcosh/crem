@@ -1,12 +1,12 @@
-module CRM.Render.RenderSpec where
+module Crem.Render.RenderSpec where
 
-import CRM.Example.LockDoor
-import CRM.Example.OneState
-import CRM.Example.Switch
-import "crm" CRM.Graph
-import "crm" CRM.Render.Render
-import "crm" CRM.StateMachine
-import CRM.Topology (trivialTopology)
+import Crem.Example.LockDoor
+import Crem.Example.OneState
+import Crem.Example.Switch
+import "crem" Crem.Graph
+import "crem" Crem.Render.Render
+import "crem" Crem.StateMachine
+import Crem.Topology (trivialTopology)
 import Data.Functor.Identity
 import "base" Data.List (intersperse)
 import Data.Singletons.Base.TH

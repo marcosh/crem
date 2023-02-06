@@ -1,10 +1,10 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GADTs #-}
 
-module CRM.Example.TriangularMachine where
+module Crem.Example.TriangularMachine where
 
-import CRM.BaseMachine (InitialState (..), pureResult)
-import CRM.StateMachine (StateMachine, unrestrictedMachine)
+import Crem.BaseMachine (InitialState (..), pureResult)
+import Crem.StateMachine (StateMachine, unrestrictedMachine)
 
 data TriangularState (a :: ()) where
   OnlyState :: Int -> TriangularState '()

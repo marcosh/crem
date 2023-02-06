@@ -1,8 +1,8 @@
 {-# LANGUAGE DataKinds #-}
 
-module CRM.BaseMachine where
+module Crem.BaseMachine where
 
-import CRM.Topology
+import Crem.Topology
 import "base" Data.Bifunctor (Bifunctor (..), first)
 import "base" Data.Kind (Type)
 

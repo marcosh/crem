@@ -1,10 +1,10 @@
-module CRM.RiskManagerSpec where
+module Crem.RiskManagerSpec where
 
-import CRM.Example.RiskManager.Application
-import CRM.Example.RiskManager.Domain
-import CRM.Example.RiskManager.Projection (ReceivedData (..))
-import "crm" CRM.StateMachine (run, runMultiple)
-import CRM.StateMachineSpec (shouldOutput)
+import Crem.Example.RiskManager.Application
+import Crem.Example.RiskManager.Domain
+import Crem.Example.RiskManager.Projection (ReceivedData (..))
+import "crem" Crem.StateMachine (run, runMultiple)
+import Crem.StateMachineSpec (shouldOutput)
 import "hspec" Test.Hspec (Spec, describe, it)
 
 myUserData :: UserData

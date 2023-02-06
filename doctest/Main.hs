@@ -5,4 +5,4 @@ import "doctest-parallel" Test.DocTest (mainFromCabal)
 
 main :: IO ()
 main = do
-  mainFromCabal "crm" =<< getArgs
+  mainFromCabal "crem" =<< getArgs

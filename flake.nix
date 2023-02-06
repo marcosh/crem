@@ -1,5 +1,5 @@
 {
-  description = "marcosh/crm: compositional reproducible machines";
+  description = "tweag/cerm: compositional reproducible executable machines";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
@@ -37,8 +37,8 @@
         }:
         haskellPackages.override {
           overrides = self: super: {
-            crm = (self.callCabal2nix "crm" src { }).overrideAttrs (attrs: {
-              # doctest-parallel needs to know where the compiled crm package is
+            crem = (self.callCabal2nix "crem" src { }).overrideAttrs (attrs: {
+              # doctest-parallel needs to know where the compiled crem package is
               preCheck = ''
                 export GHC_PACKAGE_PATH="dist/package.conf.inplace:$GHC_PACKAGE_PATH"
               '';
@@ -118,24 +118,24 @@
     in
     rec {
       packages = {
-        # Build crm for one given GHC versions.
-        crm = foldConfigurations (haskellPackages: haskellPackages.crm);
+        # Build crem for one given GHC versions.
+        crem = foldConfigurations (haskellPackages: haskellPackages.crem);
 
-        # Build crm for all GHC versions at once, collecting the results into one derivation.
+        # Build crem for all GHC versions at once, collecting the results into one derivation.
         # documentation: https://github.com/NixOS/nixpkgs/blob/master/pkgs/build-support/trivial-builders.nix
-        crmAll = pkgs.symlinkJoin {
-          name = "crmAll";
-          paths = builtins.attrValues packages.crm;
+        cremAll = pkgs.symlinkJoin {
+          name = "cremAll";
+          paths = builtins.attrValues packages.crem;
         };
 
-        default = packages.crm.${defaultGhcVersion};
+        default = packages.crem.${defaultGhcVersion};
       };
 
       # Prepare a development shell for many diffent GHC versions.
       devShells = foldConfigurations
         (haskellPackages:
           haskellPackages.shellFor {
-            packages = ps: [ ps.crm ];
+            packages = ps: [ ps.crem ];
             nativeBuildInputs = with haskellPackages; [
               cabal-install
               fourmolu

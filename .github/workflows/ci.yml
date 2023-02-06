@@ -23,4 +23,4 @@ jobs:
       with:
         nix_path: nixpkgs=channel:nixos-22.11
     - name: Build
-      run: nix build -L .#crm.ghc${{ matrix.ghc }}
+      run: nix build -L .#crem.ghc${{ matrix.ghc }}

@@ -1,6 +1,6 @@
-module CRM.GraphSpec where
+module Crem.GraphSpec where
 
-import "crm" CRM.Graph
+import "crem" Crem.Graph
 import "hspec" Test.Hspec (Spec, describe, it, shouldBe)
 
 spec :: Spec

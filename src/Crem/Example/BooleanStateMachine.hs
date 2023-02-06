@@ -1,9 +1,9 @@
 {-# LANGUAGE GADTs #-}
 
-module CRM.Example.BooleanStateMachine where
+module Crem.Example.BooleanStateMachine where
 
-import CRM.BaseMachine
-import CRM.StateMachine
+import Crem.BaseMachine
+import Crem.StateMachine
 import "singletons-base" Data.Singletons.Base.TH
 
 booleanStateMachine

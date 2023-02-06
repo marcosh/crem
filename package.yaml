@@ -1,4 +1,4 @@
-name:               crm
+name:               crem
 version:            0.1.0.0
 author:             Marco Perone
 maintainer:         marco.perone@tweag.io
@@ -99,46 +99,46 @@ library:
     - profunctors
     - singletons-base
     - text
-  # Disable adding Paths_crm to other-modules, because it does not conform to our style guide.
+  # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
   # https://github.com/sol/hpack#handling-of-paths_-modules
   when:
   - condition: false
-    other-modules: Paths_crm
+    other-modules: Paths_crem
 
 tests:
-  crm-spec:
+  crem-spec:
     main:           Spec.hs
     source-dirs:    spec
     dependencies:
-      - crm
+      - crem
       - hspec
       - profunctors
       - singletons-base
     when:
     - condition: false
-      other-modules: Paths_crm
+      other-modules: Paths_crem
 
-  crm-doctests:
+  crem-doctests:
     source-dirs:    doctest
     main:           Main.hs
     ghc-options:
       - -threaded
       - -Wno-unused-packages
     dependencies:
-      - crm
+      - crem
       - doctest-parallel
     when:
     - condition: false
-      other-modules: Paths_crm
+      other-modules: Paths_crem
 
 executables:
   hobbit-game:
     source-dirs:    hobbit-game
     main:           Main.hs
     dependencies:
-      - crm
-    # Disable adding Paths_crm to other-modules, because it does not conform to our style guide.
+      - crem
+    # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
     # https://github.com/sol/hpack#handling-of-paths_-modules
     when:
     - condition: false
-      other-modules: Paths_crm
+      other-modules: Paths_crem
