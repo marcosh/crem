@@ -213,6 +213,7 @@ Basic
        , SingI topology
        , Eq vertex
        , Show vertex
+       , RenderableVertices vertex
        )
     => BaseMachine topology a b
     -> StateMachine a b
@@ -317,12 +318,13 @@ The `Basic` constructor imposes several constraints on the `vertex` and the `top
 , SingI topology
 , Eq vertex
 , Show vertex
+, RenderableVertices vertex
 )
 ```
 
-While `Eq vertex` and `Show vertex` do not require further explanation, let's try to provide a little more details and references for the other three.
+While `Eq vertex` and `Show vertex` do not require further explanation, let's try to provide a little more details and references for the other four.
 
-They are all required to [`demote`](https://hackage.haskell.org/package/singletons-3.0.2/docs/Data-Singletons.html#v:demote) a `topology` described at the type level, so that we can actually work with it at the value level.
+The first three are required to [`demote`](https://hackage.haskell.org/package/singletons-3.0.2/docs/Data-Singletons.html#v:demote) a `topology` described at the type level, so that we can actually work with it at the value level.
 
 ##### `SingI topology`
 
@@ -350,6 +352,20 @@ Since what we actually need is in fact a `Topology vertex`, we need to require t
 This constraint is imposing some relevant restrictions to our `vertex` type.
 
 If you take a look at the type instances for `Demote` (you can use `:i Demote` in `ghci` to see them), you will notice you have instances for `()`, `Bool` and `Ordering` and that you can combine then using `[]`, tuples, `Maybe` and `Either`. In practice this means that `vertex` needs to be (isomorphic to) a type built with just these types.
+
+##### `RenderableVertices vertex`
+
+The `RenderableVertices` class is defined by the project as such
+
+```haskell
+class RenderableVertices a where
+  vertices :: [a]
+```
+
+It is used to list all the vertices of type `a` so that they can be rendered.
+It has a default instance for types `a` satisfying `(Enum a, Bounded a)`, but you can overwrite it for more specific types.
+
+Be aware that rendering a graph or topology with vertices of type `a` will try to print out every element of that type. It might not be a good idea to try to print out every value of type `Int`, for example...
 
 #### Implementing the machine logic
 
