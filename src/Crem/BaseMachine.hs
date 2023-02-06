@@ -102,17 +102,6 @@ instance Applicative m => Choice (BaseMachineT m topology) where
           Right a -> Right <$> action state a
       }
 
--- -- | see https://hackage.haskell.org/package/profunctors-5.6.2/docs/Data-Profunctor-Sieve.html#v:cosieve
--- -- This is basically saying that we can interpret a `BaseMachineT m topology a b`
--- -- as a function from a `NonEmpty a` to `b`
--- instance Cosieve (BaseMachineT m topology) NonEmpty where
---   cosieve :: BaseMachineT m topology a b -> NonEmpty a -> m b
---   cosieve machine (a0 :| as0) =
---     case runBaseMachineT machine a0 of
---       (b, machine') -> case as0 of
---         [] -> b
---         a1 : as1 -> cosieve machine' (a1 :| as1)
-
 -- | A value of type `InitialState state` describes the initial state of a
 -- state machine, describing the initial `vertex` in the `topology` and the
 -- actual initial data of type `state vertex`

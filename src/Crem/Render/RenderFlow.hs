@@ -87,10 +87,3 @@ renderFlow (BinaryLabel leftLabels rightLabels) (Kleisli machine1 machine2) = do
     , rightLabelOut
     )
 renderFlow labels _ = Left $ "Labels structure " <> show labels <> " does not match machine structure" -- TODO: this sucks
-
--- renderFlow (Basic machine) = renderMermaid $ baseMachineAsGraph machine
--- renderFlow (Sequential smt smt') = _wb
--- renderFlow (Parallel smt smt') = _wc
--- renderFlow (Alternative smt smt') = _wd
--- renderFlow (Feedback smt smt') = _we
--- renderFlow (Kleisli smt smt') = _wf
