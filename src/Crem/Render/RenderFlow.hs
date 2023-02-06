@@ -19,7 +19,7 @@ renderFlow (LeafLabel label) (Basic machine) =
     , label
     , label
     )
-renderFlow (BinaryLabel leftLabels rightLabels) (Compose machine1 machine2) = do
+renderFlow (BinaryLabel leftLabels rightLabels) (Sequential machine1 machine2) = do
   (leftMermaid, leftLabelIn, leftLabelOut) <- renderFlow leftLabels machine1
   (rightMermaid, rightLabelIn, rightLabelOut) <- renderFlow rightLabels machine2
   Right
@@ -89,7 +89,7 @@ renderFlow (BinaryLabel leftLabels rightLabels) (Kleisli machine1 machine2) = do
 renderFlow labels _ = Left $ "Labels structure " <> show labels <> " does not match machine structure" -- TODO: this sucks
 
 -- renderFlow (Basic machine) = renderMermaid $ baseMachineAsGraph machine
--- renderFlow (Compose smt smt') = _wb
+-- renderFlow (Sequential smt smt') = _wb
 -- renderFlow (Parallel smt smt') = _wc
 -- renderFlow (Alternative smt smt') = _wd
 -- renderFlow (Feedback smt smt') = _we

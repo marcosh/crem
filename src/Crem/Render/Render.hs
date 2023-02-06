@@ -104,7 +104,7 @@ renderUntypedGraph (UntypedGraph graph) = renderGraph graph
 machineAsGraph :: StateMachineT m input output -> UntypedGraph
 machineAsGraph (Basic baseMachine) =
   UntypedGraph (baseMachineAsGraph baseMachine)
-machineAsGraph (Compose machine1 machine2) =
+machineAsGraph (Sequential machine1 machine2) =
   untypedProductGraph
     (machineAsGraph machine1)
     (machineAsGraph machine2)

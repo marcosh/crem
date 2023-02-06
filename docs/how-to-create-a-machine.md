@@ -15,7 +15,7 @@ as arrows between inputs, on the left, and outputs, on the right.
 The `StateMachine a b` data type has six constructors which we can use to construct a machine:
 
 - `Basic`
-- `Compose`
+- `Sequential`
 - `Parallel`
 - `Alternative`
 - `Feedback`
@@ -23,10 +23,10 @@ The `StateMachine a b` data type has six constructors which we can use to constr
 
 Let's start with the last five.
 
-## `Compose`
+## `Sequential`
 
 ```haskell
-Compose
+Sequential
   :: StateMachine a b
   -> StateMachine b c
   -> StateMachine a c
@@ -185,7 +185,7 @@ Kleisli
   -> StateMachineT m a [c]
 ```
 
-is very similar to `Compose`, but it allows us to compose machines which emit multiple outputs.
+is very similar to `Sequential`, but it allows us to compose machines which emit multiple outputs.
 
 Consider two machines
 

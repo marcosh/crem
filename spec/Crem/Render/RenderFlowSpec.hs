@@ -25,11 +25,11 @@ spec =
             , MachineLabel "lockMachine"
             )
 
-      it "renders correctly a Compose machine" $ do
+      it "renders correctly a Sequential machine" $ do
         renderFlow
           @Identity
           (BinaryLabel (LeafLabel "show") (LeafLabel "length"))
-          ( Compose
+          ( Sequential
               (stateless $ show @Int)
               (stateless length)
           )

@@ -29,7 +29,7 @@ data StateMachineT m input output where
        )
     => BaseMachineT m topology input output
     -> StateMachineT m input output
-  Compose
+  Sequential
     :: StateMachineT m a b
     -> StateMachineT m b c
     -> StateMachineT m a c
@@ -59,7 +59,7 @@ type StateMachine a b = forall m. Monad m => StateMachineT m a b
 hoist :: (forall x. m x -> n x) -> StateMachineT m a b -> StateMachineT n a b
 hoist f machine = case machine of
   Basic baseMachine -> Basic $ baseHoist f baseMachine
-  Compose machine1 machine2 -> Compose (hoist f machine1) (hoist f machine2)
+  Sequential machine1 machine2 -> Sequential (hoist f machine1) (hoist f machine2)
   Parallel machine1 machine2 -> Parallel (hoist f machine1) (hoist f machine2)
   Alternative machine1 machine2 -> Alternative (hoist f machine1) (hoist f machine2)
   Feedback machine1 machine2 -> Feedback (hoist f machine1) (hoist f machine2)
@@ -97,20 +97,20 @@ instance Monad m => Category (StateMachineT m) where
   id = Basic identity
 
   (.) :: StateMachineT m b c -> StateMachineT m a b -> StateMachineT m a c
-  (.) = flip Compose
+  (.) = flip Sequential
 
 -- * Profunctor
 
 instance Applicative m => Profunctor (StateMachineT m) where
   lmap :: (a -> b) -> StateMachineT m b c -> StateMachineT m a c
   lmap f (Basic baseMachine) = Basic $ lmap f baseMachine
-  lmap f (Compose machine1 machine2) = Compose (lmap f machine1) machine2
-  lmap f machine = Compose (stateless f) machine
+  lmap f (Sequential machine1 machine2) = Sequential (lmap f machine1) machine2
+  lmap f machine = Sequential (stateless f) machine
 
   rmap :: (b -> c) -> StateMachineT m a b -> StateMachineT m a c
   rmap f (Basic baseMachine) = Basic $ rmap f baseMachine
-  rmap f (Compose machine1 machine2) = Compose machine1 (rmap f machine2)
-  rmap f machine = Compose machine (stateless f)
+  rmap f (Sequential machine1 machine2) = Sequential machine1 (rmap f machine2)
+  rmap f machine = Sequential machine (stateless f)
 
 -- * Strong
 
@@ -187,10 +187,10 @@ instance Monad m => Choice (StateMachineT m) where
 -- the machine
 run :: Monad m => StateMachineT m a b -> a -> m (b, StateMachineT m a b)
 run (Basic baseMachine) a = second Basic <$> runBaseMachineT baseMachine a
-run (Compose machine1 machine2) a = do
+run (Sequential machine1 machine2) a = do
   (output1, machine1') <- run machine1 a
   (output2, machine2') <- run machine2 output1
-  pure (output2, Compose machine1' machine2')
+  pure (output2, Sequential machine1' machine2')
 run (Parallel machine1 machine2) a = do
   (output1, machine1') <- run machine1 (fst a)
   (output2, machine2') <- run machine2 (snd a)
