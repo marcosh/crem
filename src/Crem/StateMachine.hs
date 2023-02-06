@@ -2,12 +2,12 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module CRM.StateMachine where
+module Crem.StateMachine where
 
-import CRM.BaseMachine as BaseMachine
-import CRM.Render.RenderableVertices (RenderableVertices)
-import CRM.Topology
 import "base" Control.Category (Category (..))
+import Crem.BaseMachine as BaseMachine
+import Crem.Render.RenderableVertices (RenderableVertices)
+import Crem.Topology
 import "base" Data.Bifunctor (Bifunctor (..), bimap)
 import "base" Data.Foldable (foldlM)
 import "base" Data.Kind (Type)

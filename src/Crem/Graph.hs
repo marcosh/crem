@@ -1,6 +1,6 @@
-module CRM.Graph where
+module Crem.Graph where
 
-import CRM.Render.RenderableVertices (RenderableVertices)
+import Crem.Render.RenderableVertices (RenderableVertices)
 import "base" Data.List (nub)
 
 -- * Graph

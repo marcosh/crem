@@ -7,11 +7,11 @@
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 
-module CRM.Example.RiskManager.Aggregate where
+module Crem.Example.RiskManager.Aggregate where
 
-import CRM.BaseMachine
-import CRM.Example.RiskManager.Domain
-import CRM.Topology
+import Crem.BaseMachine
+import Crem.Example.RiskManager.Domain
+import Crem.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
 $( singletons

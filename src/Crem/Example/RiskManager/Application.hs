@@ -1,10 +1,10 @@
-module CRM.Example.RiskManager.Application where
+module Crem.Example.RiskManager.Application where
 
-import CRM.Example.RiskManager.Aggregate (riskAggregate)
-import CRM.Example.RiskManager.Domain (RiskCommand, RiskEvent)
-import CRM.Example.RiskManager.Policy (riskPolicy)
-import CRM.Example.RiskManager.Projection (ReceivedData, riskProjection)
-import CRM.StateMachine
+import Crem.Example.RiskManager.Aggregate (riskAggregate)
+import Crem.Example.RiskManager.Domain (RiskCommand, RiskEvent)
+import Crem.Example.RiskManager.Policy (riskPolicy)
+import Crem.Example.RiskManager.Projection (ReceivedData, riskProjection)
+import Crem.StateMachine
 import "base" Data.List (singleton)
 import "base" Data.Maybe (maybeToList)
 import "profunctors" Data.Profunctor (rmap)

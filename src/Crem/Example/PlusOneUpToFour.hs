@@ -1,8 +1,8 @@
 {-# LANGUAGE GADTs #-}
 
-module CRM.Example.PlusOneUpToFour where
+module Crem.Example.PlusOneUpToFour where
 
-import CRM.StateMachine (StateMachine, stateless)
+import Crem.StateMachine (StateMachine, stateless)
 
 plus1UpTo4 :: StateMachine Int [Int]
 plus1UpTo4 =

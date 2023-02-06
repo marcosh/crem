@@ -1,10 +1,10 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GADTs #-}
 
-module CRM.Example.OneState where
+module Crem.Example.OneState where
 
-import CRM.BaseMachine
-import CRM.Topology
+import Crem.BaseMachine
+import Crem.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
 oneVertexMachine :: BaseMachine (TrivialTopology @()) () ()

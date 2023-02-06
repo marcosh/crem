@@ -1,6 +1,6 @@
 {-# LANGUAGE UndecidableInstances #-}
 
-module CRM.Render.RenderableVertices where
+module Crem.Render.RenderableVertices where
 
 class RenderableVertices a where
   vertices :: [a]

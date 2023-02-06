@@ -5,10 +5,10 @@
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wall-missed-specialisations
 {-# OPTIONS_GHC -Wno-all-missed-specialisations #-}
 
-module CRM.Example.Switch where
+module Crem.Example.Switch where
 
-import CRM.BaseMachine
-import CRM.Topology
+import Crem.BaseMachine
+import Crem.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
 $( singletons

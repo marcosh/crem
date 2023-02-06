@@ -7,7 +7,7 @@
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 
-module CRM.Topology where
+module Crem.Topology where
 
 import "singletons-base" Data.Singletons.Base.TH
 import "singletons-base" Prelude.Singletons

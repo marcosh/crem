@@ -1,4 +1,4 @@
-module CRM.Example.RiskManager.Domain where
+module Crem.Example.RiskManager.Domain where
 
 import "base" Data.String (IsString)
 

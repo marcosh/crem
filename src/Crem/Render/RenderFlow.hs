@@ -1,9 +1,9 @@
 {-# LANGUAGE GADTs #-}
 
-module CRM.Render.RenderFlow where
+module Crem.Render.RenderFlow where
 
-import CRM.Render.Render
-import CRM.StateMachine
+import Crem.Render.Render
+import Crem.StateMachine
 
 data TreeMetadata a
   = LeafLabel a

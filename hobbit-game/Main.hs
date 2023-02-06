@@ -2,8 +2,8 @@
 
 module Main where
 
-import "crm" CRM.Example.TheHobbit
-import "crm" CRM.StateMachine
+import "crem" Crem.Example.TheHobbit
+import "crem" Crem.StateMachine
 import "base" Data.Functor.Identity
 
 main :: IO ()

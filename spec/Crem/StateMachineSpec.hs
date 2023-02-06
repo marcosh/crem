@@ -1,10 +1,10 @@
-module CRM.StateMachineSpec where
+module Crem.StateMachineSpec where
 
-import CRM.Example.BooleanStateMachine (booleanStateMachine)
-import CRM.Example.LockDoor
-import CRM.Example.PlusOneUpToFour (plus1UpTo4)
-import CRM.Example.Switch (switchMachine)
-import "crm" CRM.StateMachine
+import Crem.Example.BooleanStateMachine (booleanStateMachine)
+import Crem.Example.LockDoor
+import Crem.Example.PlusOneUpToFour (plus1UpTo4)
+import Crem.Example.Switch (switchMachine)
+import "crem" Crem.StateMachine
 import "base" Control.Category qualified
 import "base" Data.Functor.Identity (Identity (..))
 import "base" Data.List (singleton)

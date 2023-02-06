@@ -1,10 +1,10 @@
-module CRM.Render.RenderFlowSpec where
+module Crem.Render.RenderFlowSpec where
 
-import "crm" CRM.Example.LockDoor (SLockDoorVertex (..), lockDoorMachine)
-import "crm" CRM.Example.RiskManager.Application (riskApplication)
-import "crm" CRM.Render.Render (MachineLabel (..), Mermaid (..), baseMachineAsGraph, renderLabelledGraph)
-import "crm" CRM.Render.RenderFlow (TreeMetadata (..), renderFlow)
-import "crm" CRM.StateMachine (StateMachineT (..), stateless)
+import "crem" Crem.Example.LockDoor (SLockDoorVertex (..), lockDoorMachine)
+import "crem" Crem.Example.RiskManager.Application (riskApplication)
+import "crem" Crem.Render.Render (MachineLabel (..), Mermaid (..), baseMachineAsGraph, renderLabelledGraph)
+import "crem" Crem.Render.RenderFlow (TreeMetadata (..), renderFlow)
+import "crem" Crem.StateMachine (StateMachineT (..), stateless)
 import "base" Data.Functor.Identity (Identity)
 import "base" Data.List (singleton)
 import "hspec" Test.Hspec

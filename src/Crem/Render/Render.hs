@@ -2,13 +2,13 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module CRM.Render.Render where
+module Crem.Render.Render where
 
-import CRM.BaseMachine
-import CRM.Graph
-import CRM.Render.RenderableVertices
-import CRM.StateMachine
-import CRM.Topology
+import Crem.BaseMachine
+import Crem.Graph
+import Crem.Render.RenderableVertices
+import Crem.StateMachine
+import Crem.Topology
 import "base" Data.List (intersperse)
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind, demote)
 import "base" Data.String (IsString)

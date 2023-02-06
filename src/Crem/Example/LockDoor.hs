@@ -9,10 +9,10 @@
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 
-module CRM.Example.LockDoor where
+module Crem.Example.LockDoor where
 
-import CRM.BaseMachine
-import CRM.Topology
+import Crem.BaseMachine
+import Crem.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
 $( singletons

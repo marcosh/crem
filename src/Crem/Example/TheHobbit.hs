@@ -8,10 +8,10 @@
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 
-module CRM.Example.TheHobbit where
+module Crem.Example.TheHobbit where
 
-import CRM.BaseMachine
-import CRM.Topology
+import Crem.BaseMachine
+import Crem.Topology
 import "base" Data.Semigroup
 import "singletons-base" Data.Singletons.Base.TH
 
