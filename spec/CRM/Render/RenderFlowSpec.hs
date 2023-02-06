@@ -76,7 +76,7 @@ spec =
               (stateless $ singleton @Int)
           )
           `shouldBe` Right
-            ( Mermaid "state foo {\nfoo_()\n}\nstate bar {\nbar_()\n}\nfoo --> bar\nbar --> foo"
+            ( Mermaid "state foo {\nfoo_()\n}\nstate bar {\nbar_()\n}\nfoo --> bar: []\nbar --> foo: []"
             , MachineLabel "foo"
             , MachineLabel "foo"
             )
@@ -90,7 +90,7 @@ spec =
               (stateless $ singleton @Int)
           )
           `shouldBe` Right
-            ( Mermaid "state show {\nshow_()\n}\nstate length {\nlength_()\n}\nshow --> length"
+            ( Mermaid "state show {\nshow_()\n}\nstate length {\nlength_()\n}\nshow --> length: []"
             , MachineLabel "show"
             , MachineLabel "length"
             )
@@ -110,7 +110,7 @@ spec =
           )
           riskApplication
           `shouldBe` Right
-            ( Mermaid "state aggregate {\naggregate_NoDataVertex\naggregate_CollectedUserDataVertex\naggregate_CollectedLoanDetailsFirstVertex\naggregate_ReceivedCreditBureauDataFirstVertex\naggregate_CollectedAllDataVertex\naggregate_NoDataVertex --> aggregate_CollectedUserDataVertex\naggregate_CollectedUserDataVertex --> aggregate_CollectedLoanDetailsFirstVertex\naggregate_CollectedUserDataVertex --> aggregate_ReceivedCreditBureauDataFirstVertex\naggregate_CollectedLoanDetailsFirstVertex --> aggregate_CollectedAllDataVertex\naggregate_ReceivedCreditBureauDataFirstVertex --> aggregate_CollectedAllDataVertex\n}\nstate policy {\npolicy_()\n}\naggregate --> policy\npolicy --> aggregate\nstate projection {\nprojection_SingleProjectionVertex\n}\naggregate --> projection\nstate mconcat {\nmconcat_()\n}\nprojection --> mconcat"
+            ( Mermaid "state aggregate {\naggregate_NoDataVertex\naggregate_CollectedUserDataVertex\naggregate_CollectedLoanDetailsFirstVertex\naggregate_ReceivedCreditBureauDataFirstVertex\naggregate_CollectedAllDataVertex\naggregate_NoDataVertex --> aggregate_CollectedUserDataVertex\naggregate_CollectedUserDataVertex --> aggregate_CollectedLoanDetailsFirstVertex\naggregate_CollectedUserDataVertex --> aggregate_ReceivedCreditBureauDataFirstVertex\naggregate_CollectedLoanDetailsFirstVertex --> aggregate_CollectedAllDataVertex\naggregate_ReceivedCreditBureauDataFirstVertex --> aggregate_CollectedAllDataVertex\n}\nstate policy {\npolicy_()\n}\naggregate --> policy: []\npolicy --> aggregate: []\nstate projection {\nprojection_SingleProjectionVertex\n}\naggregate --> projection: []\nstate mconcat {\nmconcat_()\n}\nprojection --> mconcat"
             , "aggregate"
             , "mconcat"
             )

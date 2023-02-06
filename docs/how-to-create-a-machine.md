@@ -4,13 +4,13 @@ A `StateMachine a b` is a stateful process which receives inputs of type `a` and
 
 We will represent a machine as such
 
-```
-a ┌────┐ b
-──┤    ├─>
-  └────┘
+```mermaid
+stateDiagram-v2
+direction LR
+a --> b
 ```
 
-as black boxes, where inputs are on the left and outputs are on the right.
+as arrows between inputs, on the left, and outputs, on the right.
 
 The `StateMachine a b` data type has six constructors which we can use to construct a machine:
 
@@ -34,20 +34,21 @@ Compose
 
 allows us to sequentially compose two machines
 
-```
-a ┌────┐ b   b ┌────┐ c
-──┤    ├─>   ──┤    ├─>
-  └────┘       └────┘
+```mermaid
+stateDiagram-v2
+direction LR
+b': b
+a --> b'
+b --> c
 ```
 
 to get a single machine
 
-```
-  ┌─────────────────┐
-a │ ┌╌╌╌╌┐ b ┌╌╌╌╌┐ │ c
-──┼╌┤    ├╌>╌┤    ├╌┼─>
-  │ └╌╌╌╌┘   └╌╌╌╌┘ │
-  └─────────────────┘
+```mermaid
+stateDiagram-v2
+direction LR
+a --> b
+b --> c
 ```
 
 where every output `b` of the first machine is passed as an input to the second machine.
@@ -63,27 +64,28 @@ Parallel
 
 allows us to execute two machines in parallel
 
-```
-a ┌────┐ b
-──┤    ├─>
-  └────┘
-c ┌────┐ d
-──┤    ├─>
-  └────┘
+```mermaid
+stateDiagram-v2
+direction LR
+a --> b
+c --> d
 ```
 
 to get a single machine
 
-```
-       ┌────────────┐
-       │ a ┌╌╌╌╌┐ b │
-       │┌╌╌┤    ├╌>┐│
-(a, c) ││  └╌╌╌╌┘  ││ (b, d)
-───────┼┤          ├┼──────>
-       ││  ┌╌╌╌╌┐  ││
-       │└╌╌┤    ├╌>┘│
-       │ c └╌╌╌╌┘ d │
-       └────────────┘
+```mermaid
+stateDiagram-v2
+direction LR
+state fork <<fork>>
+(a,c) --> fork
+fork --> a
+fork --> c
+a --> b
+c --> d
+state join <<join>>
+b --> join
+d --> join
+join --> (b,d)
 ```
 
 which passes the first element of the input tuple to the first machine and the second element to the second machine, collects the outputs and emits them together in a tuple.
@@ -101,30 +103,31 @@ allows us to execute one out of two machines, depending on the input.
 
 If we have two machines
 
-```
-a ┌────┐ b
-──┤    ├─>
-  └────┘
-c ┌────┐ d
-──┤    ├─>
-  └────┘
+```mermaid
+stateDiagram-v2
+direction LR
+a --> b
+c --> d
 ```
 
 we can compose them like so
 
+```mermaid
+stateDiagram-v2
+direction LR
+eitherac: Either a c
+state fork <<choice>>
+eitherac --> fork
+fork --> a
+fork --> c
+a --> b
+c --> d
+state join <<choice>>
+b --> join
+d --> join
+join --> eitherbd
+eitherbd: Either b d
 ```
-           ┌────────────┐
-           │ a ┌╌╌╌╌┐ b │
-           │┌╌╌┤    ├╌>┐│
-Either a c ││  └╌╌╌╌┘  ││ Either b d
-───────────┼┤    ⊕    ├┼──────────>
-           ││  ┌╌╌╌╌┐  ││
-           │└╌╌┤    ├╌>┘│
-           │ c └╌╌╌╌┘ d │
-           └────────────┘
-```
-
-where the `⊕` symbol allows us to distinguish alternative composition from the parallel one.
 
 In practice, if the composed machine receives a `Left a` as input, the `a` will be passed as input to the first machine that will emit a `b`, which will be wrapped to emit a `Left b` from the composed machine, while the second machine remains untouched.
 Similarly, if the composed machine receives a `Right c` as input, the `c` will be passed as input to the second machine that will emit a `d`, which will be wrapped to emit a `Right d` from the composed machine, while the first machine remains untouched.
@@ -140,28 +143,33 @@ Feedback
 
 allows us to use a machine to compute some new input to be processed from the output of a given machine.
 
-If we have two machines
+We represent machine which output lists, like `StateMachine a [b]` as
 
+```mermaid
+stateDiagram-v2
+direction LR
+a --> b: []
 ```
-a ┌────┐ [b]
-──┤    ├──>>
-  └────┘
-[a] ┌────┐ b
-<<──┤    ├──
-    └────┘
+
+Now, if we have two machines
+
+```mermaid
+stateDiagram-v2
+direction LR
+b': b
+a': a
+b: b
+a --> b: []
+b' --> a': []
 ```
 
 We can compose them like so
 
-```
-  ┌────────────────┐
-a │  a  ┌╌╌╌╌┐ [b] │ [b]
-──┼┬╌╌╌╌┤    ├╌╌>>┬┼──>>
-  ││    └╌╌╌╌┘    ││
-  ││ [a] ┌╌╌╌╌┐ b ││
-  │└╌<<╌╌┤    ├╌╌╌┘│
-  │      └╌╌╌╌┘    │
-  └────────────────┘
+```mermaid
+stateDiagram-v2
+direction LR
+a --> b: []
+b --> a: []
 ```
 
 It works as follows. When an input `a` is received by the input machine, it is processed by the first machine to obtain a list of output `bs :: [b]`. These outputs as fed as inputs into the second machine one by one, obtaining a list of outputs `as :: [a]`. These outputs are then fed again to the first machine and the circle starts again, until one of the two machines emits the empty list `[]`. The composed machine will emit all the `bs` emitted in each round of the loop.
@@ -181,20 +189,21 @@ is very similar to `Compose`, but it allows us to compose machines which emit mu
 
 Consider two machines
 
-```
-a ┌────┐ [b]   b ┌────┐ [c]
-──┤    ├──>>   ──┤    ├──>>
-  └────┘         └────┘
+```mermaid
+stateDiagram-v2
+direction LR
+b': b
+a --> b: []
+b' --> c: []
 ```
 
 We can compose them
 
-```
-  ┌───────────────────┐
-a │ ┌╌╌╌╌┐ [b] ┌╌╌╌╌┐ │ [c]
-──┼╌┤    ├╌╌>>╌┤    ├╌┼──>>
-  │ └╌╌╌╌┘     └╌╌╌╌┘ │
-  └───────────────────┘
+```mermaid
+stateDiagram-v2
+direction LR
+a --> b: []
+b --> c: []
 ```
 
 where the outputs `bs :: [b]` of the first machine are is passed as inputs to the second machine, and processed all one by one.
