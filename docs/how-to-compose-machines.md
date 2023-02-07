@@ -52,7 +52,7 @@ second' :: p a b -> p (c, a) (c, b)
 From these basic operations, when `p` is also a `Category`, some fairly interesting ones could be implemented, as
 
 ```haskell
-(***) :: p a b -> p c d -> p (a, c) (b, d)
+splitStrong :: p a b -> p c d -> p (a, c) (b, d)
 ```
 
 which, for state machines, represents parallel execution of machines.
@@ -60,7 +60,7 @@ which, for state machines, represents parallel execution of machines.
 We could also have
 
 ```haskell
-(&&&) :: p a b -> p a c -> p a (b, c)
+fanOut :: p a b -> p a c -> p a (b, c)
 ```
 
 which feeds the same input to multiple machines and collects all the outputs.
@@ -80,7 +80,7 @@ right' :: p a b -> p (Either c a) (Either c b)
 From these basic operations, when `p` is also a `Category`, some fairly interesting ones could be implemented, as
 
 ```haskell
-(+++) :: p a b -> p c d -> p (Either a c) (Either b d)
+splitChoice :: p a b -> p c d -> p (Either a c) (Either b d)
 ```
 
 which, for state machines, represents alternative execution of machines, depending on which input is provided.
@@ -88,7 +88,7 @@ which, for state machines, represents alternative execution of machines, dependi
 We could also have
 
 ```haskell
-(|||) :: p a c -> p b c -> p (Either a b) c
+fanIn :: p a c -> p b c -> p (Either a b) c
 ```
 
 which allows combining multiple machines with the same output but different inputs.
