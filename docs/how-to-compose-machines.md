@@ -2,11 +2,11 @@
 
 One of the perks of using `crem` is that it is compositional and allows creating complex machines out of simpler ones.
 
-There are two levels of combinators that you can use to compose your state machines.
+There are three sets of combinators that you can use to compose your state machines.
 
 The lower level one is given by the several `StateMachine` constructors, which have already been described in [How to create a machine](how-to-create-a-machine.md). They provide the most complete set of operations to compose state machines. On the other hand, some of them are quite ad-hoc and possibly temporary.
 
-The higher level is provided by the implementation of several classes from the `Category`/`Profunctor` hierarchy. Let's look at them in more detail.
+The other two live at a higher level and are provided by the `Category`/`Profunctor` hierarchy and the `Arrow` hierarchy. Let's look at them in more detail.
 
 ## [`Category`](https://hackage.haskell.org/package/base-4.17.0.0/docs/Control-Category.html)
 
@@ -92,3 +92,43 @@ fanIn :: p a c -> p b c -> p (Either a b) c
 ```
 
 which allows combining multiple machines with the same output but different inputs.
+
+## [`Arrow`](https://hackage.haskell.org/package/base-4.17.0.0/docs/Control-Arrow.html#t:Arrow)
+
+The `Arrow p` class describes computations similarly to what `(Category p, Strong p)` do. The main difference is that is also requires that every function `a -> b` could be interpreted as `p a b`.
+
+Its basic operations are
+
+```haskell
+arr :: (a -> b) -> p a b
+
+first :: p a b -> p (a, c) (b, c)
+```
+
+Other interesting combinators, analogous to `splitStrong` and `fanOut` are
+
+```haskell
+(***) :: p a b -> p c d -> p (a, c) (b, d)
+
+(&&&) :: p a b -> p a c -> p a (b, c)
+```
+
+When using the `Arrow` abstraction it is also possible to use the special [`proc` notation](https://www.haskell.org/arrows/syntax.html), which allows to use a syntax similar to the one introduced by `do` notation for monads.
+
+## [`ArrowChoice`](https://hackage.haskell.org/package/base-4.17.0.0/docs/Control-Arrow.html#t:ArrowChoice)
+
+The `ArrowChoice` expands `Arrow` providing conditional execution, similarly to what `Choice` does for profunctors.
+
+Its basic operation is
+
+```haskell
+left :: p a b -> p (Either a c) (Either b c)
+```
+
+Similarly to what is possible for `Choice` we can define also combinators
+
+```haskell
+(+++) :: p a b -> p c d -> p (Either a c) (Either b d)
+
+(|||) :: p a c -> p b c -> p (Either a b) c
+```
