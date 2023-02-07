@@ -4,11 +4,12 @@
 
 module Crem.StateMachine where
 
+import "base" Control.Arrow (Arrow (arr, first), ArrowChoice (left))
 import "base" Control.Category (Category (..))
 import Crem.BaseMachine as BaseMachine
 import Crem.Render.RenderableVertices (RenderableVertices)
 import Crem.Topology
-import "base" Data.Bifunctor (Bifunctor (..), bimap)
+import "base" Data.Bifunctor (Bifunctor (second), bimap)
 import "base" Data.Foldable (foldlM)
 import "base" Data.Kind (Type)
 import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
@@ -130,6 +131,21 @@ instance Monad m => Choice (StateMachineT m) where
 
   right' :: StateMachineT m a b -> StateMachineT m (Either c a) (Either c b)
   right' = Alternative Control.Category.id
+
+-- * Arrow
+
+instance Monad m => Arrow (StateMachineT m) where
+  arr :: (a -> b) -> StateMachineT m a b
+  arr = stateless
+
+  first :: StateMachineT m a b -> StateMachineT m (a, c) (b, c)
+  first = first'
+
+-- * ArrowChoice
+
+instance Monad m => ArrowChoice (StateMachineT m) where
+  left :: StateMachineT m a b -> StateMachineT m (Either a c) (Either b c)
+  left = left'
 
 -- * Run a state machine
 
