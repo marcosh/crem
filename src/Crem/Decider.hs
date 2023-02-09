@@ -2,7 +2,7 @@
 
 module Crem.Decider where
 
-import Crem.BaseMachine (ActionResult (..), BaseMachineT (..), InitialState)
+import Crem.BaseMachine (ActionResult (..), BaseMachine, BaseMachineT (..), InitialState)
 import Crem.Topology (AllowedTransition, Topology)
 import "base" Data.Kind (Type)
 
@@ -12,24 +12,22 @@ import "base" Data.Kind (Type)
 -- In terms of Mealy machine, the next state is computed by the previous state
 -- and the output
 data
-  DeciderT
-    m
+  Decider
     (topology :: Topology vertex)
     input
     output = forall state.
-  DeciderT
+  Decider
   { deciderInitialState :: InitialState state
   , decide :: forall vertex'. input -> state vertex' -> output
   , evolve
       :: forall initialVertex
        . state initialVertex
       -> output
-      -> EvolutionResult m topology state initialVertex output
+      -> EvolutionResult topology state initialVertex output
   }
 
 data
   EvolutionResult
-    m
     (topology :: Topology vertex)
     (state :: vertex -> Type)
     (initialVertex :: vertex)
@@ -37,14 +35,13 @@ data
   where
   EvolutionResult
     :: AllowedTransition topology initialVertex finalVertex
-    => m (state finalVertex)
-    -> EvolutionResult m topology state initialVertex output
+    => state finalVertex
+    -> EvolutionResult topology state initialVertex output
 
 deciderMachine
-  :: Functor m
-  => DeciderT m topology input output
-  -> BaseMachineT m topology input output
-deciderMachine (DeciderT deciderInitialState' decide' evolve') =
+  :: Decider topology input output
+  -> BaseMachine topology input output
+deciderMachine (Decider deciderInitialState' decide' evolve') =
   BaseMachineT
     { initialState = deciderInitialState'
     , action = \state input ->
@@ -52,6 +49,6 @@ deciderMachine (DeciderT deciderInitialState' decide' evolve') =
           output = decide' input state
          in
           case evolve' state output of
-            EvolutionResult mFinalState ->
-              ActionResult $ (output,) <$> mFinalState
+            EvolutionResult finalState ->
+              ActionResult $ pure (output, finalState)
     }
