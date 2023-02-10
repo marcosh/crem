@@ -1,10 +1,16 @@
 {-# LANGUAGE DataKinds #-}
+{-# HLINT ignore "Redundant id" #-}
+{-# LANGUAGE DeriveAnyClass #-}
+{-# LANGUAGE DerivingVia #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-deriving-strategies
+{-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunrecognised-pragmas
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
-
-{-# HLINT ignore "Redundant id" #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
+{-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 
 -- | Porting of https://github.com/thinkbeforecoding/UnoCore/blob/solution/Uno/Game.fs
 module Crem.Example.Uno where
@@ -19,7 +25,7 @@ import Prelude qualified (id)
 -- * Domain
 
 newtype PlayerCount = PlayerCount Int
-  deriving newtype (Eq, Ord)
+  deriving newtype (Eq, Ord, Show)
 
 data Digit
   = Zero
@@ -32,20 +38,20 @@ data Digit
   | Seven
   | Eigth
   | Nine
-  deriving stock (Eq)
+  deriving stock (Eq, Show)
 
 data Colour
   = Red
   | Green
   | Blue
   | Yellow
-  deriving stock (Eq)
+  deriving stock (Eq, Show)
 
 data Card
   = DigitCard Digit Colour
   | Skip Colour
   | Kickback Colour
-  deriving stock (Eq)
+  deriving stock (Eq, Show)
 
 colour :: Card -> Colour
 colour (DigitCard _ c) = c
@@ -55,7 +61,6 @@ colour (Kickback c) = c
 sameColour :: Card -> Card -> Bool
 sameColour card1 card2 =
   colour card1 == colour card2
-
 data CardValue
   = DigitValue Digit
   | SkipValue
@@ -72,7 +77,7 @@ sameValue card1 card2 =
   value card1 == value card2
 
 newtype PlayerId = PlayerId Int
-  deriving stock (Eq)
+  deriving newtype (Eq, Show)
 
 data Direction
   = Clockwise
@@ -134,15 +139,20 @@ data InitialData = InitialData
   { players :: PlayerCount
   , firstCard :: Card
   }
+  deriving stock (Eq, Show)
 
 data PlayData = PlayData
   { playerId :: PlayerId
   , card :: Card
   }
+  deriving stock (Eq, Show)
 
 data Command
   = StartGame InitialData
   | PlayCard PlayData
+  deriving stock (Show)
+
+-- deriving (Arbitrary) via (GenericArbitrary Command)
 
 data Event
   = GameStarted InitialData PlayerId
@@ -150,6 +160,7 @@ data Event
   | CardPlayedAndTurnBegan PlayData PlayerId
   | WrongCardPlayed PlayData
   | PlayerPlayedAtWrongTurn PlayData
+  deriving stock (Eq, Show)
 
 -- * Topology
 
@@ -158,6 +169,7 @@ $( singletons
       data UnoVertex
         = Initial
         | Started
+        deriving stock (Eq, Show, Enum, Bounded)
 
       unoTopology :: Topology UnoVertex
       unoTopology = Topology [(Initial, [Started])]
@@ -181,13 +193,21 @@ data GameError
   = TooFewPlayers
   | GameAlreadyStarted
   | GameNotStarted
+  deriving stock (Eq, Show)
 
 -- * Machine
 
-unoDecider :: Decider UnoTopology Command (Either GameError Event)
-unoDecider =
+-- | A decider with the logic of the Uno game
+--
+-- It emits one event for every transition, not a list of events, because an
+-- event represents a state transition and a state machine perform one single
+-- state transition at every step
+unoDecider
+  :: InitialState UnoState
+  -> Decider UnoTopology Command (Either GameError Event)
+unoDecider initialState =
   Decider
-    { deciderInitialState = InitialState UnoInitialState
+    { deciderInitialState = initialState
     , decide = \command state ->
         case (state, command) of
           (_, StartGame initialData)
