@@ -2,8 +2,9 @@
 
 module Crem.Decider where
 
-import Crem.BaseMachine (ActionResult (..), BaseMachine, BaseMachineT (..), InitialState)
+import Crem.BaseMachine (ActionResult (..), BaseMachine, BaseMachineT (..), InitialState (..))
 import Crem.Topology (AllowedTransition, Topology)
+import Data.Foldable (foldl')
 import "base" Data.Kind (Type)
 
 -- | The [Decider pattern](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider)
@@ -38,6 +39,7 @@ data
     => state finalVertex
     -> EvolutionResult topology state initialVertex output
 
+-- | translate a `Decider` into a `BaseMachine`
 deciderMachine
   :: Decider topology input output
   -> BaseMachine topology input output
@@ -52,3 +54,30 @@ deciderMachine (Decider deciderInitialState' decide' evolve') =
             EvolutionResult finalState ->
               ActionResult $ pure (output, finalState)
     }
+
+-- | rebuild a `Decider` from a list of outputs
+--
+-- This is the main selling point of a `Decider` over a generic `StateMachine`,
+-- since it allows it to be rebuilt from its outputs.
+rebuildDecider
+  :: [output]
+  -> Decider topology input output
+  -> Decider topology input output
+rebuildDecider outputs decider =
+  foldl' rebuildDeciderStep decider outputs
+  where
+    rebuildDeciderStep
+      :: Decider topology input output
+      -> output
+      -> Decider topology input output
+    rebuildDeciderStep (Decider (InitialState initialState') decide' evolve') output =
+      let
+        evolveResult = evolve' initialState' output
+       in
+        case evolveResult of
+          EvolutionResult evolvedState ->
+            Decider
+              { deciderInitialState = InitialState evolvedState
+              , decide = decide'
+              , evolve = evolve'
+              }
