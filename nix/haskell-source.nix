@@ -1,5 +1,6 @@
 [
   "doctest"
+  "examples"
   "hobbit-game"
   "src"
   "spec"
