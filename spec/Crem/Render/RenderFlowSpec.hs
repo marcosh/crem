@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Crem.Render.RenderFlowSpec where
 
 import "crem" Crem.Example.LockDoor (SLockDoorVertex (..), lockDoorMachine)

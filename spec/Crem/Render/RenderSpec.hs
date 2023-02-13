@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Crem.Render.RenderSpec where
 
 import Crem.Example.LockDoor

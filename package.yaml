@@ -4,6 +4,12 @@ author:             Marco Perone
 maintainer:         marco.perone@tweag.io
 copyright:          2022 Tweag I/O
 license:            OtherLicense
+description:
+  "`crem` stands for **c**ompositional **r**epresentable **e**xecutable
+  **m**achines.
+  It allows creating state machines (Mealy machines in fact), compose them to
+  build bigger machines out of smaller ones and then run them and draw their
+  flow and their state space."
 
 when:
   - condition: impl(ghc >= 9.2)
@@ -64,7 +70,6 @@ when:
 default-extensions:
   - DerivingStrategies # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/deriving_strategies.html#extension-DerivingStrategies
   - LambdaCase         # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/lambda_case.html#extension-LambdaCase
-  - OverloadedStrings  # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/overloaded_strings.html#extension-OverloadedStrings
   - PackageImports     # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/package_qualified_imports.html#extension-PackageImports
 
 # Options inspired by: https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
@@ -112,6 +117,11 @@ internal-libraries:
       - crem
       - profunctors
       - singletons-base
+    # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
+    # https://github.com/sol/hpack#handling-of-paths_-modules
+    when:
+    - condition: false
+      other-modules: Paths_crem
 
 tests:
   crem-spec:

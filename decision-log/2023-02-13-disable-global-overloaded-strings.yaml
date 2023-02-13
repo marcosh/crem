@@ -1,0 +1,21 @@
+name: Disable global `OverloadedStrings`
+date: 2023-02-13
+context: >
+  We want to use the `OverloadedStrings` extension to simplify our code.
+
+  When deriving an `Enum` instance for GHC 9.2 for a datatype like
+
+  ```haskell
+  data LockDoorVertex
+    = IsLockOpen
+    | IsLockClosed
+    | IsLockLocked
+  ```
+
+  inside a `singleton` template Haskell quasi-quoter, the code does not
+  compile. This might be due to https://gitlab.haskell.org/ghc/ghc/-/wikis/migration/9.2#kind-inference-for-data-family-instances-is-pickier.
+decision: >
+  We remove `OverloadedStrings` from the `default-extensions` in `package.yaml`.
+consequences: >
+  We will need to enable `OverloadedStrings` in every module where we want to
+  use it.
