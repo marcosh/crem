@@ -1,3 +1,5 @@
+{-# LANGUAGE OverloadedStrings #-}
+
 module Crem.Example.RiskManager.Policy where
 
 import Crem.Example.RiskManager.Domain
