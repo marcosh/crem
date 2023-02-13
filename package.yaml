@@ -105,12 +105,21 @@ library:
   - condition: false
     other-modules: Paths_crem
 
+internal-libraries:
+  crem-examples:
+    source-dirs:      examples
+    dependencies:
+      - crem
+      - profunctors
+      - singletons-base
+
 tests:
   crem-spec:
     main:           Spec.hs
     source-dirs:    spec
     dependencies:
       - crem
+      - crem-examples
       - hspec
       - profunctors
       - singletons-base
@@ -137,6 +146,7 @@ executables:
     main:           Main.hs
     dependencies:
       - crem
+      - crem-examples
     # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
     # https://github.com/sol/hpack#handling-of-paths_-modules
     when:
