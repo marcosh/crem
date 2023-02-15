@@ -2,13 +2,15 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE TypeFamilies #-}
 
+-- | This is the main module of the whole library. It defines the central
+-- `StateMachineT` type, which allows us to create composable state machines.
 module Crem.StateMachine where
 
 import "base" Control.Arrow (Arrow (arr, first), ArrowChoice (left))
 import "base" Control.Category (Category (..))
 import Crem.BaseMachine as BaseMachine
 import Crem.Render.RenderableVertices (RenderableVertices)
-import Crem.Topology
+import Crem.Topology (AllowAllTopology, Topology)
 import "base" Data.Bifunctor (Bifunctor (second), bimap)
 import "base" Data.Foldable (foldlM)
 import "base" Data.Kind (Type)
@@ -16,8 +18,14 @@ import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
 import Prelude hiding ((.))
 
--- | A `StateMachine` is a [Mealy machine](https://en.wikipedia.org/wiki/Mealy_machine)
--- with inputs of type `input` and outputs of type `output`
+-- | A `StateMachineT` is an effectful [Mealy machine](https://en.wikipedia.org/wiki/Mealy_machine)
+-- with inputs of type @input@ and outputs of type @output@
+--
+-- Effects are described by the context @m@ in which the action of the machine
+-- is executed
+--
+-- `StateMachineT` is a tree, where leaves are `BaseMachineT` and other nodes
+-- describe how to combine the subtrees to obtain more complex machines.
 data StateMachineT m input output where
   Basic
     :: forall m vertex (topology :: Topology vertex) input output
@@ -53,10 +61,16 @@ data StateMachineT m input output where
     -> StateMachineT m b (n c)
     -> StateMachineT m a (n c)
 
+-- | A `StateMachine` is an effectful machine for every possible monad @m@.
+-- Needing to work for every monad, in fact it can not perform any kind of
+-- effect and needs to be pure in nature.
 type StateMachine a b = forall m. Monad m => StateMachineT m a b
 
 -- * Hoist
 
+-- | Allows to change the context @m@ where the machine operates to another
+-- context @n@, provided we have a [natural transformation](https://stackoverflow.com/a/58364172/2718064)
+-- from @m@ to @n@
 hoist :: (forall x. m x -> n x) -> StateMachineT m a b -> StateMachineT n a b
 hoist f machine = case machine of
   Basic baseMachine -> Basic $ baseHoist f baseMachine
@@ -70,6 +84,8 @@ hoist f machine = case machine of
 statelessT :: Applicative m => (a -> m b) -> StateMachineT m a b
 statelessT f = Basic $ statelessBaseT f
 
+-- | a state machine which does not rely on state and does not perform side
+-- effects
 stateless :: Applicative m => (a -> b) -> StateMachineT m a b
 stateless f = statelessT (pure . f)
 
@@ -124,7 +140,9 @@ instance Monad m => Strong (StateMachineT m) where
 
 -- * Choice
 
--- | An instance of `Choice` allows us to have parallel composition of state machines, meaning that we can pass two inputs to two state machines and get out the outputs of both
+-- | An instance of `Choice` allows us to have parallel composition of state
+-- machines, meaning that we can pass two inputs to two state machines and get
+-- out the outputs of both
 instance Monad m => Choice (StateMachineT m) where
   left' :: StateMachineT m a b -> StateMachineT m (Either a c) (Either b c)
   left' = flip Alternative Control.Category.id
@@ -149,7 +167,7 @@ instance Monad m => ArrowChoice (StateMachineT m) where
 
 -- * Run a state machine
 
--- | Given an `input`, run the machine to get an output and a new version of
+-- | Given an @input@, run the machine to get an output and a new version of
 -- the machine
 run :: Monad m => StateMachineT m a b -> a -> m (b, StateMachineT m a b)
 run (Basic baseMachine) a = second Basic <$> runBaseMachineT baseMachine a

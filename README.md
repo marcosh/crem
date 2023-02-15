@@ -6,6 +6,10 @@ It allows creating state machines (Mealy machines in fact), compose them to buil
 
 Further documentation can be found in the [docs](/docs) folder.
 
+The [examples](/examples) folder contains a lot of examples, from simple machines to complex ones describing entire workflows.
+
+Be sure to check out also the [spec](/spec) folder, where all the tests of the application are included, to see in practice what you can do with `crem`.
+
 ## development
 
 This is a Haskell Cabal project that uses Nix for development. Nix is optional but recommended.

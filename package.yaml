@@ -5,8 +5,8 @@ maintainer:         marco.perone@tweag.io
 copyright:          2022 Tweag I/O
 license:            OtherLicense
 description:
-  "`crem` stands for **c**ompositional **r**epresentable **e**xecutable
-  **m**achines.
+  "`crem` stands for __c__ompositional __r__epresentable __e__xecutable
+  __m__achines.
   It allows creating state machines (Mealy machines in fact), compose them to
   build bigger machines out of smaller ones and then run them and draw their
   flow and their state space."
