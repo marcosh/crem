@@ -1,5 +1,11 @@
 {-# LANGUAGE DataKinds #-}
 
+-- | The [Decider pattern](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider)
+-- allows to easily describe an [aggregate](https://www.domainlanguage.com/wp-content/uploads/2016/05/DDD_Reference_2015-03.pdf)
+-- in functional terms
+--
+-- In terms of Mealy machines, a `Decider` is a machine where the next state is
+-- computed from the previous state and the output
 module Crem.Decider where
 
 import Crem.BaseMachine (ActionResult (..), BaseMachine, BaseMachineT (..), InitialState (..))
@@ -7,11 +13,20 @@ import Crem.Topology (AllowedTransition, Topology)
 import Data.Foldable (foldl')
 import "base" Data.Kind (Type)
 
--- | The [Decider pattern](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider)
--- allows to easily describe an aggregate in functional terms
+-- | A @Decider topology input output@ is a Decider which receives inputs of
+-- type @input@ and emits outputs of type @output@, where allowed transitions
+-- are constrained by the provided @topology@.
 --
--- In terms of Mealy machine, the next state is computed by the previous state
--- and the output
+-- Being used to describe the domain logic of an aggregate, a `Decider` is
+-- always pure.
+--
+-- It is defined by:
+--
+--   * its `deciderInitialState`
+--   * a `decide` function, which says how to compute the @output@ out of the
+-- @input@ and the current state
+--   * an `evolve` function, which allows us to specify the next state from the
+-- current state and the @output@
 data
   Decider
     (topology :: Topology vertex)
@@ -27,6 +42,8 @@ data
       -> EvolutionResult topology state initialVertex output
   }
 
+-- | A smart wrapper over the machine state, which allows to enforce that only
+-- transitions allowed by the @topology@ are actually performed.
 data
   EvolutionResult
     (topology :: Topology vertex)
@@ -57,8 +74,8 @@ deciderMachine (Decider deciderInitialState' decide' evolve') =
 
 -- | rebuild a `Decider` from a list of outputs
 --
--- This is the main selling point of a `Decider` over a generic `StateMachine`,
--- since it allows it to be rebuilt from its outputs.
+-- This is the main selling point of a `Decider` over a generic `Crem.StateMachine`,
+-- since it allows rebuilding a machine from its outputs.
 rebuildDecider
   :: [output]
   -> Decider topology input output

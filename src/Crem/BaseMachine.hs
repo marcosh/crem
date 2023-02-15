@@ -1,26 +1,25 @@
 {-# LANGUAGE DataKinds #-}
 
+-- | A `BaseMachine` is a Mealy machine constrained by a provided `Topology` of
+-- allowed transitions.
 module Crem.BaseMachine where
 
 import Crem.Topology
 import "base" Data.Bifunctor (Bifunctor (..), first)
-import "base" Data.Kind (Type)
-
--- import "base" Data.List.NonEmpty (NonEmpty (..))
-import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
-
--- import "profunctors" Data.Profunctor.Sieve (Cosieve (..))
-
 import "base" Data.Functor.Identity (Identity (..))
+import "base" Data.Kind (Type)
+import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
 import "singletons-base" Data.Singletons.Base.TH (STuple0 (..))
 
 -- * Specifying state machines
 
--- | A `BaseMachineT topology input output` describes a state machine with
--- allowed transitions constrained by a given `topology`.
+-- | A @BaseMachineT m topology input output@ describes a state machine with
+-- allowed transitions constrained by a given @topology@.
 -- A state machine is composed by an `initialState` and an `action`, which
--- defines the `output` and the new `state` given the current `state` and an
--- `input`
+-- defines the @output@ and the new @state@ given the current @state@ and an
+-- @input@.
+-- The @m@ parameter describes the context where the `action` of the machine is
+-- executed
 data
   BaseMachineT
     m
@@ -36,6 +35,9 @@ data
       -> ActionResult m topology state initialVertex output
   }
 
+-- | A `BaseMachine` is an effectful machine for every possible monad @m@.
+-- Needing to work for every monad, in fact it can not perform any kind of
+-- effect and needs to be pure in nature.
 type BaseMachine
   (topology :: Topology vertex)
   (input :: Type)
@@ -44,6 +46,9 @@ type BaseMachine
 
 -- * Hoist
 
+-- | Allows to change the context @m@ where the machine operates to another
+-- context @n@, provided we have a [natural transformation](https://stackoverflow.com/a/58364172/2718064)
+-- from @m@ to @n@
 baseHoist
   :: (forall x. m x -> n x)
   -> BaseMachineT m topology a b
@@ -102,15 +107,16 @@ instance Applicative m => Choice (BaseMachineT m topology) where
           Right a -> Right <$> action state a
       }
 
--- | A value of type `InitialState state` describes the initial state of a
--- state machine, describing the initial `vertex` in the `topology` and the
--- actual initial data of type `state vertex`
+-- | A value of type @InitialState state@ describes the initial state of a
+-- state machine, describing the initial @vertex@ in the @topology@ and the
+-- actual initial data of type @state vertex@
 data InitialState (state :: vertex -> Type) where
   InitialState :: state vertex -> InitialState state
 
 -- | The result of an action of the state machine.
--- An `ActionResult topology state initialVertex output` contains an `output` and a `state finalVertex`,
--- where the transition from `initialVertex` to `finalVertex` is allowed by the machine `topology`
+-- An @ActionResult m topology state initialVertex output@ contains an @output@
+-- and a @state finalVertex@, where the transition from @initialVertex@ to
+-- @finalVertex@ is allowed by the machine @topology@
 data
   ActionResult
     m
@@ -124,6 +130,9 @@ data
     => m (output, state finalVertex)
     -> ActionResult m topology state initialVertex output
 
+-- | Allows to change the computational context of an `ActionResult` from @m@
+-- to @n@, given we have a [natural transformation](https://stackoverflow.com/a/58364172/2718064)
+-- from @m@ to @n@.
 hoistResult
   :: (forall x. m x -> n x)
   -> ActionResult m topology state initialVertex output
@@ -138,7 +147,7 @@ instance Functor m => Functor (ActionResult m topology state initialVertex) wher
   fmap f (ActionResult outputStatePair) =
     ActionResult $ first f <$> outputStatePair
 
--- | Create an `ActionResult` without performing any side effect in the `m`
+-- | Create an `ActionResult` without performing any side effect in the @m@
 -- context
 pureResult
   :: (Applicative m, AllowedTransition topology initialVertex finalVertex)
@@ -147,9 +156,9 @@ pureResult
   -> ActionResult m topology state initialVertex output
 pureResult output state = ActionResult . pure $ (output, state)
 
--- | This is fairly similar to `sequenceA` from `Traversable` and in fact it
--- does the same job, with the slight difference that `sequenceA` would return
--- `f (ActionResult Identity topology state initialVertex output)`
+-- | This is fairly similar to `sequenceA` from `Data.Traversable` and in fact
+-- it does the same job, with the slight difference that `sequenceA` would
+-- return @f (ActionResult Identity topology state initialVertex output)@
 sequence
   :: Functor f
   => ActionResult Identity topology state initialVertex (f output)
@@ -176,7 +185,8 @@ statelessBase f = statelessBaseT (pure . f)
 
 -- ** Identity machine
 
--- | The `identity` machine simply outputs its input and never changes its state. It is the result of `statelessBase id`.
+-- | The `identity` machine simply outputs its input and never changes its
+-- state.
 identity :: BaseMachine (TrivialTopology @()) a a
 identity = statelessBase id
 
@@ -195,7 +205,7 @@ unrestrictedBaseMachineT action initialState =
 
 -- ** Run a machine
 
--- | Given an `input`, run the machine to get an output and a new version of
+-- | Given an @input@, run the machine to get an output and a new version of
 -- the machine
 runBaseMachineT
   :: Functor m

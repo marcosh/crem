@@ -1,3 +1,4 @@
+-- | A simple data structure to describe a directed graph
 module Crem.Graph where
 
 import Crem.Render.RenderableVertices (RenderableVertices)
@@ -5,14 +6,14 @@ import "base" Data.List (nub)
 
 -- * Graph
 
--- | A graph is just a list of edges between vertices of type `a`
+-- | A graph is just a list of edges between vertices of type @a@
 newtype Graph a = Graph [(a, a)]
   deriving stock (Eq, Show)
 
 -- | The product graph.
 -- It has as vertices the product of the set of vertices of the initial graph.
--- It has as edge from `(a1, b1)` to `(a2, b2)` if and only if there is an edge
--- from `a1` to `a2` and an edge from `b1` to `b2`
+-- It has as edge from @(a1, b1)@ to @(a2, b2)@ if and only if there is an edge
+-- from @a1@ to @a2@ and an edge from @b1@ to @b2@
 --
 -- >>> productGraph (Graph [('a', 'b')]) (Graph [('c', 'd')])
 -- Graph [(('a','c'),('b','d'))]
@@ -24,9 +25,8 @@ productGraph (Graph edges1) (Graph edges2) =
     )
       <$> [(edge1, edge2) | edge1 <- edges1, edge2 <- edges2]
 
--- computes all the possible paths in the input graph and considers them as
--- edges.
--- Notive that the current implementation is removing duplicates
+-- | Computes all the possible paths in the input graph and considers them as
+-- edges. Notice that the current implementation is removing duplicates
 transitiveClosureGraph :: Eq a => Graph a -> Graph a
 transitiveClosureGraph graph@(Graph edges) =
   Graph $
@@ -51,19 +51,20 @@ transitiveClosureGraph graph@(Graph edges) =
 
 -- * UntypedGraph
 
--- A data type to represent a graph which is not tracking the vertex type
-data UntypedGraph = forall a. (RenderableVertices a, Eq a, Show a) => UntypedGraph (Graph a)
+-- | A data type to represent a graph which is not tracking the vertex type
+data UntypedGraph
+  = forall a. (RenderableVertices a, Eq a, Show a) => UntypedGraph (Graph a)
 
 instance Show UntypedGraph where
   show :: UntypedGraph -> String
   show (UntypedGraph graph) = show graph
 
--- same as `productGraph` but for `UntypedGraph`
+-- | Same as `productGraph` but for `UntypedGraph`
 untypedProductGraph :: UntypedGraph -> UntypedGraph -> UntypedGraph
 untypedProductGraph (UntypedGraph graph1) (UntypedGraph graph2) =
   UntypedGraph (productGraph graph1 graph2)
 
--- same as `transitiveClosureGraph` but for `UntypedGraph`
+-- | Same as `transitiveClosureGraph` but for `UntypedGraph`
 untypedTransitiveClosureGraph :: UntypedGraph -> UntypedGraph
 untypedTransitiveClosureGraph (UntypedGraph graph) =
   UntypedGraph (transitiveClosureGraph graph)
