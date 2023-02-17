@@ -166,6 +166,32 @@ sequence
 sequence (ActionResult (Identity (outputs, state))) =
   ActionResult $ (,state) <$> outputs
 
+-- ** Lift machines
+
+maybeM
+  :: Applicative m
+  => BaseMachineT m topology a b
+  -> BaseMachineT m topology (Maybe a) (Maybe b)
+maybeM (BaseMachineT initialState action) =
+  BaseMachineT
+    { initialState = initialState
+    , action = \initialState' -> \case
+        Nothing -> pureResult Nothing initialState'
+        Just a -> Just <$> action initialState' a
+    }
+
+eitherM
+  :: Applicative m
+  => BaseMachineT m topology a b
+  -> BaseMachineT m topology (Either e a) (Either e b)
+eitherM (BaseMachineT initialState action) =
+  BaseMachineT
+    { initialState = initialState
+    , action = \initialState' -> \case
+        Left e -> pureResult (Left e) initialState'
+        Right a -> Right <$> action initialState' a
+    }
+
 -- ** Stateless machines
 
 -- | `statelessBaseT` transforms its input to its output and never changes its
