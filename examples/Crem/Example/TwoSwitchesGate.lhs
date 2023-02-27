@@ -1,4 +1,5 @@
 > {-# LANGUAGE DataKinds #-}
+> {-# LANGUAGE OverloadedStrings #-}
 > {-# LANGUAGE TemplateHaskell #-}
 > {-# LANGUAGE TypeFamilies #-}
 > {-# LANGUAGE UndecidableInstances #-}
@@ -10,8 +11,11 @@
 > module Crem.Example.TwoSwitchesGate where
 >
 > import "crem" Crem.BaseMachine
+> import "crem" Crem.Render.Render
+> import "crem" Crem.Render.RenderFlow
 > import "crem" Crem.StateMachine
 > import "crem" Crem.Topology
+> import "base" Data.Functor.Identity
 > import "profunctors" Data.Profunctor
 > import "singletons-base" Data.Singletons.Base.TH
 
@@ -55,6 +59,10 @@ At this point we need to define which inputs our machine should handle and which
 > data SwitchInput = TurnOn
 >
 > data SwitchOutput = TurnedOn
+>   deriving stock Show
+>
+> instance Semigroup SwitchOutput where
+>   TurnedOn <> TurnedOn = TurnedOn
 
 At this point we can actually implement our switch as a `BaseMachine`
 
@@ -180,3 +188,46 @@ At this point we could conclude our composition, joining together `bothMachine` 
 
 > gateMachine :: StateMachine (Either SwitchInput SwitchInput) (Maybe SwitchOutput)
 > gateMachine = bothSwitches `Sequential` Basic maybeGate
+
+Now we have a single machine which describes out whole flow.
+
+Now, there are two things which we could do with `gateMachine`.
+
+The first thing is actually executing it. To do it we can use the `runMultiple` function.
+
+We can try to to turn on both switches and verify that the gate actually opened
+
+> -- |
+> -- >>> openedGate
+> -- Just TurnedOn
+> openedGate :: Maybe SwitchOutput
+> openedGate = fst . runIdentity $ runMultiple gateMachine [Left TurnOn, Right TurnOn]
+
+Or we can turn just the first switch several times without opening the gate
+
+> -- |
+> -- >>> closedGate
+> -- Nothing
+> closedGate :: Maybe SwitchOutput
+> closedGate = fst . runIdentity $ runMultiple gateMachine [Left TurnOn, Left TurnOn, Left TurnOn]
+
+The other thing we can do is actually rendering a diagram representing how the `gateMachine` works.
+
+The best rendering we can get displays the flow of the machine and the state space for every step of the flow
+
+> -- |
+> -- >>> gateFlow
+> -- Right "state switch1 {\nswitch1_SwitchIsOn\nswitch1_SwitchIsOff\nswitch1_SwitchIsOff --> switch1_SwitchIsOn\n}\nstate switch2 {\nswitch2_SwitchIsOn\nswitch2_SwitchIsOff\nswitch2_SwitchIsOff --> switch2_SwitchIsOn\n}\nstate fork_choice_switch1switch2 <<choice>>\nstate join_choice_switch1switch2 <<choice>>\nfork_choice_switch1switch2 --> switch1\nfork_choice_switch1switch2 --> switch2\nswitch1 --> join_choice_switch1switch2\nswitch2 --> join_choice_switch1switch2\nstate both {\nboth_NoSwitchOn\nboth_OnlyFirstSwitchOn\nboth_OnlySecondSwitchOn\nboth_BothSwitchesOn\nboth_NoSwitchOn --> both_OnlyFirstSwitchOn\nboth_NoSwitchOn --> both_OnlySecondSwitchOn\nboth_OnlyFirstSwitchOn --> both_BothSwitchesOn\nboth_OnlySecondSwitchOn --> both_BothSwitchesOn\n}\njoin_choice_switch1switch2 --> both\nstate gate {\ngate_SwitchIsOn\ngate_SwitchIsOff\ngate_SwitchIsOff --> gate_SwitchIsOn\n}\nboth --> gate"
+> gateFlow :: Either String Mermaid
+> gateFlow = (\(mermaid, _, _) -> mermaid) <$>
+>   renderFlow
+>     (BinaryLabel
+>        (BinaryLabel
+>           (BinaryLabel
+>             (LeafLabel "switch1")
+>             (LeafLabel "switch2"))
+>           (LeafLabel "both"))
+>        (LeafLabel "gate"))
+>     (gateMachine @Identity)
+
+The result is a diagram which looks like [this](https://mermaid.live/edit#pako:eNqNVN9vgjAQ_lfIPYORCgjE-LBsS_aw-eDbQkI6KMKU1kDd5oz_-0qhcwyr8tAf331333G99gAJSwmEUHPMyX2BVxUurQ8UUQkY9WfBk9w2DhE1xNdt46Wcn-oF1eBZpjUYljU_G-jYF0V9UaQRRTpRpBFF50UzVq3jJGdFQuIuO5XHbNbi87kiv7OC3kC-EPNPEW7kNWfSnUYD6lNQPHSdJ3_mjfFc1bpZxy-srZAqtAQXdLN_LKqaa2xLkjCanjHeiaGFSd0znGRkoldVdHyt8iDYyU-b1DCg3kn0zoVGUG6qzKtm6MrcrAf93AdVM_9HZdyBv0hFHqMyggklqUpcpOJuS9EIeE5KEkEolimu1hEIN8HbbVPh8JAWnFUQZnhTExPwjrPlniYQ8mpHFKl7H35ZW0xfGevtITzAF4RWYAfeaDwOpp7rIdeEPYROgEaub6PA95GY3KMJ39I7GE0dx5-4E9vxJv50LOhEpvPcvk3yiTr-AO8tobo) where you can clearly see the overall structure of the machine we created, and for every step of the flow the state space of the basic state machine governing that step.
