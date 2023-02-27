@@ -1,5 +1,4 @@
 > {-# LANGUAGE DataKinds #-}
-> {-# LANGUAGE OverloadedStrings #-}
 > {-# LANGUAGE TemplateHaskell #-}
 > {-# LANGUAGE TypeFamilies #-}
 > {-# LANGUAGE UndecidableInstances #-}
@@ -18,6 +17,7 @@
 > import "base" Data.Functor.Identity
 > import "profunctors" Data.Profunctor
 > import "singletons-base" Data.Singletons.Base.TH
+> import "text" Data.Text (pack)
 
 We would like to implement a gate opening mechanism controlled by two switches. We would like the gate to open only when the two switches are on.
 
@@ -224,10 +224,10 @@ The best rendering we can get displays the flow of the machine and the state spa
 >     (BinaryLabel
 >        (BinaryLabel
 >           (BinaryLabel
->             (LeafLabel "switch1")
->             (LeafLabel "switch2"))
->           (LeafLabel "both"))
->        (LeafLabel "gate"))
+>             (LeafLabel . MachineLabel . pack $ "switch1")
+>             (LeafLabel . MachineLabel . pack $ "switch2"))
+>           (LeafLabel . MachineLabel . pack $ "both"))
+>        (LeafLabel . MachineLabel . pack $ "gate"))
 >     (gateMachine @Identity)
 
 The result is a diagram which looks like [this](https://mermaid.live/edit#pako:eNqNVN9vgjAQ_lfIPYORCgjE-LBsS_aw-eDbQkI6KMKU1kDd5oz_-0qhcwyr8tAf331333G99gAJSwmEUHPMyX2BVxUurQ8UUQkY9WfBk9w2DhE1xNdt46Wcn-oF1eBZpjUYljU_G-jYF0V9UaQRRTpRpBFF50UzVq3jJGdFQuIuO5XHbNbi87kiv7OC3kC-EPNPEW7kNWfSnUYD6lNQPHSdJ3_mjfFc1bpZxy-srZAqtAQXdLN_LKqaa2xLkjCanjHeiaGFSd0znGRkoldVdHyt8iDYyU-b1DCg3kn0zoVGUG6qzKtm6MrcrAf93AdVM_9HZdyBv0hFHqMyggklqUpcpOJuS9EIeE5KEkEolimu1hEIN8HbbVPh8JAWnFUQZnhTExPwjrPlniYQ8mpHFKl7H35ZW0xfGevtITzAF4RWYAfeaDwOpp7rIdeEPYROgEaub6PA95GY3KMJ39I7GE0dx5-4E9vxJv50LOhEpvPcvk3yiTr-AO8tobo) where you can clearly see the overall structure of the machine we created, and for every step of the flow the state space of the basic state machine governing that step.

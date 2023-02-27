@@ -117,6 +117,7 @@ internal-libraries:
       - crem
       - profunctors
       - singletons-base
+      - text
     # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
     # https://github.com/sol/hpack#handling-of-paths_-modules
     when:
