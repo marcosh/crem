@@ -69,13 +69,13 @@ At this point we can actually implement our switch as a `BaseMachine`
 > switch :: () -> BaseMachine SwitchTopology SwitchInput SwitchOutput
 > switch _ =
 >   BaseMachineT
->     { initialState = InitialState OnState
+>     { initialState = InitialState OffState
 >     , action = \case
 >         OnState -> \_ -> pureResult TurnedOn OnState
 >         OffState -> \_ -> pureResult TurnedOn OnState
 >     }
 
-We start from the `OnState` and every time we receive a request to turn the switch on, we return a message informing the external world that the switch in turned on and we update the state accordingly if needed.
+We start from the `OffState` and every time we receive a request to turn the switch on, we return a message informing the external world that the switch in turned on and we update the state accordingly if needed.
 
 Since we need two separate switches, we can create them by invoking the `switch` function twice
 
