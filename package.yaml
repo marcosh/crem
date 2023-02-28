@@ -163,3 +163,16 @@ executables:
     when:
     - condition: false
       other-modules: Paths_crem
+
+  hobbit-map:
+    source-dirs:    hobbit-map
+    main:           Main.hs
+    dependencies:
+      - crem
+      - crem-examples
+      - text
+    # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
+    # https://github.com/sol/hpack#handling-of-paths_-modules
+    when:
+    - condition: false
+      other-modules: Paths_crem
