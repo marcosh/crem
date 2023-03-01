@@ -3,7 +3,7 @@ version:            0.1.0.0
 author:             Marco Perone
 maintainer:         marco.perone@tweag.io
 copyright:          2022 Tweag I/O
-license:            OtherLicense
+license:            MIT
 description:
   "`crem` stands for __c__ompositional __r__epresentable __e__xecutable
   __m__achines.
