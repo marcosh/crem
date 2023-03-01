@@ -1,5 +1,7 @@
 # crem
 
+<img src="https://raw.githubusercontent.com/tweag/crem/main/logo/crem-transparent.png" width="200">
+
 `crem` stands for **c**ompositional **r**epresentable **e**xecutable **m**achines
 
 It allows creating state machines (Mealy machines in fact), compose them to build bigger machines out of smaller ones and then run them and draw their flow and their state space.
