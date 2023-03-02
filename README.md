@@ -1,18 +1,58 @@
-# crem
+# [crem](https://github.com/tweag/crem)
 
 <img src="https://raw.githubusercontent.com/tweag/crem/main/logo/crem-transparent.png" width="200">
 
-`crem` stands for **c**ompositional **r**epresentable **e**xecutable **m**achines
+`crem` stands for **c**ompositional **r**epresentable **e**xecutable **m**achines.
 
-It allows creating state machines (Mealy machines in fact), compose them to build bigger machines out of smaller ones and then run them and draw their flow and their state space.
+It allows defining state machines (Mealy machines in fact), composing them to build bigger machines out of smaller ones and then running them and drawing their flow and their state space.
+
+## What can you do with `crem`
+
+### Defining state machines
+
+`crem` allows you to define state machines so that you can enforce which state transitions are actually allowed by your machine.
+
+If you try to implement a machine by running a transition which is not allowed, you will get a compilation error.
+
+More details on how to define a machine at [How to create a machine](/docs/how-to-create-a-machine.md).
+
+### Composing state machines
+
+`crem` allows you to compose machines together to build more complex ones, proving a compositional language to implement state machines.
+
+More details on how to compose machines at [How to compose machines](/docs/how-to-compose-machines.md)
+
+### Rendering a state machine
+
+Thanks to the information on the allowed transitions `crem` collects when you define a machine, it is able to produce a graphical representation of the flow and the state space of your machine.
+
+One example of such an output is
+
+![risk manager flow](https://mermaid.ink/svg/pako:eNqlVF1PwjAU_SvkPmkyCGCBbQ8mCvqkxkj0wSwhzXad1a4lXUdAsv9u9-HcCMgMfepOz73n3PbubsGXAYILsaYaZ4yGikbd1dATHbNysEPDUGGY7bYFnK0KXDzIGdX0BZXG9b7zqeQcfY3Bc4yqJfVOUjFDTRmPb5mK9eGQJ_SRrTCYKgyYvk4U0iQTORJWKV1x_renenmdbvfyxMqa1EMJ29ffLvGpt7TfzyH3R--0hZ1_5E7rzbqUnPmbeqcWyOLsvMH-bepMqOAUJ2WGhn5DQckPY4VJ0VCp0MWciZDjYwXs8bqjXlHrOpEvhU91XaSEdmupOcrSlSywIEIVURaY3ztP4oF-xwg9cM02oOrTA0-khpcsA6N4Y95CKnDfKI_RAppoOd8IH1ytEvwhlSOiYi2peJWy8Q3uFtbgkv6oN7ZtZ0xscjEZWbABdziY9IjjODaZkMFw0HdIasFXHt_vGQrmFu6LkZRPpvQbS36R_g)
+
+More details on how to render a machine at [How to render a machine](/docs/how-to-render-a-machine.md)
+
+### Running a machine
+
+Last but not the least, you can also execute a machine, providing inputs to it and receiving the emitted outputs.
+
+More details on how to run a machine at [How to run a machine](/docs/how-to-run-a-machine.md)
+
+### Want to know more?
 
 Further documentation can be found in the [docs](/docs) folder.
 
 The [examples](/examples) folder contains a lot of examples, from simple machines to complex ones describing entire workflows.
 
+I would recommend to check:
+
+- [TwoSwitchesGate.lhs](/examples/Crem/Example/TwoSwitchesGate.lhs) if you want to see all the code which is needed to use the library with a quite detailed explanation.
+- [RiskManager](/examples/Crem/Example/RiskManager/) if you want to see how to use `crem` to [model your domain using state machines](http://marcosh.github.io/post/2021/10/27/ddd-state-machines.html) following the ideas coming from Domain Driven Design.
+- [Uno.hs](/examples/Crem/Example/Uno.hs) if you want to see how to structure a card game like [Uno](https://en.wikipedia.org/wiki/Uno_(card_game)), with an implementation ported from [UnoCore](https://github.com/thinkbeforecoding/UnoCore/blob/solution/Uno/Game.fs) by [@thinkb4coding@mastodon.social](https://functional.cafe/@thinkb4coding@mastodon.social).
+
 Be sure to check out also the [spec](/spec) folder, where all the tests of the application are included, to see in practice what you can do with `crem`.
 
-## development
+## Development
 
 This is a Haskell Cabal project that uses Nix for development. Nix is optional but recommended.
 
@@ -51,6 +91,16 @@ cabal build
 
 This provides us fast incremental builds, ease of debugging, etc.
 
+Inside the development shell, you can also use the commands
+
+```sh
+# just build the project
+build-watch
+
+# execute also the tests
+test-watch
+```
+
 It is also possible to build the project without entering the development shell.
 This allows us to build the same way as the CI/CD environment, build with different GHC versions, build container images, etc.
 
@@ -70,69 +120,25 @@ nix build -L
 nix build -L .#crem.ghc92
 ```
 
-## project setup
+## Project setup
 
-In this section we document all the files relevant for the project setup.
+You can find more details on the project setup on [Setup.md](/Setup.md).
 
-### `flake.nix`
+## Known limitations
 
-This file specifies our project's dependencies and outputs/artefacts.
-Some common dependencies for a Haskell project are the GHC and Cabal, but during development we also use HLS, hpack, ....
-Nix flake dependencies are called *inputs*, and are usually Git repositories (e.g. from GitHub, GitLab, ...), but they can be any web-accessible resource.
+The project is still in its early stage and not everything is crafted to perfection.
 
-By using Nix and Nixpkgs, the developers do not have to have those tools installed on their machines, manage their versions, etc.
-It also allows us to create other controlled environments, such as container images for CI/CD.
+Some known limitations to the current state of the project are:
+- `crem` has not been tested on huge state machines. Compilation times might grow very rapidly.
+- the topologies which `crem` allows you to define need to be finite, and not particularly big, either. For example, it is not feasible to use `Int` as the type of vertices for a topology.
+- in its current state, the `StateMachine` type is not extensible. It has a predefined set of constructors, but maybe there are more which make sense and are not present yet.
 
-The project should still build without Nix, because Nix does not change any project files. This means you must have Cabal and system libraries installed manually.
+Moreover, for current bugs and feature requests, you can check the [open issues](https://github.com/tweag/crem/issues).
 
-### `flake.lock`
+## Contributions
 
-This file is automatically generated and updated by Nix, when evaluating the `flake.nix` file.
-It contains the timestamps and hashes of each input at the time of last update.
+Contributions are extremely welcome. If you have any idea on how to improve the library, its code or its documentation, feel free to open an [issue](https://github.com/tweag/crem/issues), create a [pull request](https://github.com/tweag/crem/pulls), or just contact directly one of the maintainers.
 
-An input coupled with a timestamp and hash of its contents is called a *pinned* input. Pinning inputs allows us to guarantee reproducibility.
+## Logo
 
-We can specify unpinned inputs in `flake.nix`; for example, our `nixpkgs` input is not pinned to a specific commit. The branch `nixpkgs-unstable` changes almost every day.
-However, the `flake.lock` file contains a timestamp and hash of a specific commit in the `nixpkgs` repository. This is regenerated for every input every time we run `nix flake upadate`, to the latest commit in the branch/tag we specified in the flake.
-
-We can also update just a single input (e.g. just `nixpkgs`) and leave the others pinned.
-One way of doing this is with the command:
-```sh
-nix build . --update-input nixpkgs
-```
-
-### `shell.nix`
-
-Nix flakes are a new feature. Some Nix installations do not support them. However, it is still useful to provide a development shell for developers with older Nix versions.
-
-This file allows us to replicate the development shell provided in `flake.nix` without duplicating the code. This way changes to the `flake.nix` are automatically propagated to the `shell.nix`.
-
-Some tools also don't yet support flakes. An important example is Visual Studio Code with the Nix Environment Selector plugin: it works with `shell.nix`, but not `flake.nix`.
-
-### `hie.yaml`
-
-This file instructs the Haskell Language Server how your project should be built. Find more information at [https://haskell-language-server.readthedocs.io/en/latest/configuration.html](https://haskell-language-server.readthedocs.io/en/latest/configuration.html).
-
-### `package.yaml`
-
-This file contains the Cabal package specification in `yaml` format read by [hpack](https://github.com/sol/hpack#readme). It is more abstract and easier to maintain than the Cabal file format.
-
-To generate a `.cabal` file from a `package.yaml` file, run the following command:
-```sh
-hpack
-```
-
-Note that Cabal does not understand `package.yaml` files, and requires us to generate a `.cabal` file before running `cabal`.
-Nix (or more precisely, Cabal2nix) uses a `.cabal` file if it is present, otherwise the `package.yaml` file. Because `package.yaml` is our single source of truth, we would prefer that Nix uses it instead of the generated `.cabal`. This is why we don't commit the `.cabal` file.
-
-### `crem.cabal`
-
-This file is automatically generated from the `package.yaml` file and should not be committed to Git history.
-
-### `fourmolu.yaml`
-
-Configuration file for the [`fourmolu`](https://github.com/fourmolu/fourmolu) formatting tool.
-
-### `.hspec`
-
-Using a dedicated file to specify options for [`hspec`](https://hspec.github.io) allows passing options only to it. Using `cabal test --test-options` would pass options to all test stanzas instead.
+The `crem` logo was kindly generated by [craiyon](https://www.craiyon.com/).
