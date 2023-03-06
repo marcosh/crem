@@ -168,6 +168,9 @@ sequence (ActionResult (Identity (outputs, state))) =
 
 -- ** Lift machines
 
+-- | Lift a @BaseMachineT@ to operate with `Maybe` inputs and outputs. If the
+-- input is a `Nothing`, then the output will be a `Nothing`. If the input is a
+-- `Just`, then the machine will be used to compute the output.
 maybeM
   :: Applicative m
   => BaseMachineT m topology a b
@@ -180,6 +183,9 @@ maybeM (BaseMachineT initialState action) =
         Just a -> Just <$> action initialState' a
     }
 
+-- | Lift a @BaseMachineT@ to operate with `Either` inputs and outputs. If the
+-- input is a `Left`, then the output will be that `Left`. If the input is a
+-- `Right`, then the machine will be used to compute the output.
 eitherM
   :: Applicative m
   => BaseMachineT m topology a b
