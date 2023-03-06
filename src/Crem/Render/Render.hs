@@ -128,23 +128,28 @@ machineAsGraph :: StateMachineT m input output -> UntypedGraph
 machineAsGraph (Basic baseMachine) =
   UntypedGraph (baseMachineAsGraph baseMachine)
 machineAsGraph (Sequential machine1 machine2) =
-  untypedProductGraph
-    (machineAsGraph machine1)
-    (machineAsGraph machine2)
-machineAsGraph (Parallel machine1 machine2) =
-  untypedProductGraph
-    (machineAsGraph machine1)
-    (machineAsGraph machine2)
-machineAsGraph (Alternative machine1 machine2) =
-  untypedProductGraph
-    (machineAsGraph machine1)
-    (machineAsGraph machine2)
-machineAsGraph (Feedback machine1 machine2) =
-  untypedTransitiveClosureGraph $
+  untypedRemoveIdentityEdges $
     untypedProductGraph
-      (machineAsGraph machine1)
-      (machineAsGraph machine2)
+      (untypedAddIdentityEdges $ machineAsGraph machine1)
+      (untypedAddIdentityEdges $ machineAsGraph machine2)
+machineAsGraph (Parallel machine1 machine2) =
+  untypedRemoveIdentityEdges $
+    untypedProductGraph
+      (untypedAddIdentityEdges $ machineAsGraph machine1)
+      (untypedAddIdentityEdges $ machineAsGraph machine2)
+machineAsGraph (Alternative machine1 machine2) =
+  untypedRemoveIdentityEdges $
+    untypedProductGraph
+      (untypedAddIdentityEdges $ machineAsGraph machine1)
+      (untypedAddIdentityEdges $ machineAsGraph machine2)
+machineAsGraph (Feedback machine1 machine2) =
+  untypedRemoveIdentityEdges $
+    untypedTransitiveClosureGraph $
+      untypedProductGraph
+        (untypedAddIdentityEdges $ machineAsGraph machine1)
+        (untypedAddIdentityEdges $ machineAsGraph machine2)
 machineAsGraph (Kleisli machine1 machine2) =
-  untypedProductGraph
-    (machineAsGraph machine1)
-    (untypedTransitiveClosureGraph $ machineAsGraph machine2)
+  untypedRemoveIdentityEdges $
+    untypedProductGraph
+      (untypedAddIdentityEdges $ machineAsGraph machine1)
+      (untypedAddIdentityEdges $ untypedTransitiveClosureGraph $ machineAsGraph machine2)

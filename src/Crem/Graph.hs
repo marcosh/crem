@@ -1,7 +1,7 @@
 -- | A simple data structure to describe a directed graph
 module Crem.Graph where
 
-import Crem.Render.RenderableVertices (RenderableVertices)
+import Crem.Render.RenderableVertices (RenderableVertices (..))
 import "base" Data.List (nub)
 
 -- * Graph
@@ -49,6 +49,14 @@ transitiveClosureGraph graph@(Graph edges) =
        in
         edgesFromAToB <> edgesFromAToC
 
+-- | Add all the identity edges to a graph
+addIdentityEdges :: RenderableVertices a => Graph a -> Graph a
+addIdentityEdges (Graph edges) = Graph $ edges <> ((\a -> (a, a)) <$> vertices)
+
+-- | Remove all the edges which start and end at the same vertex
+removeIdentityEdges :: Eq a => Graph a -> Graph a
+removeIdentityEdges (Graph edges) = Graph $ filter (uncurry (/=)) edges
+
 -- * UntypedGraph
 
 -- | A data type to represent a graph which is not tracking the vertex type
@@ -59,12 +67,23 @@ instance Show UntypedGraph where
   show :: UntypedGraph -> String
   show (UntypedGraph graph) = show graph
 
--- | Same as `productGraph` but for `UntypedGraph`
+-- | Same as @productGraph@ but for @UntypedGraph@
 untypedProductGraph :: UntypedGraph -> UntypedGraph -> UntypedGraph
 untypedProductGraph (UntypedGraph graph1) (UntypedGraph graph2) =
   UntypedGraph (productGraph graph1 graph2)
 
--- | Same as `transitiveClosureGraph` but for `UntypedGraph`
+-- | Same as @transitiveClosureGraph@ but for @UntypedGraph@
 untypedTransitiveClosureGraph :: UntypedGraph -> UntypedGraph
 untypedTransitiveClosureGraph (UntypedGraph graph) =
   UntypedGraph (transitiveClosureGraph graph)
+
+-- | Add all identity edges to an @UntypedGraph@
+untypedAddIdentityEdges :: UntypedGraph -> UntypedGraph
+untypedAddIdentityEdges (UntypedGraph graph) =
+  UntypedGraph $ addIdentityEdges graph
+
+-- | Remove all the edges which start and end at the same vertex from an
+-- @UntypedGraph@
+untypedRemoveIdentityEdges :: UntypedGraph -> UntypedGraph
+untypedRemoveIdentityEdges (UntypedGraph graph) =
+  UntypedGraph $ removeIdentityEdges graph
