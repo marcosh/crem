@@ -70,6 +70,7 @@ nix develop .#ghc92
 ```
 
 Or, without flakes:
+
 ```sh
 # default GHC
 nix-shell
@@ -105,6 +106,7 @@ It is also possible to build the project without entering the development shell.
 This allows us to build the same way as the CI/CD environment, build with different GHC versions, build container images, etc.
 
 To do this, run
+
 ```sh
 # default GHC
 nix build
@@ -115,9 +117,18 @@ nix build .#crem.ghc92
 ```
 
 To view the compilation logs, you can append `-L`:
+
 ```sh
 nix build -L
 nix build -L .#crem.ghc92
+```
+
+### Haddock documentation
+
+You can generate and see the [Haddock] documentation by running
+
+```sh
+cabal haddock --open
 ```
 
 ## Project setup
