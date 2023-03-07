@@ -93,28 +93,6 @@
         cabal build --write-ghc-environment-files=always
         cabal test --test-show-details=streaming
       '';
-
-      open-haddock =
-        let
-          defaultPackage = ".#packages.${system}.default";
-        in
-        pkgs.writeScriptBin "open-haddock" ''
-          pkgName=$(nix eval --raw ${defaultPackage}.name)
-
-          echo Building Haddock documentation for $pkgName
-          docPath=$(nix build --no-link --print-out-paths ${defaultPackage}.doc)
-
-          index="file://$docPath/share/doc/$pkgName/html/index.html"
-          echo "Haddock documentation is available at: $index"
-
-          ${
-            if pkgs.stdenv.isLinux
-            then "xdg-open $index"
-            else if pkgs.stdenv.isDarwin
-            then "open $index"
-            else ""
-          }
-        '';
     in
     rec {
       packages = {
@@ -142,7 +120,6 @@
               haskell-language-server
               build-watch
               test-watch
-              open-haddock
               pkgs.hpack
             ];
             shellHook = ''
