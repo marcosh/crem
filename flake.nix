@@ -72,11 +72,11 @@
       watch = name: command:
         pkgs.writeShellApplication {
           name = name;
-          runtimeInputs = [ pkgs.inotify-tools pkgs.hpack (watch-unwrapped name command) ];
+          runtimeInputs = [ pkgs.fswatch pkgs.hpack (watch-unwrapped name command) ];
           text =
             let sources = builtins.concatStringsSep " " (import ./nix/haskell-source.nix); in
             ''
-              inotifywait -m -r -e close_write,attrib,move,delete ${sources} | sh -c "while read NEWFILE; do ${name}-unwrapped; done;"
+              fswatch --recursive --event-flags --event Created --event Removed --event Updated --event Renamed --event MovedFrom --event MovedTo --one-per-batch --latency=2 ${sources}  | sh -c "while read NUM; do ${name}-unwrapped; done;"
             '';
         };
 
