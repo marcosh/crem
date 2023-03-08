@@ -146,6 +146,7 @@ tests:
       - -Wno-unused-packages
     dependencies:
       - crem
+      - crem-examples
       - doctest-parallel
     when:
     - condition: false

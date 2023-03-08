@@ -6,4 +6,5 @@
   "src"
   "spec"
   "package.yaml"
+  "cabal.project"
 ]

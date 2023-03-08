@@ -9,7 +9,7 @@ main = do
   args <- getArgs
   cremPackage <- findCabalPackage "crem"
   cremLib <- extractCabalLibrary cremPackage
-  -- cremExamplesLib <- extractSpecificCabalLibrary (Just "crem-examples") cremPackage
+  cremExamplesLib <- extractSpecificCabalLibrary (Just "crem-examples") cremPackage
   let
-    wholeCremLib = mergeLibraries [cremLib {-, cremExamplesLib-}]
+    wholeCremLib = mergeLibraries [cremLib, cremExamplesLib]
   mainFromLibrary wholeCremLib args
