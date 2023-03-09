@@ -9,6 +9,8 @@
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunrecognised-pragmas
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunticked-promoted-constructors
+{-# OPTIONS_GHC -Wno-unticked-promoted-constructors #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 

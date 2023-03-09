@@ -13,7 +13,7 @@ jobs:
   build:
     strategy:
       matrix:
-        ghc: ['9.0.2', '9.2.7']
+        ghc: ['9.0.2', '9.2.7', '9.4.4']
         cabal: ['3.8.1.0', '3.6.2.0', '3.4.1.0']
         os: ['ubuntu-latest', 'macos-latest']
         exclude:
@@ -53,16 +53,3 @@ jobs:
 
       - name: Test on HEAD dependencies
         run: cabal test --index-state HEAD
-    # strategy:
-    #   matrix:
-    #     ghc: ['90', '92']
-    #     os: ['ubuntu-latest', 'macos-latest']
-    # runs-on: ${{ matrix.os }}
-    # name: Build with GHC ${{ matrix.ghc }} on ${{ matrix.os }}
-    # steps:
-    # - uses: actions/checkout@v3
-    # - uses: cachix/install-nix-action@v18
-    #   with:
-    #     nix_path: nixpkgs=channel:nixos-22.11
-    # - name: Build
-    #   run: nix build -L .#crem.ghc${{ matrix.ghc }}
