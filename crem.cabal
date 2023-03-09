@@ -1,0 +1,446 @@
+cabal-version: 2.0
+
+-- This file has been generated from package.yaml by hpack version 0.35.1.
+--
+-- see: https://github.com/sol/hpack
+
+name:           crem
+version:        0.1.0.0
+description:    `crem` stands for __c__ompositional __r__epresentable __e__xecutable __m__achines. It allows creating state machines (Mealy machines in fact), compose them to build bigger machines out of smaller ones and then run them and draw their flow and their state space.
+author:         Marco Perone
+maintainer:     marco.perone@tweag.io
+copyright:      2022 Tweag I/O
+license:        MIT
+license-file:   LICENSE
+build-type:     Simple
+
+library
+  exposed-modules:
+      Crem.BaseMachine
+      Crem.Decider
+      Crem.Graph
+      Crem.Render.Render
+      Crem.Render.RenderableVertices
+      Crem.Render.RenderFlow
+      Crem.StateMachine
+      Crem.Topology
+  hs-source-dirs:
+      src
+  default-extensions:
+      DerivingStrategies
+      LambdaCase
+      PackageImports
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
+  build-depends:
+      base
+    , profunctors
+    , singletons-base
+    , text
+  default-language: Haskell2010
+  if impl(ghc >= 9.2)
+    ghc-options: -Wno-missing-kind-signatures
+    default-language: GHC2021
+  else
+    default-extensions:
+        BangPatterns
+        BinaryLiterals
+        ConstrainedClassMethods
+        ConstraintKinds
+        DeriveDataTypeable
+        DeriveFoldable
+        DeriveFunctor
+        DeriveGeneric
+        DeriveLift
+        DeriveTraversable
+        DoAndIfThenElse
+        EmptyCase
+        EmptyDataDecls
+        EmptyDataDeriving
+        ExistentialQuantification
+        ExplicitForAll
+        FlexibleContexts
+        FlexibleInstances
+        ForeignFunctionInterface
+        GADTSyntax
+        GeneralisedNewtypeDeriving
+        HexFloatLiterals
+        ImplicitPrelude
+        ImportQualifiedPost
+        InstanceSigs
+        KindSignatures
+        MonomorphismRestriction
+        MultiParamTypeClasses
+        NamedFieldPuns
+        NamedWildCards
+        NumericUnderscores
+        PatternGuards
+        PolyKinds
+        PostfixOperators
+        RankNTypes
+        RelaxedPolyRec
+        ScopedTypeVariables
+        StandaloneDeriving
+        StandaloneKindSignatures
+        StarIsType
+        TraditionalRecordSyntax
+        TupleSections
+        TypeApplications
+        TypeOperators
+        TypeSynonymInstances
+
+library crem-examples
+  exposed-modules:
+      Crem.Example.BooleanStateMachine
+      Crem.Example.LockDoor
+      Crem.Example.OneState
+      Crem.Example.PlusOneUpToFour
+      Crem.Example.RiskManager.Aggregate
+      Crem.Example.RiskManager.Application
+      Crem.Example.RiskManager.Domain
+      Crem.Example.RiskManager.Policy
+      Crem.Example.RiskManager.Projection
+      Crem.Example.Switch
+      Crem.Example.TheHobbit
+      Crem.Example.TriangularMachine
+      Crem.Example.TwoSwitchesGate
+      Crem.Example.Uno
+  hs-source-dirs:
+      examples
+  default-extensions:
+      DerivingStrategies
+      LambdaCase
+      PackageImports
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
+  build-depends:
+      base
+    , crem
+    , profunctors
+    , singletons-base
+    , text
+  default-language: Haskell2010
+  if impl(ghc >= 9.2)
+    ghc-options: -Wno-missing-kind-signatures
+    default-language: GHC2021
+  else
+    default-extensions:
+        BangPatterns
+        BinaryLiterals
+        ConstrainedClassMethods
+        ConstraintKinds
+        DeriveDataTypeable
+        DeriveFoldable
+        DeriveFunctor
+        DeriveGeneric
+        DeriveLift
+        DeriveTraversable
+        DoAndIfThenElse
+        EmptyCase
+        EmptyDataDecls
+        EmptyDataDeriving
+        ExistentialQuantification
+        ExplicitForAll
+        FlexibleContexts
+        FlexibleInstances
+        ForeignFunctionInterface
+        GADTSyntax
+        GeneralisedNewtypeDeriving
+        HexFloatLiterals
+        ImplicitPrelude
+        ImportQualifiedPost
+        InstanceSigs
+        KindSignatures
+        MonomorphismRestriction
+        MultiParamTypeClasses
+        NamedFieldPuns
+        NamedWildCards
+        NumericUnderscores
+        PatternGuards
+        PolyKinds
+        PostfixOperators
+        RankNTypes
+        RelaxedPolyRec
+        ScopedTypeVariables
+        StandaloneDeriving
+        StandaloneKindSignatures
+        StarIsType
+        TraditionalRecordSyntax
+        TupleSections
+        TypeApplications
+        TypeOperators
+        TypeSynonymInstances
+
+executable hobbit-game
+  main-is: Main.hs
+  hs-source-dirs:
+      hobbit-game
+  default-extensions:
+      DerivingStrategies
+      LambdaCase
+      PackageImports
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
+  build-depends:
+      base
+    , crem
+    , crem-examples
+  default-language: Haskell2010
+  if impl(ghc >= 9.2)
+    ghc-options: -Wno-missing-kind-signatures
+    default-language: GHC2021
+  else
+    default-extensions:
+        BangPatterns
+        BinaryLiterals
+        ConstrainedClassMethods
+        ConstraintKinds
+        DeriveDataTypeable
+        DeriveFoldable
+        DeriveFunctor
+        DeriveGeneric
+        DeriveLift
+        DeriveTraversable
+        DoAndIfThenElse
+        EmptyCase
+        EmptyDataDecls
+        EmptyDataDeriving
+        ExistentialQuantification
+        ExplicitForAll
+        FlexibleContexts
+        FlexibleInstances
+        ForeignFunctionInterface
+        GADTSyntax
+        GeneralisedNewtypeDeriving
+        HexFloatLiterals
+        ImplicitPrelude
+        ImportQualifiedPost
+        InstanceSigs
+        KindSignatures
+        MonomorphismRestriction
+        MultiParamTypeClasses
+        NamedFieldPuns
+        NamedWildCards
+        NumericUnderscores
+        PatternGuards
+        PolyKinds
+        PostfixOperators
+        RankNTypes
+        RelaxedPolyRec
+        ScopedTypeVariables
+        StandaloneDeriving
+        StandaloneKindSignatures
+        StarIsType
+        TraditionalRecordSyntax
+        TupleSections
+        TypeApplications
+        TypeOperators
+        TypeSynonymInstances
+
+executable hobbit-map
+  main-is: Main.hs
+  hs-source-dirs:
+      hobbit-map
+  default-extensions:
+      DerivingStrategies
+      LambdaCase
+      PackageImports
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
+  build-depends:
+      base
+    , crem
+    , crem-examples
+    , text
+  default-language: Haskell2010
+  if impl(ghc >= 9.2)
+    ghc-options: -Wno-missing-kind-signatures
+    default-language: GHC2021
+  else
+    default-extensions:
+        BangPatterns
+        BinaryLiterals
+        ConstrainedClassMethods
+        ConstraintKinds
+        DeriveDataTypeable
+        DeriveFoldable
+        DeriveFunctor
+        DeriveGeneric
+        DeriveLift
+        DeriveTraversable
+        DoAndIfThenElse
+        EmptyCase
+        EmptyDataDecls
+        EmptyDataDeriving
+        ExistentialQuantification
+        ExplicitForAll
+        FlexibleContexts
+        FlexibleInstances
+        ForeignFunctionInterface
+        GADTSyntax
+        GeneralisedNewtypeDeriving
+        HexFloatLiterals
+        ImplicitPrelude
+        ImportQualifiedPost
+        InstanceSigs
+        KindSignatures
+        MonomorphismRestriction
+        MultiParamTypeClasses
+        NamedFieldPuns
+        NamedWildCards
+        NumericUnderscores
+        PatternGuards
+        PolyKinds
+        PostfixOperators
+        RankNTypes
+        RelaxedPolyRec
+        ScopedTypeVariables
+        StandaloneDeriving
+        StandaloneKindSignatures
+        StarIsType
+        TraditionalRecordSyntax
+        TupleSections
+        TypeApplications
+        TypeOperators
+        TypeSynonymInstances
+
+test-suite crem-doctests
+  type: exitcode-stdio-1.0
+  main-is: Main.hs
+  hs-source-dirs:
+      doctest
+  default-extensions:
+      DerivingStrategies
+      LambdaCase
+      PackageImports
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -threaded -Wno-unused-packages
+  build-depends:
+      base
+    , crem
+    , crem-examples
+    , doctest-parallel
+  default-language: Haskell2010
+  if impl(ghc >= 9.2)
+    ghc-options: -Wno-missing-kind-signatures
+    default-language: GHC2021
+  else
+    default-extensions:
+        BangPatterns
+        BinaryLiterals
+        ConstrainedClassMethods
+        ConstraintKinds
+        DeriveDataTypeable
+        DeriveFoldable
+        DeriveFunctor
+        DeriveGeneric
+        DeriveLift
+        DeriveTraversable
+        DoAndIfThenElse
+        EmptyCase
+        EmptyDataDecls
+        EmptyDataDeriving
+        ExistentialQuantification
+        ExplicitForAll
+        FlexibleContexts
+        FlexibleInstances
+        ForeignFunctionInterface
+        GADTSyntax
+        GeneralisedNewtypeDeriving
+        HexFloatLiterals
+        ImplicitPrelude
+        ImportQualifiedPost
+        InstanceSigs
+        KindSignatures
+        MonomorphismRestriction
+        MultiParamTypeClasses
+        NamedFieldPuns
+        NamedWildCards
+        NumericUnderscores
+        PatternGuards
+        PolyKinds
+        PostfixOperators
+        RankNTypes
+        RelaxedPolyRec
+        ScopedTypeVariables
+        StandaloneDeriving
+        StandaloneKindSignatures
+        StarIsType
+        TraditionalRecordSyntax
+        TupleSections
+        TypeApplications
+        TypeOperators
+        TypeSynonymInstances
+
+test-suite crem-spec
+  type: exitcode-stdio-1.0
+  main-is: Spec.hs
+  other-modules:
+      Crem.DeciderSpec
+      Crem.GraphSpec
+      Crem.Render.RenderFlowSpec
+      Crem.Render.RenderSpec
+      Crem.RiskManagerSpec
+      Crem.StateMachineSpec
+  hs-source-dirs:
+      spec
+  default-extensions:
+      DerivingStrategies
+      LambdaCase
+      PackageImports
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
+  build-tool-depends:
+      hspec-discover:hspec-discover
+  build-depends:
+      base
+    , crem
+    , crem-examples
+    , hspec
+    , profunctors
+    , singletons-base
+  default-language: Haskell2010
+  if impl(ghc >= 9.2)
+    ghc-options: -Wno-missing-kind-signatures
+    default-language: GHC2021
+  else
+    default-extensions:
+        BangPatterns
+        BinaryLiterals
+        ConstrainedClassMethods
+        ConstraintKinds
+        DeriveDataTypeable
+        DeriveFoldable
+        DeriveFunctor
+        DeriveGeneric
+        DeriveLift
+        DeriveTraversable
+        DoAndIfThenElse
+        EmptyCase
+        EmptyDataDecls
+        EmptyDataDeriving
+        ExistentialQuantification
+        ExplicitForAll
+        FlexibleContexts
+        FlexibleInstances
+        ForeignFunctionInterface
+        GADTSyntax
+        GeneralisedNewtypeDeriving
+        HexFloatLiterals
+        ImplicitPrelude
+        ImportQualifiedPost
+        InstanceSigs
+        KindSignatures
+        MonomorphismRestriction
+        MultiParamTypeClasses
+        NamedFieldPuns
+        NamedWildCards
+        NumericUnderscores
+        PatternGuards
+        PolyKinds
+        PostfixOperators
+        RankNTypes
+        RelaxedPolyRec
+        ScopedTypeVariables
+        StandaloneDeriving
+        StandaloneKindSignatures
+        StarIsType
+        TraditionalRecordSyntax
+        TupleSections
+        TypeApplications
+        TypeOperators
+        TypeSynonymInstances
