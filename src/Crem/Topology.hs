@@ -4,6 +4,8 @@
 {-# LANGUAGE UndecidableInstances #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wredundant-constraints
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunticked-promoted-constructors
+{-# OPTIONS_GHC -Wno-unticked-promoted-constructors #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 
@@ -50,17 +52,17 @@ data AllowTransition (topology :: Topology vertex) (initial :: vertex) (final ::
   AllowIdentityEdge :: AllowTransition topology a a
   -- | If @a@ is the start and @b@ is the end of the first edge,
   -- then @map@ contains an edge from @a@ to @b@
-  AllowFirstEdge :: AllowTransition ('Topology ('(a, b : l1) : l2)) a b
+  AllowFirstEdge :: AllowTransition ('Topology ('(a, b ': l1) ': l2)) a b
   -- | If we know that we have an edge from @a@ to @b@ in a topology,
   -- then we also have an edge from @a@ to @b@ if we add another edge out of @a@
   AllowAddingEdge
-    :: AllowTransition ('Topology ('(a, l1) : l2)) a b
-    -> AllowTransition ('Topology ('(a, x : l1) : l2)) a b
+    :: AllowTransition ('Topology ('(a, l1) ': l2)) a b
+    -> AllowTransition ('Topology ('(a, x ': l1) ': l2)) a b
   -- | If we know that we have an edge from @a@ to @b@ in @map@,
   -- then we also have an edge from @a@ to @b@ if we add another vertex
   AllowAddingVertex
     :: AllowTransition ('Topology map) a b
-    -> AllowTransition ('Topology (x : map)) a b
+    -> AllowTransition ('Topology (x ': map)) a b
 
 -- | The `AllowedTransition` type class enables to automatically perform proof search
 -- for a `AllowTransition` term.
@@ -68,14 +70,14 @@ data AllowTransition (topology :: Topology vertex) (initial :: vertex) (final ::
 class AllowedTransition (topology :: Topology vertex) (initial :: vertex) (final :: vertex) where
   allowsTransition :: AllowTransition topology initial final
 
-instance {-# INCOHERENT #-} AllowedTransition ('Topology ('(a, b : l1) : l2)) a b where
+instance {-# INCOHERENT #-} AllowedTransition ('Topology ('(a, b ': l1) ': l2)) a b where
   allowsTransition = AllowFirstEdge
 
-instance {-# INCOHERENT #-} AllowedTransition ('Topology ('(a, l1) : l2)) a b => AllowedTransition ('Topology ('(a, x : l1) : l2)) a b where
+instance {-# INCOHERENT #-} AllowedTransition ('Topology ('(a, l1) ': l2)) a b => AllowedTransition ('Topology ('(a, x ': l1) ': l2)) a b where
   allowsTransition =
-    AllowAddingEdge (allowsTransition :: AllowTransition ('Topology ('(a, l1) : l2)) a b)
+    AllowAddingEdge (allowsTransition :: AllowTransition ('Topology ('(a, l1) ': l2)) a b)
 
-instance {-# INCOHERENT #-} AllowedTransition ('Topology map) a b => AllowedTransition ('Topology (x : map)) a b where
+instance {-# INCOHERENT #-} AllowedTransition ('Topology map) a b => AllowedTransition ('Topology (x ': map)) a b where
   allowsTransition =
     AllowAddingVertex (allowsTransition :: AllowTransition ('Topology map) a b)
 
