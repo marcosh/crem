@@ -1,7 +1,6 @@
 # cabal
 dist
 dist-*
-*.cabal
 .ghc.*
 
 # nix

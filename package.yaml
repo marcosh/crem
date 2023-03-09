@@ -134,6 +134,7 @@ tests:
       - hspec
       - profunctors
       - singletons-base
+    build-tools: hspec-discover:hspec-discover
     when:
     - condition: false
       other-modules: Paths_crem
