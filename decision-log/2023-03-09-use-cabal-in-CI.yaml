@@ -1,0 +1,27 @@
+name: use Cabal in CI
+date: 2023-03-09
+context: >
+  Currently the CI just executes 'nix build' to compile the project.
+
+  This is extremely short and easy to setup, but it has, IMHO, two main
+  drawbacks:
+
+  - it is hard to debug, when something unexpected happen (e.g.
+  https://github.com/tweag/crem/issues/64).
+  - it constraints (or at least it defaults) to the version of the packages
+  present on `nixpkgs`.
+
+  Given that we are testing a library, it would be nice to check as many
+  combinations of tools (e.g. `GHC` and `cabal`) and dependency versions as
+  possible.
+decision: >
+  We decided to replace `Nix` with `cabal` for `CI` purposes.
+
+  This new setup allows to test on different platforms, `GHC` versions, `cabal`
+  versions and set of dependencies.
+consequences: >
+  We rewrote our CI to use `cabal`.
+
+  Now not every dependency is fixed as it was on `Nix` so it might happen that
+  `CI` breaks unexpectedly. That could be seen as a good thing, since it could
+  be something which happens to an end user.
