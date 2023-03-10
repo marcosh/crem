@@ -88,22 +88,17 @@ ghc-options:
   - -Wno-missing-export-lists      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-export-lists
   - -Wno-missing-home-modules      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-home-modules
   - -Wno-missing-import-lists      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-import-lists
-#  - -Wno-unused-type-patterns
   - -Wno-all-missed-specialisations    # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wall-missed-specialisations
-#  - -Wno-orphans
-# TODO: do we still need these?
-# - -fwrite-ide-info
-# - -hiedir=.hie
 
 dependencies:
-  - base
+  - base >= 4.15 && < 4.19
 
 library:
   source-dirs:      src
   dependencies:
-    - profunctors
-    - singletons-base
-    - text
+    - profunctors >= 3.2 && < 5.7
+    - singletons-base >= 3.0 && < 3.2
+    - text >= 1.2 && < 2.1
   # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
   # https://github.com/sol/hpack#handling-of-paths_-modules
   when:
@@ -115,9 +110,9 @@ internal-libraries:
     source-dirs:      examples
     dependencies:
       - crem
-      - profunctors
-      - singletons-base
-      - text
+      - profunctors >= 3.2 && < 5.7
+      - singletons-base >= 3.0 && < 3.2
+      - text >= 1.2 && < 2.1
     # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
     # https://github.com/sol/hpack#handling-of-paths_-modules
     when:
@@ -131,9 +126,9 @@ tests:
     dependencies:
       - crem
       - crem-examples
-      - hspec
-      - profunctors
-      - singletons-base
+      - hspec >= 2.7 && < 2.11
+      - profunctors >= 3.2 && < 5.7
+      - singletons-base >= 3.0 && < 3.2
     build-tools: hspec-discover:hspec-discover
     when:
     - condition: false
@@ -148,7 +143,7 @@ tests:
     dependencies:
       - crem
       - crem-examples
-      - doctest-parallel
+      - doctest-parallel >= 0.2.3 && < 0.4
     when:
     - condition: false
       other-modules: Paths_crem
@@ -172,7 +167,7 @@ executables:
     dependencies:
       - crem
       - crem-examples
-      - text
+      - text >= 1.2 && < 2.1
     # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
     # https://github.com/sol/hpack#handling-of-paths_-modules
     when:
