@@ -1,6 +1,6 @@
 cabal-version: 2.0
 
--- This file has been generated from package.yaml by hpack version 0.35.1.
+-- This file has been generated from package.yaml by hpack version 0.35.2.
 --
 -- see: https://github.com/sol/hpack
 
@@ -32,10 +32,10 @@ library
       PackageImports
   ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
   build-depends:
-      base
-    , profunctors
-    , singletons-base
-    , text
+      base >=4.15 && <4.19
+    , profunctors >=3.2 && <5.7
+    , singletons-base >=3.0 && <3.2
+    , text >=1.2 && <2.1
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
@@ -112,11 +112,11 @@ library crem-examples
       PackageImports
   ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
   build-depends:
-      base
+      base >=4.15 && <4.19
     , crem
-    , profunctors
-    , singletons-base
-    , text
+    , profunctors >=3.2 && <5.7
+    , singletons-base >=3.0 && <3.2
+    , text >=1.2 && <2.1
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
@@ -179,7 +179,7 @@ executable hobbit-game
       PackageImports
   ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
   build-depends:
-      base
+      base >=4.15 && <4.19
     , crem
     , crem-examples
   default-language: Haskell2010
@@ -244,10 +244,10 @@ executable hobbit-map
       PackageImports
   ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
   build-depends:
-      base
+      base >=4.15 && <4.19
     , crem
     , crem-examples
-    , text
+    , text >=1.2 && <2.1
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
@@ -311,10 +311,10 @@ test-suite crem-doctests
       PackageImports
   ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -threaded -Wno-unused-packages
   build-depends:
-      base
+      base >=4.15 && <4.19
     , crem
     , crem-examples
-    , doctest-parallel
+    , doctest-parallel >=0.2.3 && <0.4
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
@@ -387,12 +387,12 @@ test-suite crem-spec
   build-tool-depends:
       hspec-discover:hspec-discover
   build-depends:
-      base
+      base >=4.15 && <4.19
     , crem
     , crem-examples
-    , hspec
-    , profunctors
-    , singletons-base
+    , hspec >=2.7 && <2.11
+    , profunctors >=3.2 && <5.7
+    , singletons-base >=3.0 && <3.2
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
