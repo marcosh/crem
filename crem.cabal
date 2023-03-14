@@ -34,7 +34,7 @@ library
   build-depends:
       base >=4.15 && <4.19
     , profunctors >=3.2 && <5.7
-    , singletons-base >=3.0 && <3.2
+    , singletons-base >=3.0 && <3.3
     , text >=1.2 && <2.1
   default-language: Haskell2010
   if impl(ghc >= 9.2)
@@ -114,9 +114,9 @@ library crem-examples
   build-depends:
       base >=4.15 && <4.19
     , crem
-    , profunctors >=3.2 && <5.7
-    , singletons-base >=3.0 && <3.2
-    , text >=1.2 && <2.1
+    , profunctors
+    , singletons-base
+    , text
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
@@ -247,7 +247,7 @@ executable hobbit-map
       base >=4.15 && <4.19
     , crem
     , crem-examples
-    , text >=1.2 && <2.1
+    , text
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
@@ -391,8 +391,8 @@ test-suite crem-spec
     , crem
     , crem-examples
     , hspec >=2.7 && <2.11
-    , profunctors >=3.2 && <5.7
-    , singletons-base >=3.0 && <3.2
+    , profunctors
+    , singletons-base
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
