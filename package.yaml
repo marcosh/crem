@@ -97,7 +97,7 @@ library:
   source-dirs:      src
   dependencies:
     - profunctors >= 3.2 && < 5.7
-    - singletons-base >= 3.0 && < 3.2
+    - singletons-base >= 3.0 && < 3.3
     - text >= 1.2 && < 2.1
   # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
   # https://github.com/sol/hpack#handling-of-paths_-modules
@@ -110,9 +110,9 @@ internal-libraries:
     source-dirs:      examples
     dependencies:
       - crem
-      - profunctors >= 3.2 && < 5.7
-      - singletons-base >= 3.0 && < 3.2
-      - text >= 1.2 && < 2.1
+      - profunctors
+      - singletons-base
+      - text
     # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
     # https://github.com/sol/hpack#handling-of-paths_-modules
     when:
@@ -127,8 +127,8 @@ tests:
       - crem
       - crem-examples
       - hspec >= 2.7 && < 2.11
-      - profunctors >= 3.2 && < 5.7
-      - singletons-base >= 3.0 && < 3.2
+      - profunctors
+      - singletons-base
     build-tools: hspec-discover:hspec-discover
     when:
     - condition: false
@@ -167,7 +167,7 @@ executables:
     dependencies:
       - crem
       - crem-examples
-      - text >= 1.2 && < 2.1
+      - text
     # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
     # https://github.com/sol/hpack#handling-of-paths_-modules
     when:
