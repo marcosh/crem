@@ -89,6 +89,7 @@ ghc-options:
   - -Wno-missing-home-modules      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-home-modules
   - -Wno-missing-import-lists      # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-import-lists
   - -Wno-all-missed-specialisations    # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wall-missed-specialisations
+  - -Wno-prepositive-qualified-module  # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wprepositive-qualified-module
 
 dependencies:
   - base >= 4.15 && < 4.19
