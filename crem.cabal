@@ -30,7 +30,7 @@ library
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
       base >=4.15 && <4.19
     , profunctors >=3.2 && <5.7
@@ -110,7 +110,7 @@ library crem-examples
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
       base >=4.15 && <4.19
     , crem
@@ -177,7 +177,7 @@ executable hobbit-game
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
       base >=4.15 && <4.19
     , crem
@@ -242,7 +242,7 @@ executable hobbit-map
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
       base >=4.15 && <4.19
     , crem
@@ -309,7 +309,7 @@ test-suite crem-doctests
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -threaded -Wno-unused-packages
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module -threaded -Wno-unused-packages
   build-depends:
       base >=4.15 && <4.19
     , crem
@@ -383,7 +383,7 @@ test-suite crem-spec
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations
+  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-tool-depends:
       hspec-discover:hspec-discover
   build-depends:
