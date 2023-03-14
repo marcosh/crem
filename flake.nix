@@ -43,6 +43,7 @@
                 export GHC_PACKAGE_PATH="dist/package.conf.inplace:$GHC_PACKAGE_PATH"
               '';
             });
+            fourmolu = pkgs.haskell.packages.ghc944.fourmolu;
           };
         };
 
