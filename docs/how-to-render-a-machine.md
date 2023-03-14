@@ -12,7 +12,7 @@ The only supported output format for the moment is [Mermaid](https://mermaid.js.
 
 For example, this is the graph produced for the [`LockDoor`](/src/Crem/Example/LockDoor.hs) machine
 
-![lock door machine](https://mermaid.ink/svg/pako:eNptkEFPhDAQhf8KeWcggN2F9uBFPZhoPHgzvTR0VLJLS0oxroT_bhdEd-MeJpmX-eZl5o2orSYI9F55um3Um1Nt8lFIc98_2Hr31JFZ-5u97Umv6lh_6shFSXIdXUIXdTL-73oyPDde1AVrxGjJtarR4fpRmiiS8O_UkoQIrVZuJyHNFLih0-G5O9146yBe1b6nGGrw9vlgagjvBlqhnwR-qU6ZF2vPNMSITwiWbdJtVfEtq9hVuYlxgCjyMmWc84qVLC_yjLMpxte8n6UBofmExyXxOfjpGxvJf_Y)
+<img alt="lock door machine" src="https://mermaid.ink/svg/pako:eNptkEFPhDAQhf8KeWcggN2F9uBFPZhoPHgzvTR0VLJLS0oxroT_bhdEd-MeJpmX-eZl5o2orSYI9F55um3Um1Nt8lFIc98_2Hr31JFZ-5u97Umv6lh_6shFSXIdXUIXdTL-73oyPDde1AVrxGjJtarR4fpRmiiS8O_UkoQIrVZuJyHNFLih0-G5O9146yBe1b6nGGrw9vlgagjvBlqhnwR-qU6ZF2vPNMSITwiWbdJtVfEtq9hVuYlxgCjyMmWc84qVLC_yjLMpxte8n6UBofmExyXxOfjpGxvJf_Y" height=150px style="display: block; margin: auto;">
 
 ## Flow rendering
 
