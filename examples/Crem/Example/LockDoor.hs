@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DerivingVia #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
@@ -14,6 +15,7 @@
 module Crem.Example.LockDoor where
 
 import Crem.BaseMachine
+import Crem.Render.RenderableVertices (AllVertices (..), RenderableVertices)
 import Crem.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
@@ -34,6 +36,8 @@ $( singletons
           ]
       |]
  )
+
+deriving via AllVertices LockDoorVertex instance RenderableVertices LockDoorVertex
 
 data LockDoorCommand
   = LockOpen

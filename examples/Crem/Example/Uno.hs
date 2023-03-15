@@ -19,6 +19,7 @@ module Crem.Example.Uno where
 
 import Crem.BaseMachine (InitialState (..))
 import Crem.Decider (Decider (..), EvolutionResult (..))
+import Crem.Render.RenderableVertices (AllVertices (..), RenderableVertices)
 import Crem.Topology
 import "singletons-base" Data.Singletons.Base.TH
 import Prelude hiding (id, init, reverse)
@@ -177,6 +178,8 @@ $( singletons
       unoTopology = Topology [(Initial, [Started])]
       |]
  )
+
+deriving via AllVertices UnoVertex instance RenderableVertices UnoVertex
 
 -- * State
 

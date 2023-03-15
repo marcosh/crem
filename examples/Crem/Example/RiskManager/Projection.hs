@@ -15,6 +15,7 @@ module Crem.Example.RiskManager.Projection where
 
 import Crem.BaseMachine
 import Crem.Example.RiskManager.Domain
+import Crem.Render.RenderableVertices (AllVertices (..), RenderableVertices)
 import Crem.Topology
 import "base" Data.Monoid (Last (..))
 import "base" GHC.Generics (Generic)
@@ -59,6 +60,8 @@ $( singletons
         Topology []
       |]
  )
+
+deriving via AllVertices ProjectionVertex instance RenderableVertices ProjectionVertex
 
 data ProjectionState (vertex :: ProjectionVertex) where
   SingleProjectionState :: ReceivedData -> ProjectionState 'SingleProjectionVertex

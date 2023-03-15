@@ -1,4 +1,5 @@
 > {-# LANGUAGE DataKinds #-}
+> {-# LANGUAGE DerivingVia #-}
 > {-# LANGUAGE TemplateHaskell #-}
 > {-# LANGUAGE TypeFamilies #-}
 > {-# LANGUAGE UndecidableInstances #-}
@@ -13,6 +14,7 @@
 >
 > import "crem" Crem.BaseMachine
 > import "crem" Crem.Render.Render
+> import "crem" Crem.Render.RenderableVertices (AllVertices(..), RenderableVertices)
 > import "crem" Crem.Render.RenderFlow
 > import "crem" Crem.StateMachine
 > import "crem" Crem.Topology
@@ -47,6 +49,10 @@ Moreover, we want those switches to be usable only once, and therefore we want t
 >  )
 
 Notice that we need to wrap this in `singletons` because we will soon need to use this data type as a kind, to store information in the type of our state machines.
+
+We need also an instance of `RenderableVertices SwitchVertex` to decide which vertices to render for our machine. To obtain that, we use `deriving via` together with the `AllVertices` newtype.
+
+> deriving via AllVertices SwitchVertex instance RenderableVertices SwitchVertex
 
 Next we need to define which data every vertex of our topology should contain. To express that we use a generalized algebraid data type indexed with `SwitchVertex`
 
@@ -108,6 +114,8 @@ Again, we need to start thinking about the topology of our machine. Since we nee
 >         ]
 >     |]
 >  )
+>
+> deriving via AllVertices BothVertex instance RenderableVertices BothVertex
 
 The topology again constrains the machine with the invariant the we can only turn on switches.
 

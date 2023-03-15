@@ -13,6 +13,7 @@
 module Crem.Example.TheHobbit where
 
 import Crem.BaseMachine
+import Crem.Render.RenderableVertices (AllVertices (..), RenderableVertices)
 import Crem.Topology
 import "base" Data.Semigroup
 import "singletons-base" Data.Singletons.Base.TH
@@ -58,6 +59,8 @@ $( singletons
           ]
       |]
  )
+
+deriving via AllVertices HobbitVertex instance RenderableVertices HobbitVertex
 
 data KeyState
   = NoKey
