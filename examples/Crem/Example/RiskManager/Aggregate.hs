@@ -1,4 +1,5 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE DerivingVia #-}
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
@@ -13,6 +14,7 @@ module Crem.Example.RiskManager.Aggregate where
 
 import Crem.BaseMachine
 import Crem.Example.RiskManager.Domain
+import Crem.Render.RenderableVertices (AllVertices (..), RenderableVertices)
 import Crem.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
@@ -37,6 +39,8 @@ $( singletons
           ]
       |]
  )
+
+deriving via AllVertices AggregateVertex instance RenderableVertices AggregateVertex
 
 data AggregateState (vertex :: AggregateVertex) where
   NoData :: AggregateState 'NoDataVertex
