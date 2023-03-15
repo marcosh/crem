@@ -2,13 +2,13 @@
 
 module Crem.Render.RenderFlowSpec where
 
+import "base" Data.Functor.Identity (Identity)
+import "base" Data.List (singleton)
 import "crem" Crem.Example.LockDoor (SLockDoorVertex (..), lockDoorMachine)
 import "crem" Crem.Example.RiskManager.Application (riskApplication)
 import "crem" Crem.Render.Render (MachineLabel (..), Mermaid (..), baseMachineAsGraph, renderLabelledGraph)
 import "crem" Crem.Render.RenderFlow (TreeMetadata (..), renderFlow)
 import "crem" Crem.StateMachine (StateMachineT (..), stateless)
-import "base" Data.Functor.Identity (Identity)
-import "base" Data.List (singleton)
 import "hspec" Test.Hspec
 
 spec :: Spec

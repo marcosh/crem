@@ -3,11 +3,11 @@
 
 module Crem.DeciderSpec where
 
+import Crem.StateMachine (StateMachineT (..), run)
+import "base" Data.Functor.Identity (Identity)
 import "crem" Crem.BaseMachine (InitialState (..))
 import "crem" Crem.Decider
 import "crem" Crem.Example.Uno
-import Crem.StateMachine (StateMachineT (..), run)
-import Data.Functor.Identity (Identity)
 import "hspec" Test.Hspec (Spec, describe, it, shouldBe)
 
 spec :: Spec

@@ -13,8 +13,8 @@ import Crem.Render.RenderableVertices
 import Crem.StateMachine
 import Crem.Topology
 import "base" Data.List (intersperse)
-import "singletons-base" Data.Singletons (Demote, SingI, SingKind, demote)
 import "base" Data.String (IsString)
+import "singletons-base" Data.Singletons (Demote, SingI, SingKind, demote)
 import "text" Data.Text (Text, null, pack)
 import Prelude hiding (null)
 

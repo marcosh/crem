@@ -6,11 +6,11 @@
 -- `StateMachineT` type, which allows us to create composable state machines.
 module Crem.StateMachine where
 
-import "base" Control.Arrow (Arrow (arr, first), ArrowChoice (left))
-import "base" Control.Category (Category (..))
 import Crem.BaseMachine as BaseMachine
 import Crem.Render.RenderableVertices (RenderableVertices)
 import Crem.Topology (AllowAllTopology, Topology)
+import "base" Control.Arrow (Arrow (arr, first), ArrowChoice (left))
+import "base" Control.Category (Category (..))
 import "base" Data.Bifunctor (Bifunctor (second), bimap)
 import "base" Data.Foldable (foldlM)
 import "base" Data.Kind (Type)

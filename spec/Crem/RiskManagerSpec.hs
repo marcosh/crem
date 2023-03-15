@@ -5,8 +5,8 @@ module Crem.RiskManagerSpec where
 import Crem.Example.RiskManager.Application
 import Crem.Example.RiskManager.Domain
 import Crem.Example.RiskManager.Projection (ReceivedData (..))
-import "crem" Crem.StateMachine (run, runMultiple)
 import Crem.StateMachineSpec (shouldOutput)
+import "crem" Crem.StateMachine (run, runMultiple)
 import "hspec" Test.Hspec (Spec, describe, it)
 
 myUserData :: UserData

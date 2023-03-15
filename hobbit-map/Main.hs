@@ -2,10 +2,10 @@
 
 module Main where
 
+import "base" Data.Functor.Identity
 import "crem" Crem.BaseMachine
 import "crem" Crem.Example.TheHobbit
 import "crem" Crem.Render.Render
-import "base" Data.Functor.Identity
 import "text" Data.Text.IO qualified as Text
 
 main :: IO ()
