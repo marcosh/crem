@@ -1,4 +1,3 @@
-{-# LANGUAGE DeriveAnyClass #-}
 {-# OPTIONS_GHC -Wno-orphans #-}
 
 module Crem.DeciderSpec where
