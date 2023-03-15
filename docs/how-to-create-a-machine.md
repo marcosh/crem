@@ -372,7 +372,8 @@ class RenderableVertices a where
 ```
 
 It is used to list all the vertices of type `a` so that they can be rendered.
-It has a default instance for types `a` satisfying `(Enum a, Bounded a)`, but you can overwrite it for more specific types.
+
+For your own types with `Enum` and `Bounded` instances, you can use the `AllVertices` newtype wrapper in conjunction with `deriving via` to derive a `RenderableVertices` instance which returns the list of all the terms of your type.
 
 Be aware that rendering a graph or topology with vertices of type `a` will try to print out every element of that type. It might not be a good idea to try to print out every value of type `Int`, for example...
 
