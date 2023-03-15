@@ -112,6 +112,10 @@ You can generate and see the [Haddock] documentation by running
 cabal haddock --open
 ```
 
+### Code formatting
+
+Code is formatted using [fourmolu](https://github.com/fourmolu/fourmolu) version 0.10.1.0.
+
 ## Project setup
 
 You can find more details on the project setup on [Setup.md](/Setup.md).
