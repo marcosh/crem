@@ -1,16 +1,16 @@
 module Crem.StateMachineSpec where
 
-import "base" Control.Category qualified
 import Crem.Example.BooleanStateMachine (booleanStateMachine)
 import Crem.Example.LockDoor
 import Crem.Example.PlusOneUpToFour (plus1UpTo4)
 import Crem.Example.Switch (switchMachine)
-import "crem" Crem.StateMachine
+import "base" Control.Category qualified
 import "base" Data.Functor.Identity (Identity (..))
 import "base" Data.List (singleton)
+import "crem" Crem.StateMachine
+import "hspec" Test.Hspec (Expectation, Spec, describe, it, shouldBe)
 import "profunctors" Data.Profunctor (rmap)
 import "singletons-base" Data.Singletons.Base.TH
-import "hspec" Test.Hspec (Expectation, Spec, describe, it, shouldBe)
 
 shouldOutput :: (Eq b, Show b) => Identity (b, c) -> b -> Expectation
 shouldOutput (Identity (output, _)) expectedOutput = output `shouldBe` expectedOutput

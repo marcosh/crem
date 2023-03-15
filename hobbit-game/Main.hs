@@ -2,9 +2,9 @@
 
 module Main where
 
+import "base" Data.Functor.Identity
 import "crem" Crem.Example.TheHobbit
 import "crem" Crem.StateMachine
-import "base" Data.Functor.Identity
 
 main :: IO ()
 main = do

@@ -5,13 +5,13 @@ module Crem.Render.RenderSpec where
 import Crem.Example.LockDoor
 import Crem.Example.OneState
 import Crem.Example.Switch
+import Crem.Topology (trivialTopology)
+import Data.Functor.Identity
+import Data.Singletons.Base.TH
+import "base" Data.List (intersperse)
 import "crem" Crem.Graph
 import "crem" Crem.Render.Render
 import "crem" Crem.StateMachine
-import Crem.Topology (trivialTopology)
-import Data.Functor.Identity
-import "base" Data.List (intersperse)
-import Data.Singletons.Base.TH
 import "hspec" Test.Hspec (Spec, describe, it, shouldBe)
 
 spec :: Spec

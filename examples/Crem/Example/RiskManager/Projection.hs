@@ -17,8 +17,8 @@ import Crem.BaseMachine
 import Crem.Example.RiskManager.Domain
 import Crem.Topology
 import "base" Data.Monoid (Last (..))
-import "singletons-base" Data.Singletons.Base.TH
 import "base" GHC.Generics (Generic)
+import "singletons-base" Data.Singletons.Base.TH
 
 data ReceivedData = ReceivedData
   { receivedUserData :: Maybe UserData
