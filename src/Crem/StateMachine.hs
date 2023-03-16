@@ -26,7 +26,12 @@ import Prelude hiding ((.))
 --
 -- `StateMachineT` is a tree, where leaves are `BaseMachineT` and other nodes
 -- describe how to combine the subtrees to obtain more complex machines.
+--
+-- Please refer to https://github.com/tweag/crem/blob/main/docs/how-to-create-a-machine.md
+-- for a more complete discussion on the various constructors.
 data StateMachineT m input output where
+  -- | `Basic` allows to interpret a `BaseMachineT` as a `StateMachineT`,
+  -- making the @topology@ type variable existential
   Basic
     :: forall m vertex (topology :: Topology vertex) input output
      . ( Demote vertex ~ vertex
@@ -38,23 +43,31 @@ data StateMachineT m input output where
        )
     => BaseMachineT m topology input output
     -> StateMachineT m input output
+  -- | `Sequential` adds categorical composition for `StateMachineT`
   Sequential
     :: StateMachineT m a b
     -> StateMachineT m b c
     -> StateMachineT m a c
+  -- | `Parallel` allows to process two machine simultaneously
   Parallel
     :: StateMachineT m a b
     -> StateMachineT m c d
     -> StateMachineT m (a, c) (b, d)
+  -- | `Alternative` allows to process one out of two machines depending on the
+  -- input
   Alternative
     :: StateMachineT m a b
     -> StateMachineT m c d
     -> StateMachineT m (Either a c) (Either b d)
+  -- | `Feedback` allows to compose two machine going in oppositive directions
+  -- and run them in a loop
   Feedback
     :: (Foldable n, Monoid (n a), Monoid (n b))
     => StateMachineT m a (n b)
     -> StateMachineT m b (n a)
     -> StateMachineT m a (n b)
+  -- | `Kleisli` allows to compose sequentially machines which emit multiple
+  -- outputs
   Kleisli
     :: (Foldable n, Monoid (n c))
     => StateMachineT m a (n b)

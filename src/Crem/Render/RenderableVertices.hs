@@ -18,9 +18,9 @@ import "base" Data.Void (Void)
 class RenderableVertices a where
   vertices :: [a]
 
--- | This is a newtype to be used with `deriving via`. If `a` has instances for
+-- | This is a newtype to be used with `deriving via`. If @a@ has instances for
 -- `Enum` and `Bounded`, then `AllVertices a` has an instance of
--- `RenderableVertices` which lists all the terms of type `a`.
+-- `RenderableVertices` which lists all the terms of type @a@.
 newtype AllVertices a = AllVertices a
 
 instance (Enum a, Bounded a) => RenderableVertices (AllVertices a) where
