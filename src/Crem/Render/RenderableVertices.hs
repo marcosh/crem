@@ -35,13 +35,9 @@ deriving via AllVertices () instance RenderableVertices ()
 
 deriving via AllVertices Bool instance RenderableVertices Bool
 
-instance RenderableVertices All where
-  vertices :: [All]
-  vertices = [All False, All True]
+deriving newtype instance RenderableVertices All
 
-instance RenderableVertices Any where
-  vertices :: [Any]
-  vertices = [Any False, Any True]
+deriving newtype instance RenderableVertices Any
 
 deriving via AllVertices Ordering instance RenderableVertices Ordering
 
@@ -50,49 +46,29 @@ instance RenderableVertices a => RenderableVertices (Maybe a) where
   vertices =
     Nothing : (Just <$> vertices)
 
-instance RenderableVertices a => RenderableVertices (Min a) where
-  vertices :: [Min a]
-  vertices = Min <$> vertices
+deriving newtype instance RenderableVertices a => RenderableVertices (Min a)
 
-instance RenderableVertices a => RenderableVertices (Max a) where
-  vertices :: [Max a]
-  vertices = Max <$> vertices
+deriving newtype instance RenderableVertices a => RenderableVertices (Max a)
 
-instance RenderableVertices a => RenderableVertices (First a) where
-  vertices :: [First a]
-  vertices = First <$> vertices
+deriving newtype instance RenderableVertices a => RenderableVertices (First a)
 
-instance RenderableVertices a => RenderableVertices (Last a) where
-  vertices :: [Last a]
-  vertices = Last <$> vertices
+deriving newtype instance RenderableVertices a => RenderableVertices (Last a)
 
-instance RenderableVertices a => RenderableVertices (Identity a) where
-  vertices :: [Identity a]
-  vertices = Identity <$> vertices
+deriving newtype instance RenderableVertices a => RenderableVertices (Identity a)
 
-instance RenderableVertices a => RenderableVertices (Dual a) where
-  vertices :: [Dual a]
-  vertices = Dual <$> vertices
+deriving newtype instance RenderableVertices a => RenderableVertices (Dual a)
 
-instance RenderableVertices a => RenderableVertices (Sum a) where
-  vertices :: [Sum a]
-  vertices = Sum <$> vertices
+deriving newtype instance RenderableVertices a => RenderableVertices (Sum a)
 
-instance RenderableVertices a => RenderableVertices (Down a) where
-  vertices :: [Down a]
-  vertices = Down <$> vertices
+deriving newtype instance RenderableVertices a => RenderableVertices (Down a)
 
-instance RenderableVertices a => RenderableVertices (Product a) where
-  vertices :: [Product a]
-  vertices = Product <$> vertices
+deriving newtype instance RenderableVertices a => RenderableVertices (Product a)
 
 instance RenderableVertices (Proxy a) where
   vertices :: [Proxy a]
   vertices = [Proxy]
 
-instance RenderableVertices a => RenderableVertices (Const a b) where
-  vertices :: [Const a b]
-  vertices = Const <$> vertices
+deriving newtype instance RenderableVertices a => RenderableVertices (Const a b)
 
 instance (RenderableVertices a, RenderableVertices b) => RenderableVertices (Either a b) where
   vertices :: [Either a b]
