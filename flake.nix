@@ -83,7 +83,7 @@
 
       # Trigger a simple build every time a file changes
       build-watch = watch "build-watch" ''
-        cabal build
+        cabal build -f errors
       '';
 
       # Trigger a test execution every time a file changes
@@ -92,7 +92,7 @@
       # and https://github.com/martijnbastiaan/doctest-parallel/issues/22
       test-watch = watch "test-watch" ''
         cabal build --write-ghc-environment-files=always
-        cabal test --test-show-details=streaming
+        cabal test --test-show-details=streaming -f errors
       '';
     in
     rec {

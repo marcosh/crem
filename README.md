@@ -116,6 +116,12 @@ cabal haddock --open
 
 Code is formatted using [fourmolu](https://github.com/fourmolu/fourmolu) version 0.10.1.0.
 
+### Cabal flags
+
+We have a `cabal` flag called `errors` which allows enabling `-Werror`. It has a default of `False`, so that warning are not turned into errors.
+
+In development and CI we use the flag `-f errors` so that we can avoid any warning in the library code.
+
 ## Project setup
 
 You can find more details on the project setup on [Setup.md](/Setup.md).
