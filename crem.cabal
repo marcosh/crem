@@ -22,6 +22,8 @@ tested-with:
   , GHC ==9.2.7
   , GHC ==9.4.4
   , GHC ==9.6.1
+extra-source-files:
+    CHANGELOG.md
 
 flag errors
   description: enable -Werror
