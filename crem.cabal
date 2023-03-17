@@ -6,13 +6,27 @@ cabal-version: 2.0
 
 name:           crem
 version:        0.1.0.0
+synopsis:       Compositional representable executable machines
 description:    `crem` stands for __c__ompositional __r__epresentable __e__xecutable __m__achines. It allows creating state machines (Mealy machines in fact), compose them to build bigger machines out of smaller ones and then run them and draw their flow and their state space.
+category:       Machines, Control
+homepage:       https://github.com/tweag/crem
+bug-reports:    https://github.com/tweag/crem/issues
 author:         Marco Perone
 maintainer:     marco.perone@tweag.io
 copyright:      2022 Tweag I/O
 license:        MIT
 license-file:   LICENSE
 build-type:     Simple
+tested-with:
+    GHC ==9.0.2
+  , GHC ==9.2.7
+  , GHC ==9.4.4
+  , GHC ==9.6.1
+
+flag errors
+  description: enable -Werror
+  manual: True
+  default: False
 
 library
   exposed-modules:
@@ -30,7 +44,7 @@ library
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
+  ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
       base >=4.15 && <4.19
     , profunctors >=3.2 && <5.7
@@ -87,6 +101,8 @@ library
         TypeApplications
         TypeOperators
         TypeSynonymInstances
+  if flag(errors)
+    ghc-options: -Werror
 
 library crem-examples
   exposed-modules:
@@ -110,7 +126,7 @@ library crem-examples
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
+  ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
       base >=4.15 && <4.19
     , crem
@@ -168,6 +184,8 @@ library crem-examples
         TypeApplications
         TypeOperators
         TypeSynonymInstances
+  if flag(errors)
+    ghc-options: -Werror
 
 executable hobbit-game
   main-is: Main.hs
@@ -177,7 +195,7 @@ executable hobbit-game
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
+  ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
       base >=4.15 && <4.19
     , crem
@@ -233,6 +251,8 @@ executable hobbit-game
         TypeApplications
         TypeOperators
         TypeSynonymInstances
+  if flag(errors)
+    ghc-options: -Werror
 
 executable hobbit-map
   main-is: Main.hs
@@ -242,7 +262,7 @@ executable hobbit-map
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
+  ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
       base >=4.15 && <4.19
     , crem
@@ -299,6 +319,8 @@ executable hobbit-map
         TypeApplications
         TypeOperators
         TypeSynonymInstances
+  if flag(errors)
+    ghc-options: -Werror
 
 test-suite crem-doctests
   type: exitcode-stdio-1.0
@@ -309,7 +331,7 @@ test-suite crem-doctests
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module -threaded -Wno-unused-packages
+  ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module -threaded -Wno-unused-packages
   build-depends:
       base >=4.15 && <4.19
     , crem
@@ -366,6 +388,8 @@ test-suite crem-doctests
         TypeApplications
         TypeOperators
         TypeSynonymInstances
+  if flag(errors)
+    ghc-options: -Werror
 
 test-suite crem-spec
   type: exitcode-stdio-1.0
@@ -383,7 +407,7 @@ test-suite crem-spec
       DerivingStrategies
       LambdaCase
       PackageImports
-  ghc-options: -Weverything -Werror -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
+  ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-tool-depends:
       hspec-discover:hspec-discover
   build-depends:
@@ -444,3 +468,5 @@ test-suite crem-spec
         TypeApplications
         TypeOperators
         TypeSynonymInstances
+  if flag(errors)
+    ghc-options: -Werror

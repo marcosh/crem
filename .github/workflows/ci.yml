@@ -56,7 +56,7 @@ jobs:
         run: cabal build --only-dependencies
 
       - name: Build
-        run: cabal build
+        run: cabal build -f errors
 
       - name: Test on current dependencies
         run: cabal test
