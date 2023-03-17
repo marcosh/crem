@@ -4,7 +4,7 @@ author:             Marco Perone
 maintainer:         marco.perone@tweag.io
 copyright:          2022 Tweag I/O
 license:            MIT
-category:           Machines, Control
+category:           Machines, Control, State Machines
 synopsis:           Compositional representable executable machines
 homepage:           https://github.com/tweag/crem
 bug-reports:        https://github.com/tweag/crem/issues

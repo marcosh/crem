@@ -8,7 +8,7 @@ name:           crem
 version:        0.1.0.0
 synopsis:       Compositional representable executable machines
 description:    `crem` stands for __c__ompositional __r__epresentable __e__xecutable __m__achines. It allows creating state machines (Mealy machines in fact), compose them to build bigger machines out of smaller ones and then run them and draw their flow and their state space.
-category:       Machines, Control
+category:       Machines, Control, State Machines
 homepage:       https://github.com/tweag/crem
 bug-reports:    https://github.com/tweag/crem/issues
 author:         Marco Perone
