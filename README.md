@@ -122,6 +122,10 @@ We have a `cabal` flag called `errors` which allows enabling `-Werror`. It has a
 
 In development and CI we use the flag `-f errors` so that we can avoid any warning in the library code.
 
+### Changelog
+
+All changes are tracked in the [`Changelog`](CHANGELOG.md).
+
 ## Project setup
 
 You can find more details on the project setup on [Setup.md](/Setup.md).
