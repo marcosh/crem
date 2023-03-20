@@ -11,6 +11,7 @@ and this project adheres to [PVP](https://pvp.haskell.org/).
 
 - Minimal documentation on how to play the Hobbit game
 - Basic error handling for the Hobbit game
+- Added README to `extra-source-files`
 
 ## [0.1.0.0] - 2023-03-17
 
