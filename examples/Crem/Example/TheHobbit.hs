@@ -10,6 +10,12 @@
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 
+-- | This is a small adventure game based on [The Hobbit](https://en.wikipedia.org/wiki/The_Hobbit_(1982_video_game))
+-- video game. You can play it by running @cabal run hobbit-game@. It will ask
+-- you to enter commands. You need to use the precise names of the constructors
+-- for the `HobbitCommand` data type, like `GoEast`, `GoWest` and so on.
+-- Moreover, with the @cabal run hobbit-map@ command, you could generate, from
+-- the definition of the state machine, a diagram with the map of the game.
 module Crem.Example.TheHobbit where
 
 import Crem.BaseMachine
