@@ -95,7 +95,7 @@ which allows combining multiple machines with the same output but different inpu
 
 ## [`Arrow`](https://hackage.haskell.org/package/base-4.17.0.0/docs/Control-Arrow.html#t:Arrow)
 
-The `Arrow p` class describes computations similarly to what `(Category p, Strong p)` do. The main difference is that is also requires that every function `a -> b` could be interpreted as `p a b`.
+The `Arrow p` class describes computations similarly to what `(Category p, Strong p)` do. The main difference is that is also requires that every function `a -> b` could be interpreted as `p a b`, while `p` does not need to be a `Profunctor`.
 
 Its basic operations are
 

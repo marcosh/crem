@@ -18,7 +18,7 @@ For example, this is the graph produced for the [`LockDoor`](/src/Crem/Example/L
 
 Rendering the state space for big machines could be quite uninformative, because it could easily get quite big.
 
-A possibly more useful representation is provided by the flow representation which can be generated using the `renderFlow` function from the [`RenderFlow`](/src/Crem/Render/RenderFlow.hs) module.
+A possibly more useful representation is provided by the flow representation (i.e. a graph showing the state space of each `Basic` machine and how they were composed) which can be generated using the `renderFlow` function from the [`RenderFlow`](/src/Crem/Render/RenderFlow.hs) module.
 
 To be called, it requires us to annotate every leaf of our tree of machines with a label, which will be used in the drawing.
 

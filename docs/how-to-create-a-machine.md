@@ -284,7 +284,7 @@ stateDiagram-v2
   SecondVertex --> ThirdVertex
 ```
 
-Since we need the topology information at the type level, we wrap the two type definitions in
+Since we need the topology information at the type level, we wrap those two declarations in
 
 ```haskell
 $( singletons
