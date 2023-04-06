@@ -141,6 +141,12 @@ Some known limitations to the current state of the project are:
 
 Moreover, for current bugs and feature requests, you can check the [open issues](https://github.com/tweag/crem/issues).
 
+## Credits
+
+![tweag logo](./logo/tweag.png)
+
+The initial development of `crem` was funded by [Tweag](https://www.tweag.io/).
+
 ## Contributions
 
 Contributions are extremely welcome. If you have any idea on how to improve the library, its code or its documentation, feel free to open an [issue](https://github.com/tweag/crem/issues), create a [pull request](https://github.com/tweag/crem/pulls), or just contact directly one of the maintainers.
