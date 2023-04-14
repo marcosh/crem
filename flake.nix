@@ -1,5 +1,5 @@
 {
-  description = "tweag/cerm: compositional reproducible executable machines";
+  description = "tweag/crem: compositional reproducible executable machines";
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
