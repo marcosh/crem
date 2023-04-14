@@ -37,6 +37,7 @@
         }:
         haskellPackages.override {
           overrides = self: super: {
+            hpack = pkgs.hpack;
             crem = (self.callCabal2nix "crem" src { }).overrideAttrs (attrs: {
               # doctest-parallel needs to know where the compiled crem package is
               preCheck = ''
@@ -121,7 +122,6 @@
               haskell-language-server
               build-watch
               test-watch
-              pkgs.hpack
             ];
             shellHook = ''
               export PS1="❄️ GHC ${haskellPackages.ghc.version} $PS1"
