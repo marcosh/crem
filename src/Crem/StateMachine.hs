@@ -77,7 +77,7 @@ data StateMachineT m input output where
 -- | A `StateMachine` is an effectful machine for every possible monad @m@.
 -- Needing to work for every monad, in fact it can not perform any kind of
 -- effect and needs to be pure in nature.
-type StateMachine a b = forall m. Monad m => StateMachineT m a b
+type StateMachine a b = forall m. (Monad m) => StateMachineT m a b
 
 -- * Hoist
 
@@ -94,12 +94,12 @@ hoist f machine = case machine of
   Kleisli machine1 machine2 -> Kleisli (hoist f machine1) (hoist f machine2)
 
 -- | a state machine which does not rely on state
-statelessT :: Applicative m => (a -> m b) -> StateMachineT m a b
+statelessT :: (Applicative m) => (a -> m b) -> StateMachineT m a b
 statelessT f = Basic $ statelessBaseT f
 
 -- | a state machine which does not rely on state and does not perform side
 -- effects
-stateless :: Applicative m => (a -> b) -> StateMachineT m a b
+stateless :: (Applicative m) => (a -> b) -> StateMachineT m a b
 stateless f = statelessT (pure . f)
 
 -- | a machine modelled with explicit state, where every transition is allowed
@@ -122,7 +122,7 @@ unrestrictedMachine action state = Basic $ unrestrictedBaseMachineT action state
 
 -- * Category
 
-instance Monad m => Category (StateMachineT m) where
+instance (Monad m) => Category (StateMachineT m) where
   id :: StateMachineT m a a
   id = Basic identity
 
@@ -131,7 +131,7 @@ instance Monad m => Category (StateMachineT m) where
 
 -- * Profunctor
 
-instance Applicative m => Profunctor (StateMachineT m) where
+instance (Applicative m) => Profunctor (StateMachineT m) where
   lmap :: (a -> b) -> StateMachineT m b c -> StateMachineT m a c
   lmap f (Basic baseMachine) = Basic $ lmap f baseMachine
   lmap f (Sequential machine1 machine2) = Sequential (lmap f machine1) machine2
@@ -144,7 +144,7 @@ instance Applicative m => Profunctor (StateMachineT m) where
 
 -- * Strong
 
-instance Monad m => Strong (StateMachineT m) where
+instance (Monad m) => Strong (StateMachineT m) where
   first' :: StateMachineT m a b -> StateMachineT m (a, c) (b, c)
   first' = flip Parallel Control.Category.id
 
@@ -156,7 +156,7 @@ instance Monad m => Strong (StateMachineT m) where
 -- | An instance of `Choice` allows us to have parallel composition of state
 -- machines, meaning that we can pass two inputs to two state machines and get
 -- out the outputs of both
-instance Monad m => Choice (StateMachineT m) where
+instance (Monad m) => Choice (StateMachineT m) where
   left' :: StateMachineT m a b -> StateMachineT m (Either a c) (Either b c)
   left' = flip Alternative Control.Category.id
 
@@ -165,7 +165,7 @@ instance Monad m => Choice (StateMachineT m) where
 
 -- * Arrow
 
-instance Monad m => Arrow (StateMachineT m) where
+instance (Monad m) => Arrow (StateMachineT m) where
   arr :: (a -> b) -> StateMachineT m a b
   arr = stateless
 
@@ -174,7 +174,7 @@ instance Monad m => Arrow (StateMachineT m) where
 
 -- * ArrowChoice
 
-instance Monad m => ArrowChoice (StateMachineT m) where
+instance (Monad m) => ArrowChoice (StateMachineT m) where
   left :: StateMachineT m a b -> StateMachineT m (Either a c) (Either b c)
   left = left'
 
@@ -182,7 +182,7 @@ instance Monad m => ArrowChoice (StateMachineT m) where
 
 -- | Given an @input@, run the machine to get an output and a new version of
 -- the machine
-run :: Monad m => StateMachineT m a b -> a -> m (b, StateMachineT m a b)
+run :: (Monad m) => StateMachineT m a b -> a -> m (b, StateMachineT m a b)
 run (Basic baseMachine) a = second Basic <$> runBaseMachineT baseMachine a
 run (Sequential machine1 machine2) a = do
   (output1, machine1') <- run machine1 a

@@ -52,7 +52,7 @@ data
     output
   where
   EvolutionResult
-    :: AllowedTransition topology initialVertex finalVertex
+    :: (AllowedTransition topology initialVertex finalVertex)
     => state finalVertex
     -> EvolutionResult topology state initialVertex output
 

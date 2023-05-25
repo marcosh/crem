@@ -114,7 +114,7 @@ cabal haddock --open
 
 ### Code formatting
 
-Code is formatted using [fourmolu](https://github.com/fourmolu/fourmolu) version 0.10.1.0.
+Code is formatted using [fourmolu](https://github.com/fourmolu/fourmolu) version 0.12.0.0.
 
 ### Cabal flags
 
