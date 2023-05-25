@@ -42,7 +42,7 @@ type BaseMachine
   (topology :: Topology vertex)
   (input :: Type)
   (output :: Type) =
-  forall m. Monad m => BaseMachineT m topology input output
+  forall m. (Monad m) => BaseMachineT m topology input output
 
 -- * Hoist
 
@@ -58,7 +58,7 @@ baseHoist f (BaseMachineT initialState action) =
     initialState
     ((hoistResult f .) . action)
 
-instance Functor m => Profunctor (BaseMachineT m topology) where
+instance (Functor m) => Profunctor (BaseMachineT m topology) where
   lmap :: (a -> b) -> BaseMachineT m topology b c -> BaseMachineT m topology a c
   lmap f (BaseMachineT initialState action) =
     BaseMachineT
@@ -73,7 +73,7 @@ instance Functor m => Profunctor (BaseMachineT m topology) where
       , action = ((f <$>) .) . action
       }
 
-instance Functor m => Strong (BaseMachineT m topology) where
+instance (Functor m) => Strong (BaseMachineT m topology) where
   first' :: BaseMachineT m topology a b -> BaseMachineT m topology (a, c) (b, c)
   first' (BaseMachineT initialState action) =
     BaseMachineT
@@ -88,7 +88,7 @@ instance Functor m => Strong (BaseMachineT m topology) where
       , action = \state (c, a) -> (c,) <$> action state a
       }
 
-instance Applicative m => Choice (BaseMachineT m topology) where
+instance (Applicative m) => Choice (BaseMachineT m topology) where
   left' :: BaseMachineT m topology a b -> BaseMachineT m topology (Either a c) (Either b c)
   left' (BaseMachineT initialState action) =
     BaseMachineT
@@ -126,7 +126,7 @@ data
     (output :: Type)
   where
   ActionResult
-    :: AllowedTransition topology initialVertex finalVertex
+    :: (AllowedTransition topology initialVertex finalVertex)
     => m (output, state finalVertex)
     -> ActionResult m topology state initialVertex output
 
@@ -139,7 +139,7 @@ hoistResult
   -> ActionResult n topology state initialVertex output
 hoistResult f (ActionResult outputStatePair) = ActionResult $ f outputStatePair
 
-instance Functor m => Functor (ActionResult m topology state initialVertex) where
+instance (Functor m) => Functor (ActionResult m topology state initialVertex) where
   fmap
     :: (a -> b)
     -> ActionResult m topology state initialVertex a
@@ -160,7 +160,7 @@ pureResult output state = ActionResult . pure $ (output, state)
 -- it does the same job, with the slight difference that `sequenceA` would
 -- return @f (ActionResult Identity topology state initialVertex output)@
 sequence
-  :: Functor f
+  :: (Functor f)
   => ActionResult Identity topology state initialVertex (f output)
   -> ActionResult f topology state initialVertex output
 sequence (ActionResult (Identity (outputs, state))) =
@@ -172,7 +172,7 @@ sequence (ActionResult (Identity (outputs, state))) =
 -- input is a `Nothing`, then the output will be a `Nothing`. If the input is a
 -- `Just`, then the machine will be used to compute the output.
 maybeM
-  :: Applicative m
+  :: (Applicative m)
   => BaseMachineT m topology a b
   -> BaseMachineT m topology (Maybe a) (Maybe b)
 maybeM (BaseMachineT initialState action) =
@@ -187,7 +187,7 @@ maybeM (BaseMachineT initialState action) =
 -- input is a `Left`, then the output will be that `Left`. If the input is a
 -- `Right`, then the machine will be used to compute the output.
 eitherM
-  :: Applicative m
+  :: (Applicative m)
   => BaseMachineT m topology a b
   -> BaseMachineT m topology (Either e a) (Either e b)
 eitherM (BaseMachineT initialState action) =
@@ -202,7 +202,7 @@ eitherM (BaseMachineT initialState action) =
 
 -- | `statelessBaseT` transforms its input to its output and never changes its
 -- state
-statelessBaseT :: Applicative m => (a -> m b) -> BaseMachineT m (TrivialTopology @()) a b
+statelessBaseT :: (Applicative m) => (a -> m b) -> BaseMachineT m (TrivialTopology @()) a b
 statelessBaseT f =
   BaseMachineT
     { initialState = InitialState STuple0
@@ -240,7 +240,7 @@ unrestrictedBaseMachineT action initialState =
 -- | Given an @input@, run the machine to get an output and a new version of
 -- the machine
 runBaseMachineT
-  :: Functor m
+  :: (Functor m)
   => BaseMachineT m topology input output
   -> input
   -> m (output, BaseMachineT m topology input output)

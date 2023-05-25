@@ -264,7 +264,7 @@ unoDecider initialState =
     }
   where
     initialResult
-      :: AllowedTransition UnoTopology initialVertex 'Started
+      :: (AllowedTransition UnoTopology initialVertex 'Started)
       => InitialData
       -> PlayerId
       -> EvolutionResult UnoTopology UnoState initialVertex (Either GameError Event)

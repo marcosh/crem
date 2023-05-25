@@ -27,7 +27,7 @@ productGraph (Graph edges1) (Graph edges2) =
 
 -- | Computes all the possible paths in the input graph and considers them as
 -- edges. Notice that the current implementation is removing duplicates
-transitiveClosureGraph :: Eq a => Graph a -> Graph a
+transitiveClosureGraph :: (Eq a) => Graph a -> Graph a
 transitiveClosureGraph graph@(Graph edges) =
   Graph $
     foldr
@@ -37,10 +37,10 @@ transitiveClosureGraph graph@(Graph edges) =
       []
       (nub $ fst <$> edges)
   where
-    edgesFrom :: Eq a => Graph a -> a -> [(a, a)]
+    edgesFrom :: (Eq a) => Graph a -> a -> [(a, a)]
     edgesFrom (Graph edges') a = filter ((== a) . fst) edges'
 
-    pathsFrom :: forall a. Eq a => Graph a -> a -> [(a, a)]
+    pathsFrom :: forall a. (Eq a) => Graph a -> a -> [(a, a)]
     pathsFrom g a =
       let
         edgesFromAToB = edgesFrom g a
@@ -50,11 +50,11 @@ transitiveClosureGraph graph@(Graph edges) =
         edgesFromAToB <> edgesFromAToC
 
 -- | Add all the identity edges to a graph
-addIdentityEdges :: RenderableVertices a => Graph a -> Graph a
+addIdentityEdges :: (RenderableVertices a) => Graph a -> Graph a
 addIdentityEdges (Graph edges) = Graph $ edges <> ((\a -> (a, a)) <$> vertices)
 
 -- | Remove all the edges which start and end at the same vertex
-removeIdentityEdges :: Eq a => Graph a -> Graph a
+removeIdentityEdges :: (Eq a) => Graph a -> Graph a
 removeIdentityEdges (Graph edges) = Graph $ filter (uncurry (/=)) edges
 
 -- * UntypedGraph

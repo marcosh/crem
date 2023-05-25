@@ -73,11 +73,11 @@ class AllowedTransition (topology :: Topology vertex) (initial :: vertex) (final
 instance {-# INCOHERENT #-} AllowedTransition ('Topology ('(a, b ': l1) ': l2)) a b where
   allowsTransition = AllowFirstEdge
 
-instance {-# INCOHERENT #-} AllowedTransition ('Topology ('(a, l1) ': l2)) a b => AllowedTransition ('Topology ('(a, x ': l1) ': l2)) a b where
+instance {-# INCOHERENT #-} (AllowedTransition ('Topology ('(a, l1) ': l2)) a b) => AllowedTransition ('Topology ('(a, x ': l1) ': l2)) a b where
   allowsTransition =
     AllowAddingEdge (allowsTransition :: AllowTransition ('Topology ('(a, l1) ': l2)) a b)
 
-instance {-# INCOHERENT #-} AllowedTransition ('Topology map) a b => AllowedTransition ('Topology (x ': map)) a b where
+instance {-# INCOHERENT #-} (AllowedTransition ('Topology map) a b) => AllowedTransition ('Topology (x ': map)) a b where
   allowsTransition =
     AllowAddingVertex (allowsTransition :: AllowTransition ('Topology map) a b)
 

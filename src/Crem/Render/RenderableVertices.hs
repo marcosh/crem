@@ -41,34 +41,34 @@ deriving newtype instance RenderableVertices Any
 
 deriving via AllVertices Ordering instance RenderableVertices Ordering
 
-instance RenderableVertices a => RenderableVertices (Maybe a) where
+instance (RenderableVertices a) => RenderableVertices (Maybe a) where
   vertices :: [Maybe a]
   vertices =
     Nothing : (Just <$> vertices)
 
-deriving newtype instance RenderableVertices a => RenderableVertices (Min a)
+deriving newtype instance (RenderableVertices a) => RenderableVertices (Min a)
 
-deriving newtype instance RenderableVertices a => RenderableVertices (Max a)
+deriving newtype instance (RenderableVertices a) => RenderableVertices (Max a)
 
-deriving newtype instance RenderableVertices a => RenderableVertices (First a)
+deriving newtype instance (RenderableVertices a) => RenderableVertices (First a)
 
-deriving newtype instance RenderableVertices a => RenderableVertices (Last a)
+deriving newtype instance (RenderableVertices a) => RenderableVertices (Last a)
 
-deriving newtype instance RenderableVertices a => RenderableVertices (Identity a)
+deriving newtype instance (RenderableVertices a) => RenderableVertices (Identity a)
 
-deriving newtype instance RenderableVertices a => RenderableVertices (Dual a)
+deriving newtype instance (RenderableVertices a) => RenderableVertices (Dual a)
 
-deriving newtype instance RenderableVertices a => RenderableVertices (Sum a)
+deriving newtype instance (RenderableVertices a) => RenderableVertices (Sum a)
 
-deriving newtype instance RenderableVertices a => RenderableVertices (Down a)
+deriving newtype instance (RenderableVertices a) => RenderableVertices (Down a)
 
-deriving newtype instance RenderableVertices a => RenderableVertices (Product a)
+deriving newtype instance (RenderableVertices a) => RenderableVertices (Product a)
 
 instance RenderableVertices (Proxy a) where
   vertices :: [Proxy a]
   vertices = [Proxy]
 
-deriving newtype instance RenderableVertices a => RenderableVertices (Const a b)
+deriving newtype instance (RenderableVertices a) => RenderableVertices (Const a b)
 
 instance (RenderableVertices a, RenderableVertices b) => RenderableVertices (Either a b) where
   vertices :: [Either a b]

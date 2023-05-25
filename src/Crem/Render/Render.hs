@@ -43,7 +43,7 @@ renderStateDiagram graph =
   Mermaid "stateDiagram-v2\n" <> renderGraph graph
 
 -- | Prepends a `MachineLabel` to the `Show` output, as a `Text`
-labelVertex :: Show a => MachineLabel -> a -> Text
+labelVertex :: (Show a) => MachineLabel -> a -> Text
 labelVertex label =
   let
     prefix =
@@ -68,13 +68,13 @@ renderVertices :: forall a. (Show a, RenderableVertices a) => Graph a -> Mermaid
 renderVertices = renderLabelledVertices ""
 
 -- | Render all the edges of a graph after labelling all of them
-renderLabelledEdges :: Show a => MachineLabel -> Graph a -> Mermaid
+renderLabelledEdges :: (Show a) => MachineLabel -> Graph a -> Mermaid
 renderLabelledEdges label (Graph l) =
   Mermaid . mconcat . intersperse "\n" $
     (\(a1, a2) -> labelVertex label a1 <> " --> " <> labelVertex label a2) <$> l
 
 -- | Render all edges with no label
-renderEdges :: Show a => Graph a -> Mermaid
+renderEdges :: (Show a) => Graph a -> Mermaid
 renderEdges = renderLabelledEdges ""
 
 -- | Join the outputs of `renderLabelledVertices` and `renderLabelledEdges` to
@@ -97,6 +97,16 @@ topologyAsGraph (Topology edges) = Graph $ edges >>= edgify
   where
     edgify :: (v, [v]) -> [(v, v)]
     edgify (v, vs) = (v,) <$> vs
+
+baseMachineTopology
+  :: forall vertex topology input output m
+   . ( Demote vertex ~ vertex
+     , SingKind vertex
+     , SingI topology
+     )
+  => BaseMachineT m (topology :: Topology vertex) input output
+  -> Topology vertex
+baseMachineTopology _ = demote @topology
 
 -- | Interpret a `BaseMachine` as a `Graph` using the information contained in
 -- its topology.
