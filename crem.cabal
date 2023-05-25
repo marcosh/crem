@@ -110,6 +110,11 @@ library
 library crem-examples
   exposed-modules:
       Crem.Example.BooleanStateMachine
+      Crem.Example.Cart.Aggregate
+      Crem.Example.Cart.Application
+      Crem.Example.Cart.Domain
+      Crem.Example.Cart.Policy
+      Crem.Example.Cart.Projection
       Crem.Example.LockDoor
       Crem.Example.OneState
       Crem.Example.PlusOneUpToFour
