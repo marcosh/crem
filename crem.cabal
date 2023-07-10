@@ -115,6 +115,7 @@ library crem-examples
       Crem.Example.Cart.Domain
       Crem.Example.Cart.Policy
       Crem.Example.Cart.Projection
+      Crem.Example.Cart.Shipping
       Crem.Example.LockDoor
       Crem.Example.OneState
       Crem.Example.PlusOneUpToFour

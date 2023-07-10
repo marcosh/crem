@@ -9,5 +9,5 @@ import Crem.StateMachine
 writeModel :: StateMachine CartCommand [CartEvent]
 writeModel = Feedback cart paymentGateway
 
-application :: StateMachine CartCommand [String]
-application = Kleisli writeModel cartState
+application :: StateMachine CartCommand [CartView]
+application = Kleisli writeModel paymentStatus
