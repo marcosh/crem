@@ -35,7 +35,7 @@ $( singletons
 
       shippingTopology :: Topology ShippingVertex
       shippingTopology = Topology []
-    |]
+      |]
  )
 
 deriving via AllVertices ShippingVertex instance RenderableVertices ShippingVertex
@@ -55,9 +55,10 @@ paymentCompletePolicy = stateless $ \case
   CartPaymentCompleted -> [StartShipping]
 
 writeModelWithShipping' :: StateMachine (Either CartCommand ShippingCommand) [Either CartEvent ShippingEvent]
-writeModelWithShipping' = Feedback
-  writeModelWithShipping
-  (rmap (fmap Right) paymentCompletePolicy ||| stateless (const []))
+writeModelWithShipping' =
+  Feedback
+    writeModelWithShipping
+    (rmap (fmap Right) paymentCompletePolicy ||| stateless (const []))
 
 data ShippingInfo
 
