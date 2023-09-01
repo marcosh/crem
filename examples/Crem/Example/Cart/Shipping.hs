@@ -15,7 +15,7 @@
 module Crem.Example.Cart.Shipping where
 
 import Crem.BaseMachine
-import Crem.Example.Cart.Application
+import Crem.Example.Cart.Aggregate
 import Crem.Example.Cart.Domain
 import Crem.Example.Cart.Projection
 import Crem.Render.RenderableVertices
@@ -48,18 +48,18 @@ shippingBasic = undefined
 shipping :: StateMachine ShippingCommand [ShippingEvent]
 shipping = Basic shippingBasic
 
-writeModelWithShipping :: StateMachine (Either CartCommand ShippingCommand) [Either CartEvent ShippingEvent]
-writeModelWithShipping = rmap (fmap Left ||| fmap Right) $ writeModel +++ shipping
+aggregateWithShipping :: StateMachine (Either CartCommand ShippingCommand) [Either CartEvent ShippingEvent]
+aggregateWithShipping = rmap (fmap Left ||| fmap Right) $ cart +++ shipping
 
 paymentCompletePolicy :: StateMachine CartEvent [ShippingCommand]
 paymentCompletePolicy = stateless $ \case
   CartPaymentInitiated -> []
   CartPaymentCompleted -> [StartShipping]
 
-writeModelWithShipping' :: StateMachine (Either CartCommand ShippingCommand) [Either CartEvent ShippingEvent]
-writeModelWithShipping' =
+writeModelWithShipping :: StateMachine (Either CartCommand ShippingCommand) [Either CartEvent ShippingEvent]
+writeModelWithShipping =
   Feedback
-    writeModelWithShipping
+    aggregateWithShipping
     (rmap (fmap Right) paymentCompletePolicy ||| stateless (const []))
 
 data ShippingInfo
@@ -71,4 +71,4 @@ readModel :: StateMachine (Either CartEvent ShippingEvent) [Either CartView Ship
 readModel = rmap (fmap Left ||| fmap Right) $ paymentStatus +++ shippingInfo
 
 cartAndShipping :: StateMachine (Either CartCommand ShippingCommand) [Either CartView ShippingInfo]
-cartAndShipping = Kleisli writeModelWithShipping' readModel
+cartAndShipping = Kleisli writeModelWithShipping readModel
