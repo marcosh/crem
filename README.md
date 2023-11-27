@@ -164,3 +164,4 @@ If you want to know a bit more of `crem` and some ideas behind it, here are some
 - [State machines with `crem`](https://hackmd.io/@CJO5VbycTsyzjGBytbwezQ/rkJliIjRj#/) the slide deck used for the above presentation.
 - [Crem: compositional representable executable machines](https://www.tweag.io/blog/2023-04-13-crem-state-machines/), a blog post explaining the main ideas of `crem`.
 - [Domain modelling with state machines](https://www.youtube.com/watch?v=UBnHpnss8Fg), a video describing the main ideas motivating `crem`.
+- [Crème de la Crem: Composable Representable Executable Machines](https://dl.acm.org/doi/10.1145/3609025.3609480?cid=99660990271), an academic paper describing the why and the the how of `crem`.
