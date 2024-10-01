@@ -3,12 +3,14 @@ module Crem.Graph where
 
 import Crem.Render.RenderableVertices (RenderableVertices (..))
 import "base" Data.List (nub)
+import "nothunks" NoThunks.Class (NoThunks (..))
 
 -- * Graph
 
 -- | A graph is just a list of edges between vertices of type @a@
 newtype Graph a = Graph [(a, a)]
   deriving stock (Eq, Show)
+  deriving newtype (NoThunks)
 
 -- | The product graph.
 -- It has as vertices the product of the set of vertices of the initial graph.

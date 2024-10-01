@@ -50,6 +50,7 @@ library
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
       base >=4.15 && <4.19
+    , nothunks >=0.1 && <0.4
     , profunctors >=3.2 && <5.7
     , singletons-base >=3.0 && <3.3
     , text >=1.2 && <2.1
