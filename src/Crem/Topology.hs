@@ -26,6 +26,7 @@ module Crem.Topology
   )
 where
 
+import "nothunks" NoThunks.Class (NoThunks (..))
 import "singletons-base" Data.Singletons.Base.TH
 import "singletons-base" Prelude.Singletons
 
@@ -63,6 +64,15 @@ data AllowTransition (topology :: Topology vertex) (initial :: vertex) (final ::
   AllowAddingVertex
     :: AllowTransition ('Topology map) a b
     -> AllowTransition ('Topology (x ': map)) a b
+
+instance NoThunks (AllowTransition topology initial final) where
+  showTypeOf _ = "AllowTransition"
+  wNoThunks ctxt at =
+      case at of
+        AllowIdentityEdge -> return Nothing
+        AllowFirstEdge -> return Nothing
+        AllowAddingEdge x -> noThunks ctxt x
+        AllowAddingVertex x -> noThunks ctxt x
 
 -- | The `AllowedTransition` type class enables to automatically perform proof search
 -- for a `AllowTransition` term.

@@ -11,6 +11,7 @@ module Crem.Render.RenderFlow where
 
 import Crem.Render.Render
 import Crem.StateMachine
+import "nothunks" NoThunks.Class (NoThunks (..), allNoThunks)
 
 -- | A tree-like structure which could be used to attach metadata to any
 -- similar tree-like structure with only leaves and nodes with exactly two
@@ -19,6 +20,13 @@ data TreeMetadata a
   = LeafLabel a
   | BinaryLabel (TreeMetadata a) (TreeMetadata a)
   deriving stock (Show)
+
+instance NoThunks a => NoThunks (TreeMetadata a) where
+  showTypeOf _ = "TreeMetadata"
+  wNoThunks ctxt tm =
+      case tm of
+        LeafLabel x -> noThunks ctxt x
+        BinaryLabel x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
 
 -- | Given a `StateMachineT` and a `TreeMetadata` of @MachineLabel@s, we can
 -- create a flow representation of our machine.

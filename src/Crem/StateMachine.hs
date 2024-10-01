@@ -14,6 +14,7 @@ import "base" Control.Category (Category (..))
 import "base" Data.Bifunctor (Bifunctor (second), bimap)
 import "base" Data.Foldable (foldlM)
 import "base" Data.Kind (Type)
+import "nothunks" NoThunks.Class (NoThunks (..), allNoThunks)
 import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
 import Prelude hiding ((.))
@@ -73,6 +74,17 @@ data StateMachineT m input output where
     => StateMachineT m a (n b)
     -> StateMachineT m b (n c)
     -> StateMachineT m a (n c)
+
+instance NoThunks (StateMachineT m input output) where
+  showTypeOf _ = "StateMachineT"
+  wNoThunks ctxt sm =
+      case sm of
+        Basic _ -> return Nothing
+        Sequential x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
+        Parallel x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
+        Alternative x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
+        Feedback x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
+        Kleisli x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
 
 -- | A `StateMachine` is an effectful machine for every possible monad @m@.
 -- Needing to work for every monad, in fact it can not perform any kind of
