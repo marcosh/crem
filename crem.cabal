@@ -31,6 +31,11 @@ flag errors
   manual: True
   default: False
 
+flag test-doctest
+  description: run doctests
+  manual: True
+  default: True
+
 library
   exposed-modules:
       Crem.BaseMachine
@@ -341,11 +346,14 @@ test-suite crem-doctests
       LambdaCase
       PackageImports
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module -threaded -Wno-unused-packages
-  build-depends:
-      base >=4.15 && <4.19
-    , crem
-    , crem-examples
-    , doctest-parallel >=0.2.3 && <0.4
+  if !flag(test-doctest)
+    buildable: False
+  else
+    build-depends:
+        base >=4.15 && <4.19
+      , crem
+      , crem-examples
+      , doctest-parallel >=0.2.3 && <0.4
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
