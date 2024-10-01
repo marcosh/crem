@@ -38,12 +38,12 @@
         haskellPackages.override {
           overrides = self: super: {
             hpack = pkgs.hpack;
-            crem = (self.callCabal2nix "crem" src { }).overrideAttrs (attrs: {
+            crem = pkgs.haskell.lib.compose.disableCabalFlag "test-doctest" ((self.callCabal2nix "crem" src { }).overrideAttrs (attrs: {
               # doctest-parallel needs to know where the compiled crem package is
               preCheck = ''
                 export GHC_PACKAGE_PATH="dist/package.conf.inplace:$GHC_PACKAGE_PATH"
               '';
-            });
+            }));
             fourmolu = pkgs.haskell.packages.ghc944.fourmolu;
           };
         };
