@@ -24,9 +24,9 @@ data TreeMetadata a
 instance NoThunks a => NoThunks (TreeMetadata a) where
   showTypeOf _ = "TreeMetadata"
   wNoThunks ctxt tm =
-      case tm of
-        LeafLabel x -> noThunks ctxt x
-        BinaryLabel x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
+    case tm of
+      LeafLabel x -> noThunks ctxt x
+      BinaryLabel x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
 
 -- | Given a `StateMachineT` and a `TreeMetadata` of @MachineLabel@s, we can
 -- create a flow representation of our machine.

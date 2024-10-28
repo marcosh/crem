@@ -78,13 +78,13 @@ data StateMachineT m input output where
 instance NoThunks (StateMachineT m input output) where
   showTypeOf _ = "StateMachineT"
   wNoThunks ctxt sm =
-      case sm of
-        Basic _ -> return Nothing
-        Sequential x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
-        Parallel x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
-        Alternative x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
-        Feedback x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
-        Kleisli x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
+    case sm of
+      Basic _ -> return Nothing
+      Sequential x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
+      Parallel x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
+      Alternative x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
+      Feedback x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
+      Kleisli x y -> allNoThunks [noThunks ctxt x, noThunks ctxt y]
 
 -- | A `StateMachine` is an effectful machine for every possible monad @m@.
 -- Needing to work for every monad, in fact it can not perform any kind of
