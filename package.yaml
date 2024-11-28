@@ -120,6 +120,7 @@ library:
     - profunctors >= 3.2 && < 5.7
     - singletons-base >= 3.0 && < 3.3
     - text >= 1.2 && < 2.1
+    - nothunks >= 0.1 && < 0.4
   # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
   # https://github.com/sol/hpack#handling-of-paths_-modules
   when:
