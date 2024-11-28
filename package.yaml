@@ -30,6 +30,11 @@ flags:
     default: False
     manual: True
 
+  test-doctest:
+    description: run doctests
+    manual: True
+    default: True
+
 when:
   - condition: impl(ghc >= 9.2)
     then:
@@ -167,6 +172,11 @@ tests:
       - crem-examples
       - doctest-parallel >= 0.2.3 && < 0.4
     when:
+    - condition: flag(test-doctest)
+      then:
+        buildable: True
+      else:
+        buildable: False
     - condition: false
       other-modules: Paths_crem
 
