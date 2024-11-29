@@ -13,10 +13,16 @@ jobs:
   build:
     strategy:
       matrix:
-        ghc: ['9.0.2', '9.2.7', '9.4.4', '9.6.1']
+        ghc: ['9.0.2', '9.2.2', '9.2.7', '9.4.4', '9.6.1']
         cabal: ['3.4.1.0', '3.6.2.0', '3.8.1.0', '3.10.1.0']
         os: ['ubuntu-latest', 'macos-latest']
         exclude:
+          - cabal: '3.4.1.0'
+            ghc: '9.2.2'
+          - cabal: '3.8.1.0'
+            ghc: '9.2.2'
+          - cabal: '3.10.1.0'
+            ghc: '9.2.2'
           # Cabal 3.4.1.0 supports GHC version < 9.1
           - cabal: '3.4.1.0'
             ghc: '9.2.7'
