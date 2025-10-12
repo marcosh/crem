@@ -55,6 +55,7 @@ library
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
       base >=4.15 && <4.19
+    , machines >=0.7.3 && <0.8
     , nothunks >=0.1 && <0.4
     , profunctors >=3.2 && <5.7
     , singletons-base >=3.0 && <3.3
@@ -434,6 +435,7 @@ test-suite crem-spec
     , crem
     , crem-examples
     , hspec >=2.7 && <2.12
+    , machines
     , profunctors
     , singletons-base
   default-language: Haskell2010

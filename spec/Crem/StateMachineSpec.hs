@@ -9,6 +9,9 @@ import "base" Data.Functor.Identity (Identity (..))
 import "base" Data.List (singleton)
 import "crem" Crem.StateMachine
 import "hspec" Test.Hspec (Expectation, Spec, describe, it, shouldBe)
+import "machines" Data.Machine (runT, source, (~>))
+import "machines" Data.Machine.Process (autoT)
+import "machines" Data.Machine.Process qualified
 import "profunctors" Data.Profunctor (rmap)
 import "singletons-base" Data.Singletons.Base.TH
 
@@ -116,3 +119,76 @@ spec =
 
         it "processes correctly multiple inputs" $ do
           runMultiple (Feedback echo plus1UpTo4) [1, 1] `shouldOutput` [1, 2, 3, 4, 5, 1, 2, 3, 4, 5]
+
+    describe "AutomatonM instance" $ do
+      describe "autoT converts StateMachineT to ProcessT" $ do
+        it "processes a single input through a stateless machine" $ do
+          let machine = stateless (+ 1) :: StateMachineT Identity Int Int
+          let process = autoT machine
+          let result = runIdentity $ runT $ source [5] ~> process
+          result `shouldBe` [6]
+
+        it "processes multiple inputs through a stateless machine" $ do
+          let machine = stateless (* 2) :: StateMachineT Identity Int Int
+          let process = autoT machine
+          let result = runIdentity $ runT $ source [1, 2, 3, 4] ~> process
+          result `shouldBe` [2, 4, 6, 8]
+
+        it "processes inputs through a stateful machine (switch)" $ do
+          let machine = Basic $ switchMachine SFalse :: StateMachineT Identity () ()
+          let process = autoT machine
+          let result = runIdentity $ runT $ source [(), (), ()] ~> process
+          result `shouldBe` [(), (), ()]
+
+        it "maintains state across inputs (lock door)" $ do
+          let machine = Basic $ lockDoorMachine SIsLockClosed :: StateMachineT Identity LockDoorCommand LockDoorEvent
+          let process = autoT machine :: Data.Machine.Process.ProcessT Identity LockDoorCommand LockDoorEvent
+          let result = runIdentity $ runT $ source [LockLock, LockUnlock, LockOpen] ~> process
+          result `shouldBe` [LockLocked, LockUnlocked, LockOpened]
+
+        it "works with sequential composition" $ do
+          let machine1 = stateless (+ 1) :: StateMachineT Identity Int Int
+          let machine2 = stateless (* 2) :: StateMachineT Identity Int Int
+          let composed = machine2 Control.Category.. machine1 -- Category composition: right-to-left
+          let process = autoT composed
+          let result = runIdentity $ runT $ source [1, 2, 3] ~> process
+          result `shouldBe` [4, 6, 8]
+
+        it "works with parallel composition" $ do
+          let machine1 = stateless (+ 1) :: StateMachineT Identity Int Int
+          let machine2 = stateless (* 2) :: StateMachineT Identity Int Int
+          let parallel = Parallel machine1 machine2
+          let process = autoT parallel
+          let result = runIdentity $ runT $ source [(1, 10), (2, 20), (3, 30)] ~> process
+          result `shouldBe` [(2, 20), (3, 40), (4, 60)]
+
+        it "works with alternative composition (left)" $ do
+          let machine1 = stateless (+ 1) :: StateMachineT Identity Int Int
+          let machine2 = stateless (* 2) :: StateMachineT Identity Int Int
+          let alt = Alternative machine1 machine2
+          let process = autoT alt
+          let result = runIdentity $ runT $ source [Left 1, Left 2, Left 3] ~> process
+          result `shouldBe` [Left 2, Left 3, Left 4]
+
+        it "works with alternative composition (right)" $ do
+          let machine1 = stateless (+ 1) :: StateMachineT Identity Int Int
+          let machine2 = stateless (* 2) :: StateMachineT Identity Int Int
+          let alt = Alternative machine1 machine2
+          let process = autoT alt
+          let result = runIdentity $ runT $ source [Right 1, Right 2, Right 3] ~> process
+          result `shouldBe` [Right 2, Right 4, Right 6]
+
+        it "works with mixed alternative composition" $ do
+          let machine1 = stateless (+ 1) :: StateMachineT Identity Int Int
+          let machine2 = stateless (* 2) :: StateMachineT Identity Int Int
+          let alt = Alternative machine1 machine2
+          let process = autoT alt
+          let result = runIdentity $ runT $ source [Left 1, Right 5, Left 2] ~> process
+          result `shouldBe` [Left 2, Right 10, Left 3]
+
+        it "handles boolean state machine correctly" $ do
+          let machine = booleanStateMachine SFalse :: StateMachineT Identity Int Int
+          let process = autoT machine :: Data.Machine.Process.ProcessT Identity Int Int
+          let result = runIdentity $ runT $ source [0, 1, 0] ~> process
+          -- Starting at SFalse: 0 (even) -> 1, stay SFalse; 1 (odd) -> 3, move to STrue; 0 (even) -> -1, stay STrue
+          result `shouldBe` [1, 3, -1]

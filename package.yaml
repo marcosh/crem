@@ -126,6 +126,7 @@ library:
     - singletons-base >= 3.0 && < 3.3
     - text >= 1.2 && < 2.1
     - nothunks >= 0.1 && < 0.4
+    - machines >=0.7.3 && <0.8
   # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
   # https://github.com/sol/hpack#handling-of-paths_-modules
   when:
@@ -154,6 +155,7 @@ tests:
       - crem
       - crem-examples
       - hspec >= 2.7 && < 2.12
+      - machines
       - profunctors
       - singletons-base
     build-tools: hspec-discover:hspec-discover

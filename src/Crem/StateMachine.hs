@@ -14,6 +14,8 @@ import "base" Control.Category (Category (..))
 import "base" Data.Bifunctor (Bifunctor (second), bimap)
 import "base" Data.Foldable (foldlM)
 import "base" Data.Kind (Type)
+import "machines" Data.Machine.MealyT qualified as Machines
+import "machines" Data.Machine.Process qualified as Machines
 import "nothunks" NoThunks.Class (NoThunks (..), allNoThunks)
 import "profunctors" Data.Profunctor (Choice (..), Profunctor (..), Strong (..))
 import "singletons-base" Data.Singletons (Demote, SingI, SingKind)
@@ -189,6 +191,15 @@ instance (Monad m) => Arrow (StateMachineT m) where
 instance (Monad m) => ArrowChoice (StateMachineT m) where
   left :: StateMachineT m a b -> StateMachineT m (Either a c) (Either b c)
   left = left'
+
+-- * AutomatonM
+
+instance Machines.AutomatonM StateMachineT where
+  autoT :: (Monad m) => StateMachineT m a b -> Machines.ProcessT m a b
+  autoT = Machines.autoT . go
+    where
+      go :: (Monad m) => StateMachineT m a b -> Machines.MealyT m a b
+      go sm = Machines.MealyT $ fmap (fmap go) . run sm
 
 -- * Run a state machine
 
