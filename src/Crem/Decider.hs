@@ -1,4 +1,6 @@
 {-# LANGUAGE DataKinds #-}
+{-# LANGUAGE RoleAnnotations #-}
+{-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
 
 -- | The [Decider pattern](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider)
 -- allows to easily describe an [aggregate](https://www.domainlanguage.com/wp-content/uploads/2016/05/DDD_Reference_2015-03.pdf)
@@ -10,7 +12,7 @@ module Crem.Decider where
 
 import Crem.BaseMachine (ActionResult (..), BaseMachine, BaseMachineT (..), InitialState (..))
 import Crem.Topology (AllowedTransition, Topology)
-import Data.Foldable (foldl')
+-- import Data.Foldable (foldl')
 import "base" Data.Kind (Type)
 
 -- | A @Decider topology input output@ is a Decider which receives inputs of
@@ -42,6 +44,8 @@ data
       -> EvolutionResult topology state initialVertex output
   }
 
+type role Decider nominal representational representational
+
 -- | A smart wrapper over the machine state, which allows to enforce that only
 -- transitions allowed by the @topology@ are actually performed.
 data
@@ -55,6 +59,8 @@ data
     :: (AllowedTransition topology initialVertex finalVertex)
     => state finalVertex
     -> EvolutionResult topology state initialVertex output
+
+type role EvolutionResult nominal representational nominal phantom
 
 -- | translate a `Decider` into a `BaseMachine`
 deciderMachine

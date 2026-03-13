@@ -1,6 +1,7 @@
-{-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE TypeFamilies #-}
+{-# LANGUAGE DataKinds #-}
+{-# LANGUAGE RoleAnnotations #-}
 
 -- | This is the main module of the whole library. It defines the central
 -- `StateMachineT` type, which allows us to create composable state machines.
@@ -76,6 +77,8 @@ data StateMachineT m input output where
     => StateMachineT m a (n b)
     -> StateMachineT m b (n c)
     -> StateMachineT m a (n c)
+
+type role StateMachineT representational nominal nominal
 
 instance NoThunks (StateMachineT m input output) where
   showTypeOf _ = "StateMachineT"

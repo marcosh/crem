@@ -1,5 +1,6 @@
 {-# LANGUAGE DerivingVia #-}
 {-# LANGUAGE UndecidableInstances #-}
+{-# LANGUAGE RoleAnnotations #-}
 
 -- | The `RenderableVertices` class describes which values of type @a@ should
 -- be rendered when drawing a graph (or a topology) with vertices of type @a@
@@ -22,6 +23,7 @@ class RenderableVertices a where
 -- `Enum` and `Bounded`, then `AllVertices a` has an instance of
 -- `RenderableVertices` which lists all the terms of type @a@.
 newtype AllVertices a = AllVertices a
+type role AllVertices representational
 
 instance (Enum a, Bounded a) => RenderableVertices (AllVertices a) where
   vertices :: [AllVertices a]

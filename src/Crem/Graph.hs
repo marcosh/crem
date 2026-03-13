@@ -1,3 +1,5 @@
+{-# LANGUAGE RoleAnnotations #-}
+
 -- | A simple data structure to describe a directed graph
 module Crem.Graph where
 
@@ -11,6 +13,8 @@ import "nothunks" NoThunks.Class (NoThunks (..))
 newtype Graph a = Graph [(a, a)]
   deriving stock (Eq, Show)
   deriving newtype (NoThunks)
+
+type role Graph representational
 
 -- | The product graph.
 -- It has as vertices the product of the set of vertices of the initial graph.

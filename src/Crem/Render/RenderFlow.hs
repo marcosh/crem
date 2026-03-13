@@ -1,5 +1,6 @@
 {-# LANGUAGE GADTs #-}
 {-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE RoleAnnotations #-}
 
 -- | Rendering just the state space of a state machine might be sometimes
 -- limiting.
@@ -20,6 +21,8 @@ data TreeMetadata a
   = LeafLabel a
   | BinaryLabel (TreeMetadata a) (TreeMetadata a)
   deriving stock (Show)
+
+type role TreeMetadata representational
 
 instance NoThunks a => NoThunks (TreeMetadata a) where
   showTypeOf _ = "TreeMetadata"
