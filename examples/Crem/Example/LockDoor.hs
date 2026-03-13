@@ -1,15 +1,14 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DerivingVia #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeAbstractions #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
--- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wall-missed-specialisations
 {-# OPTIONS_GHC -Wno-all-missed-specialisations #-}
--- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-deriving-strategies
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
--- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunticked-promoted-constructors
+{-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
+{-# OPTIONS_GHC -Wno-missing-role-annotations #-}
 {-# OPTIONS_GHC -Wno-unticked-promoted-constructors #-}
--- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 
 module Crem.Example.LockDoor where

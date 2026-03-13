@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE GADTs #-}
+{-# LANGUAGE RoleAnnotations #-}
 
 module Crem.Example.TriangularMachine where
 
@@ -8,6 +9,8 @@ import Crem.StateMachine (StateMachine, unrestrictedMachine)
 
 data TriangularState (a :: ()) where
   OnlyState :: Int -> TriangularState '()
+
+type role TriangularState nominal
 
 triangular :: StateMachine Int Int
 triangular =
