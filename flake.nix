@@ -44,7 +44,7 @@
                 export GHC_PACKAGE_PATH="dist/package.conf.inplace:$GHC_PACKAGE_PATH"
               '';
             }));
-            fourmolu = pkgs.haskell.packages.ghc984.fourmolu;
+            fourmolu = pkgs.haskell.packages.ghc910.fourmolu;
           };
         };
 
@@ -62,7 +62,7 @@
           configurations;
 
       # The version of GHC used for default package and development shell.
-      defaultGhcVersion = "ghc90";
+      defaultGhcVersion = "ghc910";
 
       # This is a shell utility that watches source files for changes, and triggers a
       # command when they change.
