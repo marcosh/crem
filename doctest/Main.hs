@@ -11,5 +11,6 @@ main = do
   cremLib <- extractCabalLibrary cremPackage
   cremExamplesLib <- extractSpecificCabalLibrary (Just "crem-examples") cremPackage
   let
-    wholeCremLib = mergeLibraries [cremLib, cremExamplesLib]
-  mainFromLibrary wholeCremLib args
+    base = mergeLibraries [cremLib, cremExamplesLib]
+    wholeCremLib = base
+      { <ghcOptionsField> = "-package-id" : "crem-examples" : <ghcOptionsField> base }
