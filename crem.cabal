@@ -1,4 +1,4 @@
-cabal-version: 2.0
+cabal-version: 3.0
 
 -- This file has been generated from package.yaml by hpack version 0.38.3.
 --
@@ -215,7 +215,7 @@ executable hobbit-game
   build-depends:
       base >=4.15
     , crem
-    , crem-examples
+    , crem:crem-examples
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
@@ -282,7 +282,7 @@ executable hobbit-map
   build-depends:
       base >=4.15
     , crem
-    , crem-examples
+    , crem:crem-examples
     , text
   default-language: Haskell2010
   if impl(ghc >= 9.2)
@@ -351,8 +351,10 @@ test-suite crem-doctests
   build-depends:
       base >=4.15
     , crem
-    , crem-examples
+    , crem:crem-examples
+    , directory
     , doctest-parallel >=0.2.3
+    , filepath
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
@@ -433,7 +435,7 @@ test-suite crem-spec
   build-depends:
       base >=4.15
     , crem
-    , crem-examples
+    , crem:crem-examples
     , hspec >=2.7
     , machines
     , profunctors
