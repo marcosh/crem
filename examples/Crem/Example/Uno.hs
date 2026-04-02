@@ -7,16 +7,16 @@
 {-# LANGUAGE UndecidableInstances #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-deriving-strategies
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
+{-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-role-annotations
+{-# OPTIONS_GHC -Wno-missing-role-annotations #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunrecognised-pragmas
 {-# OPTIONS_GHC -Wno-unrecognised-pragmas #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunticked-promoted-constructors
 {-# OPTIONS_GHC -Wno-unticked-promoted-constructors #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
--- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
-{-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
--- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-role-annotations
-{-# OPTIONS_GHC -Wno-missing-role-annotations #-}
 
 -- | Porting of https://github.com/thinkbeforecoding/UnoCore/blob/solution/Uno/Game.fs
 module Crem.Example.Uno where
@@ -172,15 +172,15 @@ data Event
 -- * Topology
 
 $( singletons
-    [d|
-      data UnoVertex
-        = Initial
-        | Started
-        deriving stock (Eq, Show, Enum, Bounded)
+     [d|
+       data UnoVertex
+         = Initial
+         | Started
+         deriving stock (Eq, Show, Enum, Bounded)
 
-      unoTopology :: Topology UnoVertex
-      unoTopology = Topology [(Initial, [Started])]
-      |]
+       unoTopology :: Topology UnoVertex
+       unoTopology = Topology [(Initial, [Started])]
+       |]
  )
 
 deriving via AllVertices UnoVertex instance RenderableVertices UnoVertex

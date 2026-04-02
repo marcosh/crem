@@ -12,16 +12,16 @@ import Crem.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
 $( singletons
-    [d|
-      -- topology with a two vertices and one edge from each vertex to the
-      -- other
-      switchTopology :: Topology Bool
-      switchTopology =
-        Topology
-          [ (True, [False])
-          , (False, [True])
-          ]
-      |]
+     [d|
+       -- topology with a two vertices and one edge from each vertex to the
+       -- other
+       switchTopology :: Topology Bool
+       switchTopology =
+         Topology
+           [ (True, [False])
+           , (False, [True])
+           ]
+       |]
  )
 
 switchMachine :: SBool a -> BaseMachine SwitchTopology () ()

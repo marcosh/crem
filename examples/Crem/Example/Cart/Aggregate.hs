@@ -24,21 +24,21 @@ import Crem.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
 $( singletons
-    [d|
-      data CartVertex
-        = WaitingForPayment
-        | InitiatingPayment
-        | PaymentComplete
-        deriving stock (Eq, Show, Enum, Bounded)
+     [d|
+       data CartVertex
+         = WaitingForPayment
+         | InitiatingPayment
+         | PaymentComplete
+         deriving stock (Eq, Show, Enum, Bounded)
 
-      cartTopology :: Topology CartVertex
-      cartTopology =
-        Topology
-          [ (WaitingForPayment, [InitiatingPayment])
-          , (InitiatingPayment, [PaymentComplete])
-          , (PaymentComplete, [])
-          ]
-      |]
+       cartTopology :: Topology CartVertex
+       cartTopology =
+         Topology
+           [ (WaitingForPayment, [InitiatingPayment])
+           , (InitiatingPayment, [PaymentComplete])
+           , (PaymentComplete, [])
+           ]
+       |]
  )
 
 deriving via AllVertices CartVertex instance RenderableVertices CartVertex

@@ -3,16 +3,16 @@
 {-# LANGUAGE TypeAbstractions #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
+{-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-role-annotations
+{-# OPTIONS_GHC -Wno-missing-role-annotations #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wredundant-constraints
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunticked-promoted-constructors
 {-# OPTIONS_GHC -Wno-unticked-promoted-constructors #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
--- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-role-annotations
-{-# OPTIONS_GHC -Wno-missing-role-annotations #-}
--- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
-{-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
 
 -- | A `Topology` is a list of allowed transition for a state machine.
 -- We are using it to enforce that only allowed transitions could be performed.
@@ -42,10 +42,10 @@ import "singletons-base" Prelude.Singletons
 -- Since we are using this information at the type level, and then we want to
 -- bring it down to the value level, we wrap it in `singletons`
 $( singletons
-    [d|
-      newtype Topology vertex = Topology
-        {edges :: [(vertex, [vertex])]}
-      |]
+     [d|
+       newtype Topology vertex = Topology
+         {edges :: [(vertex, [vertex])]}
+       |]
  )
 
 -- ** AllowedTransition
@@ -105,10 +105,10 @@ instance {-# INCOHERENT #-} AllowedTransition topology a a where
 -- Given a type @a@ for vertices, only trivial transitions, i.e. staying
 -- at the same vertex, are allowed
 $( singletons
-    [d|
-      trivialTopology :: Topology a
-      trivialTopology = Topology []
-      |]
+     [d|
+       trivialTopology :: Topology a
+       trivialTopology = Topology []
+       |]
  )
 
 -- ** Allow all topology
@@ -116,8 +116,8 @@ $( singletons
 -- | Given a type @a@ for vertices, every transition from one vertex to
 -- any other is allowed
 $( singletons
-    [d|
-      allowAllTopology :: (Bounded a, Enum a) => Topology a
-      allowAllTopology = Topology [(a, [minBound .. maxBound]) | a <- [minBound .. maxBound]]
-      |]
+     [d|
+       allowAllTopology :: (Bounded a, Enum a) => Topology a
+       allowAllTopology = Topology [(a, [minBound .. maxBound]) | a <- [minBound .. maxBound]]
+       |]
  )

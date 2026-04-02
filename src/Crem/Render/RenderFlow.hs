@@ -23,7 +23,7 @@ data TreeMetadata a
 
 type role TreeMetadata representational
 
-instance NoThunks a => NoThunks (TreeMetadata a) where
+instance (NoThunks a) => NoThunks (TreeMetadata a) where
   showTypeOf _ = "TreeMetadata"
   wNoThunks ctxt tm =
     case tm of

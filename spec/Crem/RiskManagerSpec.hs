@@ -136,58 +136,58 @@ spec =
       it "registers one user when a registration event is received" $ do
         run readModel (UserDataRegistered myUserData)
           `shouldOutput` [ ReceivedData
-                            { receivedUserData = Just myUserData
-                            , receivedLoanDetails = Nothing
-                            , receivedCreditBureauData = Nothing
-                            }
+                             { receivedUserData = Just myUserData
+                             , receivedLoanDetails = Nothing
+                             , receivedCreditBureauData = Nothing
+                             }
                          ]
 
       it "registers two users when two registration events are received" $ do
         runMultiple readModel [UserDataRegistered myUserData, UserDataRegistered notMyUserData]
           `shouldOutput` [ ReceivedData
-                            { receivedUserData = Just myUserData
-                            , receivedLoanDetails = Nothing
-                            , receivedCreditBureauData = Nothing
-                            }
+                             { receivedUserData = Just myUserData
+                             , receivedLoanDetails = Nothing
+                             , receivedCreditBureauData = Nothing
+                             }
                          , ReceivedData
-                            { receivedUserData = Just notMyUserData
-                            , receivedLoanDetails = Nothing
-                            , receivedCreditBureauData = Nothing
-                            }
+                             { receivedUserData = Just notMyUserData
+                             , receivedLoanDetails = Nothing
+                             , receivedCreditBureauData = Nothing
+                             }
                          ]
 
     describe "whole" $ do
       it "registers one user when a registration command is received" $ do
         run whole (RegisterUserData myUserData)
           `shouldOutput` [ ReceivedData
-                            { receivedUserData = Just myUserData
-                            , receivedLoanDetails = Nothing
-                            , receivedCreditBureauData = Nothing
-                            }
+                             { receivedUserData = Just myUserData
+                             , receivedLoanDetails = Nothing
+                             , receivedCreditBureauData = Nothing
+                             }
                          , ReceivedData
-                            { receivedUserData = Just myUserData
-                            , receivedLoanDetails = Nothing
-                            , receivedCreditBureauData = Just creditBureauData
-                            }
+                             { receivedUserData = Just myUserData
+                             , receivedLoanDetails = Nothing
+                             , receivedCreditBureauData = Just creditBureauData
+                             }
                          ]
 
       it "registers two users when two registration commands are received" $ do
         runMultiple whole [RegisterUserData myUserData, RegisterUserData notMyUserData]
           `shouldOutput` [ ReceivedData
-                            { receivedUserData = Just myUserData
-                            , receivedLoanDetails = Nothing
-                            , receivedCreditBureauData = Nothing
-                            }
+                             { receivedUserData = Just myUserData
+                             , receivedLoanDetails = Nothing
+                             , receivedCreditBureauData = Nothing
+                             }
                          , ReceivedData
-                            { receivedUserData = Just myUserData
-                            , receivedLoanDetails = Nothing
-                            , receivedCreditBureauData = Just creditBureauData
-                            }
+                             { receivedUserData = Just myUserData
+                             , receivedLoanDetails = Nothing
+                             , receivedCreditBureauData = Just creditBureauData
+                             }
                          , ReceivedData
-                            { receivedUserData = Just notMyUserData
-                            , receivedLoanDetails = Nothing
-                            , receivedCreditBureauData = Just creditBureauData
-                            }
+                             { receivedUserData = Just notMyUserData
+                             , receivedLoanDetails = Nothing
+                             , receivedCreditBureauData = Just creditBureauData
+                             }
                          ]
 
     describe "riskApplication" $ do
