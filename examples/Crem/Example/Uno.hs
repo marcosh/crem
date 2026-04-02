@@ -13,6 +13,10 @@
 {-# OPTIONS_GHC -Wno-unticked-promoted-constructors #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
+{-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-role-annotations
+{-# OPTIONS_GHC -Wno-missing-role-annotations #-}
 
 -- | Porting of https://github.com/thinkbeforecoding/UnoCore/blob/solution/Uno/Game.fs
 module Crem.Example.Uno where
@@ -191,6 +195,8 @@ data StateData = StateData
 data UnoState (vertex :: UnoVertex) where
   UnoInitialState :: UnoState 'Initial
   UnoStartedState :: StateData -> UnoState 'Started
+
+type role UnoState nominal
 
 -- * Errors
 

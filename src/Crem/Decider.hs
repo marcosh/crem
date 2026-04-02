@@ -10,7 +10,6 @@ module Crem.Decider where
 
 import Crem.BaseMachine (ActionResult (..), BaseMachine, BaseMachineT (..), InitialState (..))
 import Crem.Topology (AllowedTransition, Topology)
-import Data.Foldable (foldl')
 import "base" Data.Kind (Type)
 
 -- | A @Decider topology input output@ is a Decider which receives inputs of
@@ -42,6 +41,8 @@ data
       -> EvolutionResult topology state initialVertex output
   }
 
+type role Decider nominal representational representational
+
 -- | A smart wrapper over the machine state, which allows to enforce that only
 -- transitions allowed by the @topology@ are actually performed.
 data
@@ -49,12 +50,14 @@ data
     (topology :: Topology vertex)
     (state :: vertex -> Type)
     (initialVertex :: vertex)
-    output
+    (output :: k)
   where
   EvolutionResult
     :: (AllowedTransition topology initialVertex finalVertex)
     => state finalVertex
     -> EvolutionResult topology state initialVertex output
+
+type role EvolutionResult nominal representational nominal phantom
 
 -- | translate a `Decider` into a `BaseMachine`
 deciderMachine

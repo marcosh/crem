@@ -35,6 +35,8 @@ data
       -> ActionResult m topology state initialVertex output
   }
 
+type role BaseMachineT representational nominal representational nominal
+
 -- | A `BaseMachine` is an effectful machine for every possible monad @m@.
 -- Needing to work for every monad, in fact it can not perform any kind of
 -- effect and needs to be pure in nature.
@@ -113,6 +115,8 @@ instance (Applicative m) => Choice (BaseMachineT m topology) where
 data InitialState (state :: vertex -> Type) where
   InitialState :: state vertex -> InitialState state
 
+type role InitialState representational
+
 -- | The result of an action of the state machine.
 -- An @ActionResult m topology state initialVertex output@ contains an @output@
 -- and a @state finalVertex@, where the transition from @initialVertex@ to
@@ -129,6 +133,8 @@ data
     :: (AllowedTransition topology initialVertex finalVertex)
     => m (output, state finalVertex)
     -> ActionResult m topology state initialVertex output
+
+type role ActionResult representational nominal nominal nominal nominal
 
 -- | Allows to change the computational context of an `ActionResult` from @m@
 -- to @n@, given we have a [natural transformation](https://stackoverflow.com/a/58364172/2718064)

@@ -23,6 +23,8 @@ class RenderableVertices a where
 -- `RenderableVertices` which lists all the terms of type @a@.
 newtype AllVertices a = AllVertices a
 
+type role AllVertices representational
+
 instance (Enum a, Bounded a) => RenderableVertices (AllVertices a) where
   vertices :: [AllVertices a]
   vertices = AllVertices <$> [minBound .. maxBound]

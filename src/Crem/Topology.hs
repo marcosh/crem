@@ -1,5 +1,6 @@
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TypeAbstractions #-}
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wredundant-constraints
@@ -8,6 +9,10 @@
 {-# OPTIONS_GHC -Wno-unticked-promoted-constructors #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-role-annotations
+{-# OPTIONS_GHC -Wno-missing-role-annotations #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
+{-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
 
 -- | A `Topology` is a list of allowed transition for a state machine.
 -- We are using it to enforce that only allowed transitions could be performed.
@@ -62,8 +67,8 @@ data AllowTransition (topology :: Topology vertex) (initial :: vertex) (final ::
   -- | If we know that we have an edge from @a@ to @b@ in @map@,
   -- then we also have an edge from @a@ to @b@ if we add another vertex
   AllowAddingVertex
-    :: AllowTransition ('Topology map) a b
-    -> AllowTransition ('Topology (x ': map)) a b
+    :: AllowTransition ('Topology tmap) a b
+    -> AllowTransition ('Topology (x ': tmap)) a b
 
 instance NoThunks (AllowTransition topology initial final) where
   showTypeOf _ = "AllowTransition"
@@ -87,9 +92,9 @@ instance {-# INCOHERENT #-} (AllowedTransition ('Topology ('(a, l1) ': l2)) a b)
   allowsTransition =
     AllowAddingEdge (allowsTransition :: AllowTransition ('Topology ('(a, l1) ': l2)) a b)
 
-instance {-# INCOHERENT #-} (AllowedTransition ('Topology map) a b) => AllowedTransition ('Topology (x ': map)) a b where
+instance {-# INCOHERENT #-} (AllowedTransition ('Topology tmap) a b) => AllowedTransition ('Topology (x ': tmap)) a b where
   allowsTransition =
-    AllowAddingVertex (allowsTransition :: AllowTransition ('Topology map) a b)
+    AllowAddingVertex (allowsTransition :: AllowTransition ('Topology tmap) a b)
 
 instance {-# INCOHERENT #-} AllowedTransition topology a a where
   allowsTransition = AllowIdentityEdge
