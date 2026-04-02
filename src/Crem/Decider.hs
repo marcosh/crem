@@ -30,7 +30,8 @@ data
   Decider
     (topology :: Topology vertex)
     input
-    output = forall state.
+    output
+  = forall state.
   Decider
   { deciderInitialState :: InitialState state
   , decide :: forall vertex'. input -> state vertex' -> output

@@ -25,7 +25,8 @@ data
     m
     (topology :: Topology vertex)
     (input :: Type)
-    (output :: Type) = forall state.
+    (output :: Type)
+  = forall state.
   BaseMachineT
   { initialState :: InitialState state
   , action

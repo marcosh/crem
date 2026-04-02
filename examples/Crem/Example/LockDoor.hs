@@ -24,21 +24,21 @@ import Crem.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
 $( singletons
-    [d|
-      data LockDoorVertex
-        = IsLockOpen
-        | IsLockClosed
-        | IsLockLocked
-        deriving stock (Eq, Show, Enum, Bounded)
+     [d|
+       data LockDoorVertex
+         = IsLockOpen
+         | IsLockClosed
+         | IsLockLocked
+         deriving stock (Eq, Show, Enum, Bounded)
 
-      lockDoorTopology :: Topology LockDoorVertex
-      lockDoorTopology =
-        Topology
-          [ (IsLockOpen, [IsLockClosed])
-          , (IsLockClosed, [IsLockOpen, IsLockLocked])
-          , (IsLockLocked, [IsLockClosed])
-          ]
-      |]
+       lockDoorTopology :: Topology LockDoorVertex
+       lockDoorTopology =
+         Topology
+           [ (IsLockOpen, [IsLockClosed])
+           , (IsLockClosed, [IsLockOpen, IsLockLocked])
+           , (IsLockLocked, [IsLockClosed])
+           ]
+       |]
  )
 
 deriving via AllVertices LockDoorVertex instance RenderableVertices LockDoorVertex

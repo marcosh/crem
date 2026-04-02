@@ -23,25 +23,25 @@ import Crem.Topology
 import "singletons-base" Data.Singletons.Base.TH
 
 $( singletons
-    [d|
-      data AggregateVertex
-        = NoDataVertex
-        | CollectedUserDataVertex
-        | CollectedLoanDetailsFirstVertex
-        | ReceivedCreditBureauDataFirstVertex
-        | CollectedAllDataVertex
-        deriving stock (Eq, Show, Enum, Bounded)
+     [d|
+       data AggregateVertex
+         = NoDataVertex
+         | CollectedUserDataVertex
+         | CollectedLoanDetailsFirstVertex
+         | ReceivedCreditBureauDataFirstVertex
+         | CollectedAllDataVertex
+         deriving stock (Eq, Show, Enum, Bounded)
 
-      aggregateTopology :: Topology AggregateVertex
-      aggregateTopology =
-        Topology
-          [ (NoDataVertex, [CollectedUserDataVertex])
-          , (CollectedUserDataVertex, [CollectedLoanDetailsFirstVertex, ReceivedCreditBureauDataFirstVertex])
-          , (CollectedLoanDetailsFirstVertex, [CollectedAllDataVertex])
-          , (ReceivedCreditBureauDataFirstVertex, [CollectedAllDataVertex])
-          , (CollectedAllDataVertex, [])
-          ]
-      |]
+       aggregateTopology :: Topology AggregateVertex
+       aggregateTopology =
+         Topology
+           [ (NoDataVertex, [CollectedUserDataVertex])
+           , (CollectedUserDataVertex, [CollectedLoanDetailsFirstVertex, ReceivedCreditBureauDataFirstVertex])
+           , (CollectedLoanDetailsFirstVertex, [CollectedAllDataVertex])
+           , (ReceivedCreditBureauDataFirstVertex, [CollectedAllDataVertex])
+           , (CollectedAllDataVertex, [])
+           ]
+       |]
  )
 
 deriving via AllVertices AggregateVertex instance RenderableVertices AggregateVertex

@@ -20,7 +20,7 @@ spec =
           `shouldBe` Right
             ( Mermaid "state lockMachine {"
                 <> ( renderLabelledGraph "lockMachine" . baseMachineAsGraph @_ @_ @_ @_ @Identity $
-                      lockDoorMachine SIsLockClosed
+                       lockDoorMachine SIsLockClosed
                    )
                 <> Mermaid "}"
             , MachineLabel "lockMachine"

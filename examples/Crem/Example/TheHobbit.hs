@@ -45,29 +45,29 @@ instance Monoid HobbitMessage where
   mempty = HobbitMessage ""
 
 $( singletons
-    [d|
-      data HobbitVertex
-        = TunnelLikeHall
-        | Lonelands
-        | TrollsClearing
-        | Rivendell
-        | MistyMountain
-        | TrollsPath
-        | TrollsCave
-        deriving stock (Eq, Show, Enum, Bounded)
+     [d|
+       data HobbitVertex
+         = TunnelLikeHall
+         | Lonelands
+         | TrollsClearing
+         | Rivendell
+         | MistyMountain
+         | TrollsPath
+         | TrollsCave
+         deriving stock (Eq, Show, Enum, Bounded)
 
-      hobbitTopology :: Topology HobbitVertex
-      hobbitTopology =
-        Topology
-          [ (TunnelLikeHall, [Lonelands])
-          , (Lonelands, [TunnelLikeHall, TrollsClearing])
-          , (TrollsClearing, [Rivendell, TrollsPath])
-          , (Rivendell, [TrollsClearing, MistyMountain])
-          , (MistyMountain, [Rivendell])
-          , (TrollsPath, [TrollsClearing, TrollsCave])
-          , (TrollsCave, [TrollsPath])
-          ]
-      |]
+       hobbitTopology :: Topology HobbitVertex
+       hobbitTopology =
+         Topology
+           [ (TunnelLikeHall, [Lonelands])
+           , (Lonelands, [TunnelLikeHall, TrollsClearing])
+           , (TrollsClearing, [Rivendell, TrollsPath])
+           , (Rivendell, [TrollsClearing, MistyMountain])
+           , (MistyMountain, [Rivendell])
+           , (TrollsPath, [TrollsClearing, TrollsCave])
+           , (TrollsCave, [TrollsPath])
+           ]
+       |]
  )
 
 deriving via AllVertices HobbitVertex instance RenderableVertices HobbitVertex
