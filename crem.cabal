@@ -1,6 +1,6 @@
 cabal-version: 2.0
 
--- This file has been generated from package.yaml by hpack version 0.35.2.
+-- This file has been generated from package.yaml by hpack version 0.38.3.
 --
 -- see: https://github.com/sol/hpack
 
@@ -29,11 +29,6 @@ extra-source-files:
 flag errors
   description: enable -Werror
   manual: True
-  default: False
-
-flag test-doctest
-  description: run doctests
-  manual: True
   default: True
 
 library
@@ -52,14 +47,15 @@ library
       DerivingStrategies
       LambdaCase
       PackageImports
+      RoleAnnotations
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
-      base >=4.15 && <4.19
+      base >=4.15 && <4.21
     , machines >=0.7.3 && <0.8
     , nothunks >=0.1 && <0.4
     , profunctors >=3.2 && <5.7
-    , singletons-base >=3.0 && <3.3
-    , text >=1.2 && <2.1
+    , singletons-base >=3.0 && <3.5
+    , text >=1.2 && <2.2
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
@@ -142,9 +138,10 @@ library crem-examples
       DerivingStrategies
       LambdaCase
       PackageImports
+      RoleAnnotations
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
-      base >=4.15 && <4.19
+      base >=4.15 && <4.21
     , crem
     , profunctors
     , singletons-base
@@ -211,9 +208,10 @@ executable hobbit-game
       DerivingStrategies
       LambdaCase
       PackageImports
+      RoleAnnotations
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
-      base >=4.15 && <4.19
+      base >=4.15 && <4.21
     , crem
     , crem-examples
   default-language: Haskell2010
@@ -278,9 +276,10 @@ executable hobbit-map
       DerivingStrategies
       LambdaCase
       PackageImports
+      RoleAnnotations
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
-      base >=4.15 && <4.19
+      base >=4.15 && <4.21
     , crem
     , crem-examples
     , text
@@ -347,12 +346,15 @@ test-suite crem-doctests
       DerivingStrategies
       LambdaCase
       PackageImports
+      RoleAnnotations
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module -threaded -Wno-unused-packages
   build-depends:
-      base >=4.15 && <4.19
+      Cabal
+    , base >=4.15 && <4.21
     , crem
     , crem-examples
-    , doctest-parallel >=0.2.3 && <0.4
+    , doctest-parallel >=0.2.3 && <0.5
+    , ghc
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
@@ -406,10 +408,6 @@ test-suite crem-doctests
         TypeSynonymInstances
   if flag(errors)
     ghc-options: -Werror
-  if flag(test-doctest)
-    buildable: True
-  else
-    buildable: False
 
 test-suite crem-spec
   type: exitcode-stdio-1.0
@@ -427,11 +425,12 @@ test-suite crem-spec
       DerivingStrategies
       LambdaCase
       PackageImports
+      RoleAnnotations
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-tool-depends:
       hspec-discover:hspec-discover
   build-depends:
-      base >=4.15 && <4.19
+      base >=4.15 && <4.21
     , crem
     , crem-examples
     , hspec >=2.7 && <2.12

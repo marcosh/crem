@@ -21,6 +21,8 @@ data TreeMetadata a
   | BinaryLabel (TreeMetadata a) (TreeMetadata a)
   deriving stock (Show)
 
+type role TreeMetadata representational
+
 instance NoThunks a => NoThunks (TreeMetadata a) where
   showTypeOf _ = "TreeMetadata"
   wNoThunks ctxt tm =

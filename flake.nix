@@ -3,7 +3,7 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixos-unstable";
-    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-22.11";
+    nixpkgs-stable.url = "github:nixos/nixpkgs/nixos-25.11";
     flake-utils.url = "github:numtide/flake-utils";
     nix-filter.url = "github:numtide/nix-filter";
     flake-compat = {
@@ -38,13 +38,13 @@
         haskellPackages.override {
           overrides = self: super: {
             hpack = pkgs.hpack;
-            crem = pkgs.haskell.lib.compose.disableCabalFlag "test-doctest" ((self.callCabal2nix "crem" src { }).overrideAttrs (attrs: {
+            crem = (self.callCabal2nix "crem" src { }).overrideAttrs (attrs: {
               # doctest-parallel needs to know where the compiled crem package is
               preCheck = ''
                 export GHC_PACKAGE_PATH="dist/package.conf.inplace:$GHC_PACKAGE_PATH"
               '';
-            }));
-            fourmolu = pkgs.haskell.packages.ghc944.fourmolu;
+            });
+            fourmolu = pkgs.haskell.packages.ghc910.fourmolu;
           };
         };
 
@@ -62,7 +62,7 @@
           configurations;
 
       # The version of GHC used for default package and development shell.
-      defaultGhcVersion = "ghc90";
+      defaultGhcVersion = "ghc910";
 
       # This is a shell utility that watches source files for changes, and triggers a
       # command when they change.
@@ -122,6 +122,7 @@
               haskell-language-server
               build-watch
               test-watch
+              unlit
             ];
             shellHook = ''
               export PS1="❄️ GHC ${haskellPackages.ghc.version} $PS1"

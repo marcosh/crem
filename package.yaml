@@ -27,13 +27,8 @@ extra-source-files:
 flags:
   errors:
     description: enable -Werror
-    default: False
-    manual: True
-
-  test-doctest:
-    description: run doctests
-    manual: True
     default: True
+    manual: True
 
 when:
   - condition: impl(ghc >= 9.2)
@@ -99,6 +94,7 @@ default-extensions:
   - DerivingStrategies # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/deriving_strategies.html#extension-DerivingStrategies
   - LambdaCase         # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/lambda_case.html#extension-LambdaCase
   - PackageImports     # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/package_qualified_imports.html#extension-PackageImports
+  - RoleAnnotations    # https://downloads.haskell.org/ghc/latest/docs/users_guide/exts/roles.html#extension-RoleAnnotations
 
 # Options inspired by: https://medium.com/mercury-bank/enable-all-the-warnings-a0517bc081c3
 ghc-options:
@@ -117,14 +113,14 @@ ghc-options:
   - -Wno-prepositive-qualified-module  # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wprepositive-qualified-module
 
 dependencies:
-  - base >= 4.15 && < 4.19
+  - base >= 4.15 && < 4.21
 
 library:
   source-dirs:      src
   dependencies:
     - profunctors >= 3.2 && < 5.7
-    - singletons-base >= 3.0 && < 3.3
-    - text >= 1.2 && < 2.1
+    - singletons-base >= 3.0 && < 3.5
+    - text >= 1.2 && < 2.2
     - nothunks >= 0.1 && < 0.4
     - machines >=0.7.3 && <0.8
   # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
@@ -172,13 +168,10 @@ tests:
     dependencies:
       - crem
       - crem-examples
-      - doctest-parallel >= 0.2.3 && < 0.4
+      - doctest-parallel >= 0.2.3 && < 0.5
+      - ghc
+      - Cabal
     when:
-    - condition: flag(test-doctest)
-      then:
-        buildable: True
-      else:
-        buildable: False
     - condition: false
       other-modules: Paths_crem
 

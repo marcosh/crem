@@ -9,6 +9,10 @@
 > {-# OPTIONS_GHC -Wno-unticked-promoted-constructors #-}
 > -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 > {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
+> -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
+> {-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
+> -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-role-annotations
+> {-# OPTIONS_GHC -Wno-missing-role-annotations #-}
 >
 > module Crem.Example.TwoSwitchesGate where
 >
@@ -59,6 +63,8 @@ Next we need to define which data every vertex of our topology should contain. T
 > data SwitchState (vertex :: SwitchVertex) where
 >   OnState :: SwitchState 'SwitchIsOn
 >   OffState :: SwitchState 'SwitchIsOff
+>
+> type role SwitchState nominal
 
 In this case, for every vertex there is just one possible state.
 

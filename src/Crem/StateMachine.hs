@@ -77,6 +77,8 @@ data StateMachineT m input output where
     -> StateMachineT m b (n c)
     -> StateMachineT m a (n c)
 
+type role StateMachineT representational nominal nominal
+
 instance NoThunks (StateMachineT m input output) where
   showTypeOf _ = "StateMachineT"
   wNoThunks ctxt sm =

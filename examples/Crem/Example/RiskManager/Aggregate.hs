@@ -5,6 +5,10 @@
 {-# LANGUAGE UndecidableInstances #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-deriving-strategies
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
+{-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-role-annotations
+{-# OPTIONS_GHC -Wno-missing-role-annotations #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunticked-promoted-constructors
 {-# OPTIONS_GHC -Wno-unticked-promoted-constructors #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
@@ -48,6 +52,8 @@ data AggregateState (vertex :: AggregateVertex) where
   CollectedLoanDetailsFirst :: UserData -> LoanDetails -> AggregateState 'CollectedLoanDetailsFirstVertex
   ReceivedCreditBureauDataFirst :: UserData -> CreditBureauData -> AggregateState 'ReceivedCreditBureauDataFirstVertex
   CollectedAllData :: UserData -> LoanDetails -> CreditBureauData -> AggregateState 'CollectedAllDataVertex
+
+type role AggregateState nominal
 
 riskAggregate :: BaseMachine AggregateTopology RiskCommand (Maybe RiskEvent)
 riskAggregate =

@@ -9,6 +9,8 @@ import Crem.StateMachine (StateMachine, unrestrictedMachine)
 data TriangularState (a :: ()) where
   OnlyState :: Int -> TriangularState '()
 
+type role TriangularState nominal
+
 triangular :: StateMachine Int Int
 triangular =
   unrestrictedMachine

@@ -5,6 +5,10 @@
 {-# LANGUAGE UndecidableInstances #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-deriving-strategies
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
+{-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
+-- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-role-annotations
+{-# OPTIONS_GHC -Wno-missing-role-annotations #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wredundant-constraints
 {-# OPTIONS_GHC -Wno-redundant-constraints #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunticked-promoted-constructors
@@ -31,13 +35,13 @@ data ShippingCommand
 data ShippingEvent
 
 $( singletons
-    [d|
-      data ShippingVertex = ShippingVertex
-        deriving stock (Eq, Show, Enum, Bounded)
+     [d|
+       data ShippingVertex = ShippingVertex
+         deriving stock (Eq, Show, Enum, Bounded)
 
-      shippingTopology :: Topology ShippingVertex
-      shippingTopology = Topology []
-      |]
+       shippingTopology :: Topology ShippingVertex
+       shippingTopology = Topology []
+       |]
  )
 
 deriving via AllVertices ShippingVertex instance RenderableVertices ShippingVertex
