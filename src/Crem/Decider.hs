@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DataKinds #-}
 
 -- | The [Decider pattern](https://thinkbeforecoding.com/post/2021/12/17/functional-event-sourcing-decider)
@@ -10,6 +11,11 @@ module Crem.Decider where
 
 import Crem.BaseMachine (ActionResult (..), BaseMachine, BaseMachineT (..), InitialState (..))
 import Crem.Topology (AllowedTransition, Topology)
+
+#if __GLASGOW_HASKELL__ < 910
+import "base" Data.Foldable (foldl')
+#endif
+
 import "base" Data.Kind (Type)
 
 -- | A @Decider topology input output@ is a Decider which receives inputs of
