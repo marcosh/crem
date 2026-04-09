@@ -1,3 +1,4 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE DerivingVia #-}
 {-# LANGUAGE TemplateHaskell #-}
@@ -5,10 +6,14 @@
 {-# LANGUAGE UndecidableInstances #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wmissing-deriving-strategies
 {-# OPTIONS_GHC -Wno-missing-deriving-strategies #-}
+
+#if __GLASGOW_HASKELL__ >= 908
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
 {-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-role-annotations
 {-# OPTIONS_GHC -Wno-missing-role-annotations #-}
+#endif
+
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunticked-promoted-constructors
 {-# OPTIONS_GHC -Wno-unticked-promoted-constructors #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
@@ -93,62 +98,41 @@ type role HobbitState nominal
 stateMessage :: HobbitState vertex -> HobbitMessage
 stateMessage TunnelLikeHallState =
   HobbitMessage
-    "You are in a tunnel-like hall.\n\
-    \You can only go east to the Lonelands"
+    "You are in a tunnel-like hall.\nYou can only go east to the Lonelands"
 stateMessage LonelandsState =
   HobbitMessage
-    "You are in the lonelands.\n\
-    \You can either go west to a tunnel-like hall\n\
-    \or go east to the Trolls clearing"
+    "You are in the lonelands.\nYou can either go west to a tunnel-like hall\nor go east to the Trolls clearing"
 stateMessage (TrollsClearingState keyState) =
   if keyState == DayDawned
     then
       HobbitMessage
-        "You are in the Trolls clearing.\n\
-        \You could go north to the Trolls path,\n\
-        \you can go east to Rivendell\n\
-        \or you could get the key for the TrollsCave"
+        "You are in the Trolls clearing.\nYou could go north to the Trolls path,\nyou can go east to Rivendell\nor you could get the key for the TrollsCave"
     else
       HobbitMessage
-        "You are in the Trolls clearing.\n\
-        \You could go north to the Trolls path,\n\
-        \you can go east to Rivendell"
+        "You are in the Trolls clearing.\nYou could go north to the Trolls path,\nyou can go east to Rivendell"
 stateMessage (RivendellState _) =
   HobbitMessage
-    "You are in Rivendell.\n\
-    \You could either go west to the Trolls clearing\n\
-    \or go east to the Misty mountains\n"
+    "You are in Rivendell.\nYou could either go west to the Trolls clearing\nor go east to the Misty mountains\n"
 stateMessage (MistyMountainState _) =
   HobbitMessage
-    "You are in the Misty mountains.\n\
-    \You can only go east to Rivendell"
+    "You are in the Misty mountains.\nYou can only go east to Rivendell"
 stateMessage (TrollsPathState keyState) =
   case keyState of
     NoKey ->
       HobbitMessage
-        "You are in the Trolls path.\n\
-        \You can go south to the Trolls clearing\n\
-        \or you can wait a bit"
+        "You are in the Trolls path.\nYou can go south to the Trolls clearing\nor you can wait a bit"
     DayDawned ->
       HobbitMessage
-        "You are in the Trolls path.\n\
-        \You can go south to the Trolls clearing\n\
-        \or you can wait some more"
+        "You are in the Trolls path.\nYou can go south to the Trolls clearing\nor you can wait some more"
     GotKey ->
       HobbitMessage
-        "You are in the Trolls path.\n\
-        \You can go south to the Trolls clearing,\n\
-        \you can unlock the door to the Trolls cave\n\
-        \or you can wait some more"
+        "You are in the Trolls path.\nYou can go south to the Trolls clearing,\nyou can unlock the door to the Trolls cave\nor you can wait some more"
     DoorUnlocked ->
       HobbitMessage
-        "You are in the Trolls path.\n\
-        \You can go south to the Trolls clearing\n\
-        \or you can go north to the Trolls cave"
+        "You are in the Trolls path.\nYou can go south to the Trolls clearing\nor you can go north to the Trolls cave"
 stateMessage TrollsCaveState =
   HobbitMessage
-    "Welcome to the Trolls cave!\n\
-    \Now you can go back south to the Trolls path"
+    "Welcome to the Trolls cave!\nNow you can go back south to the Trolls path"
 
 hobbitResult
   :: (Applicative m, AllowedTransition HobbitTopology initialVertex finalVertex)

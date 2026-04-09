@@ -1,3 +1,4 @@
+> {-# LANGUAGE CPP #-}
 > {-# LANGUAGE DataKinds #-}
 > {-# LANGUAGE DerivingVia #-}
 > {-# LANGUAGE TemplateHaskell #-}
@@ -10,9 +11,13 @@
 > -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wunused-type-patterns
 > {-# OPTIONS_GHC -Wno-unused-type-patterns #-}
 > -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
+>
+> #if __GLASGOW_HASKELL__ >= 908
+> -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
 > {-# OPTIONS_GHC -Wno-missing-poly-kind-signatures #-}
 > -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-role-annotations
 > {-# OPTIONS_GHC -Wno-missing-role-annotations #-}
+> #endif
 >
 > module Crem.Example.TwoSwitchesGate where
 >
