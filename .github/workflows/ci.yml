@@ -13,22 +13,9 @@ jobs:
   build:
     strategy:
       matrix:
-        ghc: ['9.0.2', '9.2.7', '9.4.4', '9.6.1']
-        cabal: ['3.4.1.0', '3.6.2.0', '3.8.1.0', '3.10.1.0']
+        ghc: ['9.0.2', '9.2.8', '9.4.8', '9.6.7', '9.8.4', '9.10.3']
+        cabal: ['3.10.2.0', '3.12.1.0', '3.14.2.0', '3.16.1.0']
         os: ['ubuntu-latest', 'macos-latest']
-        exclude:
-          # Cabal 3.4.1.0 supports GHC version < 9.1
-          - cabal: '3.4.1.0'
-            ghc: '9.2.7'
-          - cabal: '3.4.1.0'
-            ghc: '9.4.4'
-          - cabal: '3.4.1.0'
-            ghc: '9.6.1'
-          # Cabal 3.6.2.0 supports GHC version < 9.4
-          - cabal: '3.6.2.0'
-            ghc: '9.4.4'
-          - cabal: '3.6.2.0'
-            ghc: '9.6.1'
     runs-on: ${{ matrix.os }}
     name: platform ${{ matrix.os }} GHC ${{ matrix.ghc }} cabal ${{ matrix.cabal }}
     steps:
@@ -37,7 +24,7 @@ jobs:
 
       - name: Setup Haskell
         id: setup-haskell
-        uses: haskell/actions/setup@v2
+        uses: haskell-actions/setup@v2
         with:
           ghc-version: ${{ matrix.ghc }}
           cabal-version: ${{ matrix.cabal }}
@@ -48,9 +35,6 @@ jobs:
           path: ${{ steps.setup-haskell.outputs.cabal-store }}
           key: ${{ runner.os }}-${{ matrix.ghc }}-${{ github.sha }}
           restore-keys: ${{ runner.os }}-${{ matrix.ghc }}-
-
-      - name: Update cabal package list
-        run: cabal update
 
       - name: Build dependencies
         run: cabal build --only-dependencies
