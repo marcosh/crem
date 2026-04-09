@@ -1,6 +1,11 @@
+{-# LANGUAGE CPP #-}
 {-# LANGUAGE DataKinds #-}
 {-# LANGUAGE TemplateHaskell #-}
+
+#if __GLASGOW_HASKELL__ >= 908
 {-# LANGUAGE TypeAbstractions #-}
+#endif
+
 {-# LANGUAGE TypeFamilies #-}
 {-# LANGUAGE UndecidableInstances #-}
 -- https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag-Wmissing-poly-kind-signatures
