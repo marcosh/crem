@@ -42,12 +42,6 @@ jobs:
       - name: Build
         run: cabal build -f errors
 
-      - name: Unlit
-        run: |
-          cabal install unlit
-          unlit -i examples/Crem/Example/TwoSwitchesGate.lhs -o examples/Crem/Example/TwoSwitchesGate.hs
-          rm examples/Crem/Example/TwoSwitchesGate.lhs
-
       - name: Test on current dependencies
         run: cabal test
 

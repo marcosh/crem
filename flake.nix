@@ -122,7 +122,6 @@
               haskell-language-server
               build-watch
               test-watch
-              unlit
             ];
             shellHook = ''
               export PS1="❄️ GHC ${haskellPackages.ghc.version} $PS1"
