@@ -12,5 +12,7 @@
   }
   { ghcVersion = "92"; }
   { ghcVersion = "94"; }
+  { ghcVersion = "96"; }
+  { ghcVersion = "98"; }
   { ghcVersion = "910"; }
 ]
