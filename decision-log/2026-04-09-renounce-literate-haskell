@@ -1,0 +1,12 @@
+name: renounce literate Haskell
+date: 2026-04-09
+context: >
+  Currently we are using literate Haskell for one example where the comments take the most part of the file.
+
+  This always created issues with `doctest-parallel` execution, since the library is not able to parse literate Haskell files.
+
+  Moreover, lately we found that, when trying to use CPP conditionals inside a literate Haskell files, then it fails to compile.
+decision: >
+  We decide to renounce literate Haskell, since it is creating more issues that the value it is providing
+consequences: >
+  We `unlit` the literate Haskell file, and we turn it into a normal Haskell module with a lot of comments
