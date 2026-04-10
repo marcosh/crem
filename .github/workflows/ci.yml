@@ -13,9 +13,9 @@ jobs:
   build:
     strategy:
       matrix:
-        ghc: ['9.0.2', '9.2.8', '9.4.8', '9.6.7', '9.8.4', '9.10.3']
-        cabal: ['3.10.2.0', '3.12.1.0', '3.14.2.0', '3.16.1.0']
-        os: ['ubuntu-latest'] #, 'macos-latest']
+        ghc: ['9.0.2'] #['9.0.2', '9.2.8', '9.4.8', '9.6.7', '9.8.4', '9.10.3']
+        cabal: ['3.16.1.0'] #['3.10.2.0', '3.12.1.0', '3.14.2.0', '3.16.1.0']
+        os: ['macos-latest'] #['ubuntu-latest', 'macos-latest']
     runs-on: ${{ matrix.os }}
     name: platform ${{ matrix.os }} GHC ${{ matrix.ghc }} cabal ${{ matrix.cabal }}
     steps:
@@ -36,6 +36,9 @@ jobs:
           key: ${{ runner.os }}-${{ matrix.ghc }}-${{ github.sha }}
           restore-keys: ${{ runner.os }}-${{ matrix.ghc }}-
 
+      - name: Setup upterm session
+        uses: owenthereal/action-upterm@v1
+
       - name: Build dependencies
         run: cabal build --only-dependencies
 
@@ -49,7 +52,6 @@ jobs:
         run: cabal test --index-state HEAD
 
       - name: Test on oldest dependencies
-        if: matrix.cabal == '3.10.1.0'
         run: cabal test --prefer-oldest
 
   format:
