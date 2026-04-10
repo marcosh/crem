@@ -1,0 +1,19 @@
+name: remove macos from ci
+date: 2026-04-10
+context: >
+  With the support for GHC 9.10 and newer cabal versions, we stumbled into an issue with respect to builds with `macos` machines.
+
+  The issue present itself as follows, during `cabal build`:
+
+  ```
+  <no location info>: error:
+      Warning: Couldn't figure out LLVM version!
+               Make sure you have installed LLVM between [9 and 13)
+  ghc-9.0.2: could not execute: opt
+  ```
+
+  I tried applying the suggestions frm https://discourse.haskell.org/t/cabal-and-llvm-issue/3672 but was not able to solve the issue.
+decision: >
+  For the moment the decision is to remove `macos` machines from CI and hide the issue under the carpet.
+consequences: >
+  I will create an issue about this if someone more knowledgeable than me wants to fix this.
