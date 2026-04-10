@@ -53,6 +53,11 @@ library
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
       base >=4.15 && <4.21
+    , machines >=0.7.3 && <0.8
+    , nothunks >=0.1 && <0.4
+    , profunctors >=3.2 && <5.7
+    , singletons-base >=3.0 && <3.5
+    , text >=1.2 && <2.2
   default-language: Haskell2010
   if impl(ghc >= 9.2)
     ghc-options: -Wno-missing-kind-signatures
@@ -106,48 +111,6 @@ library
         TypeSynonymInstances
   if flag(errors)
     ghc-options: -Werror
-  if impl(ghc >= 9.10)
-    build-depends:
-        machines >=0.7.3 && <0.8
-      , nothunks >=0.1 && <0.4
-      , profunctors >=3.2 && <5.7
-      , singletons-base ==3.4.*
-      , text >=1.2 && <2.2
-  if impl(ghc >= 9.8) && impl(ghc < 9.10)
-    build-depends:
-        machines >=0.7.3 && <0.8
-      , nothunks >=0.1 && <0.4
-      , profunctors >=3.2 && <5.7
-      , singletons-base ==3.3.*
-      , text >=1.2 && <2.2
-  if impl(ghc >= 9.6) && impl(ghc < 9.8)
-    build-depends:
-        machines >=0.7.3 && <0.8
-      , nothunks >=0.1 && <0.4
-      , profunctors >=3.2 && <5.7
-      , singletons-base ==3.2.*
-      , text >=1.2 && <2.2
-  if impl(ghc >= 9.4) && impl(ghc < 9.6)
-    build-depends:
-        machines >=0.7.3 && <0.8
-      , nothunks >=0.1 && <0.4
-      , profunctors >=3.2 && <5.7
-      , singletons-base >=3.1.1 && <3.2
-      , text >=1.2 && <2.2
-  if impl(ghc >= 9.2) && impl(ghc < 9.4)
-    build-depends:
-        machines >=0.7.3 && <0.8
-      , nothunks >=0.1 && <0.4
-      , profunctors >=3.2 && <5.7
-      , singletons-base >=3.1 && <3.1.1
-      , text >=1.2 && <2.2
-  if impl(ghc >= 9.0) && impl(ghc < 9.2)
-    build-depends:
-        machines >=0.7.3 && <0.8
-      , nothunks >=0.1 && <0.4
-      , profunctors >=3.2 && <5.7
-      , singletons-base ==3.0.*
-      , text >=1.2 && <2.2
 
 library crem-examples
   exposed-modules:
