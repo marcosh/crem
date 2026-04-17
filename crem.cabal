@@ -5,7 +5,7 @@ cabal-version: 2.0
 -- see: https://github.com/sol/hpack
 
 name:           crem
-version:        0.1.0.0
+version:        0.1.1.0
 synopsis:       Compositional representable executable machines
 description:    `crem` stands for __c__ompositional __r__epresentable __e__xecutable __m__achines. It allows creating state machines (Mealy machines in fact), compose them to build bigger machines out of smaller ones and then run them and draw their flow and their state space.
 category:       Machines, Control, State Machines
