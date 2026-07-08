@@ -21,6 +21,7 @@ tested-with:
   - GHC ==9.6.7
   - GHC ==9.8.4
   - GHC ==9.10.3
+  - GHC ==9.12.2
 
 extra-source-files:
   - README.md
@@ -115,7 +116,7 @@ ghc-options:
   - -Wno-prepositive-qualified-module  # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wprepositive-qualified-module
 
 dependencies:
-  - base >= 4.15 && < 4.21
+  - base >= 4.15 && < 4.22
 
 library:
   source-dirs:      src
@@ -124,7 +125,7 @@ library:
       - text >= 1.2 && < 2.2
       - nothunks >= 0.1 && < 0.4
       - machines >=0.7.3 && <0.8
-      - singletons-base >= 3.0 && < 3.5
+      - singletons-base >= 3.0 && < 3.5.2
   # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
   # https://github.com/sol/hpack#handling-of-paths_-modules
   when:
