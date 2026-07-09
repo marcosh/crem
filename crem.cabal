@@ -9,10 +9,10 @@ version:        0.1.1.0
 synopsis:       Compositional representable executable machines
 description:    `crem` stands for __c__ompositional __r__epresentable __e__xecutable __m__achines. It allows creating state machines (Mealy machines in fact), compose them to build bigger machines out of smaller ones and then run them and draw their flow and their state space.
 category:       Machines, Control, State Machines
-homepage:       https://github.com/tweag/crem
-bug-reports:    https://github.com/tweag/crem/issues
+homepage:       https://github.com/marcosh/crem
+bug-reports:    https://github.com/marcosh/crem/issues
 author:         Marco Perone
-maintainer:     marco.perone@tweag.io
+maintainer:     pasafama@gmail.com
 copyright:      2022 Tweag I/O
 license:        MIT
 license-file:   LICENSE
@@ -24,6 +24,7 @@ tested-with:
   , GHC ==9.6.7
   , GHC ==9.8.4
   , GHC ==9.10.3
+  , GHC ==9.12.2
 extra-source-files:
     README.md
     CHANGELOG.md
@@ -52,11 +53,11 @@ library
       RoleAnnotations
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
-      base >=4.15 && <4.21
+      base >=4.15 && <4.22
     , machines >=0.7.3 && <0.8
     , nothunks >=0.1 && <0.4
     , profunctors >=3.2 && <5.7
-    , singletons-base >=3.0 && <3.5
+    , singletons-base >=3.0 && <3.5.2
     , text >=1.2 && <2.2
   default-language: Haskell2010
   if impl(ghc >= 9.2)
@@ -143,7 +144,7 @@ library crem-examples
       RoleAnnotations
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
-      base >=4.15 && <4.21
+      base >=4.15 && <4.22
     , crem
     , profunctors
     , singletons-base
@@ -213,7 +214,7 @@ executable hobbit-game
       RoleAnnotations
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
-      base >=4.15 && <4.21
+      base >=4.15 && <4.22
     , crem
     , crem-examples
   default-language: Haskell2010
@@ -281,7 +282,7 @@ executable hobbit-map
       RoleAnnotations
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module
   build-depends:
-      base >=4.15 && <4.21
+      base >=4.15 && <4.22
     , crem
     , crem-examples
     , text
@@ -352,7 +353,7 @@ test-suite crem-doctests
   ghc-options: -Weverything -Wno-safe -Wno-unsafe -Wno-missing-safe-haskell-mode -Wno-implicit-prelude -Wno-missing-export-lists -Wno-missing-home-modules -Wno-missing-import-lists -Wno-all-missed-specialisations -Wno-prepositive-qualified-module -threaded -Wno-unused-packages
   build-depends:
       Cabal
-    , base >=4.15 && <4.21
+    , base >=4.15 && <4.22
     , crem
     , crem-examples
     , doctest-parallel >=0.2.3 && <0.5
@@ -432,7 +433,7 @@ test-suite crem-spec
   build-tool-depends:
       hspec-discover:hspec-discover
   build-depends:
-      base >=4.15 && <4.21
+      base >=4.15 && <4.22
     , crem
     , crem-examples
     , hspec >=2.7 && <2.12

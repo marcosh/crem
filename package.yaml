@@ -1,13 +1,13 @@
 name:               crem
 version:            0.1.1.0
 author:             Marco Perone
-maintainer:         marco.perone@tweag.io
+maintainer:         pasafama@gmail.com
 copyright:          2022 Tweag I/O
 license:            MIT
 category:           Machines, Control, State Machines
 synopsis:           Compositional representable executable machines
-homepage:           https://github.com/tweag/crem
-bug-reports:        https://github.com/tweag/crem/issues
+homepage:           https://github.com/marcosh/crem
+bug-reports:        https://github.com/marcosh/crem/issues
 description:
   "`crem` stands for __c__ompositional __r__epresentable __e__xecutable
   __m__achines.
@@ -21,6 +21,7 @@ tested-with:
   - GHC ==9.6.7
   - GHC ==9.8.4
   - GHC ==9.10.3
+  - GHC ==9.12.2
 
 extra-source-files:
   - README.md
@@ -115,7 +116,7 @@ ghc-options:
   - -Wno-prepositive-qualified-module  # https://downloads.haskell.org/ghc/latest/docs/users_guide/using-warnings.html#ghc-flag--Wprepositive-qualified-module
 
 dependencies:
-  - base >= 4.15 && < 4.21
+  - base >= 4.15 && < 4.22
 
 library:
   source-dirs:      src
@@ -124,7 +125,7 @@ library:
       - text >= 1.2 && < 2.2
       - nothunks >= 0.1 && < 0.4
       - machines >=0.7.3 && <0.8
-      - singletons-base >= 3.0 && < 3.5
+      - singletons-base >= 3.0 && < 3.5.2
   # Disable adding Paths_crem to other-modules, because it does not conform to our style guide.
   # https://github.com/sol/hpack#handling-of-paths_-modules
   when:
