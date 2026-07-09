@@ -34,9 +34,11 @@ module Crem.Topology
   , trivialTopology
   , sTrivialTopology
   , TrivialTopology
+  , TrivialTopologySym0
   , allowAllTopology
   , sAllowAllTopology
   , AllowAllTopology
+  , AllowAllTopologySym0
   )
 where
 
